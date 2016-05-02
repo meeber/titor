@@ -1,2 +1,5 @@
-# titor
-build and bundle assistant for ES2015 and beyond
+# Titor
+
+JavaScript build and bundle assistant.
+
+# WIP
