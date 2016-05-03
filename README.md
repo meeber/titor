@@ -124,6 +124,21 @@ Optional:
 - `lint`: If true, lint `src/` and `test/` when running tests.
 - `shimCheck`: Name of the global that, if missing, means shimming is required (e.g., "Reflect").
 
+Example:
+
+```js
+{
+  bundle: true,
+  cover: true,
+  coverReport: true,
+  export: "chaiAssertX",
+  lint: true,
+  minCurNodeVer: "v6.0.0",
+  shimCheck: "Reflect",
+  test: true,
+}
+```
+
 # Consumers
 
 Let's pretend you create a library named "cheeseball" using Titor, and then publish it on npm.
