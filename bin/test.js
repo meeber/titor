@@ -23,7 +23,7 @@ function runBuildTest (test) {
         + " " + path.join("build", env, "test"));
 }
 
-function runCoverageTest () {
+function runCoverTest () {
   var tokens = build.split("-");
   var env = tokens[0];
   var shim = tokens[1] === "shim" ? "-r babel-polyfill" : "";
@@ -38,7 +38,7 @@ function runCoverageTest () {
         + shim
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
-
+  
   if (config.lint) sh.exec("npm run lint");
 }
 
@@ -65,16 +65,14 @@ function main () {
     sh.echo("*** BEGIN TEST " + tests[i]);
 
     switch (tests[i]) {
-      case "coverage":
-        runCoverageTest();
-        break;
       case "current":
       case "legacy":
       case "legacy-shim":
         runBuildTest(tests[i]);
         break;
       case "src":
-        runSrcTest();
+        if (config.cover) runCoverTest();
+        else runSrcTest();
         break;
       default:
         throw Error("Invalid test: " + tests[i]);

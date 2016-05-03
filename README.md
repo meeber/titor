@@ -43,7 +43,8 @@ Add to your package.json:
     "postversion": "titor-postversion",
     "preversion": "titor-preversion",
     "release": "titor-release",
-    "test": "titor-test"
+    "test": "titor-test",
+    "travis": "titor-travis"
   }
 ```
 
@@ -52,6 +53,8 @@ Create `.titorrc` in project root with a minimum of `export` and `minCurNodeVer`
 Create `src/` directory to hold all your source code. Create `src/index.js` as your project's entry-point with a `default export` named after the `export` in `.titorrc`.
 
 Create `test/` directory to hold all your tests. Create `test/index.js` to test your `export`. Don't `require("../src/index.js")` from within `test/index.js`; your `export` will automatically be provided as a global during tests. However, other test files will need to require their associated source files.
+
+If using Travis CI, create `.travis.yml` and add `script: npm run travis` to the end.
 
 # Usage
 
@@ -113,9 +116,11 @@ Required:
 Optional:
 
 - `bundle`: If true, create browser bundles during build process.
+- `cover`: If true, calculate test coverage whenever testing `src/`.
+- `coverReport`: If true, submit test coverage to coveralls.io on travis build.
+- `test`: If true, run tests during build process.
 - `lint`: If true, lint `src/` and `test/` when running tests.
 - `shimCheck`: Name of the global that, if missing, means shimming is required (e.g., "Reflect").
-- `test`: If true, run tests and calculate test coverage during build process.
 
 # Consumers
 
