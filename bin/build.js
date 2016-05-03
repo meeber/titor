@@ -27,7 +27,8 @@ function createBuild (build) {
 
 function main () {
   sh.exec("npm run clean build");
-  sh.exec("npm run test coverage");
+
+  if (config.test) sh.exec("npm run test coverage");
 
   var builds = ["current", "legacy", "legacy-shim"];
 
@@ -56,7 +57,7 @@ function main () {
     sh.echo("*** END BUILD " + builds[i]);
   }
 
-  sh.exec("npm run test " + util.detectBuild());
+  if (config.test) sh.exec("npm run test " + util.detectBuild());
 
   if (config.bundle) sh.exec("npm run bundle");
   else sh.exec("npm run clean bundle");

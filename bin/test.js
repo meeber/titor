@@ -10,6 +10,7 @@ var path = require("path");
 var util = require("titor-util");
 
 var build = util.detectBuild();
+var config = util.loadConfig();
 
 function runBuildTest (test) {
   // Note: There isn't a legacy-shim test build. Instead, use legacy test build.
@@ -31,13 +32,14 @@ function runCoverageTest () {
 
   sh.exec("BABEL_ENV=" + env
         + " istanbul cover"
+        + " --report lcovonly"
         + " --root src/"
         + " _mocha -- -c "
         + shim
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
 
-  sh.exec("npm run lint");
+  if (config.lint) sh.exec("npm run lint");
 }
 
 function runSrcTest () {
@@ -51,7 +53,7 @@ function runSrcTest () {
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
 
-  sh.exec("npm run lint");
+  if (config.lint) sh.exec("npm run lint");
 }
 
 function main () {

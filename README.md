@@ -55,11 +55,11 @@ Create `test/` directory to hold all your tests. Create `test/index.js` to test 
 # Usage
 
 - `npm run build`:
-    1. Run all of your tests against `src/`
+    1. Optionally run all of your tests against `src/`
     1. Optionally lint `src/` and `test/`
     1. Optionally calculate test coverage of `src/`
     1. Create `current`, `legacy`, and `legacy-shim` builds based on `src/`
-    1. Run your mainExport tests against the best build for your version of Node
+    1. Optionally run your mainExport tests against the best build for your version of Node
     1. Optionally create browser bundles for each build and each build's tests
 
 - `npm run bundle`:
@@ -112,9 +112,9 @@ Required:
 Optional:
 
 - `bundle`: If true, create browser bundles during build process.
-- `coverage`: If true, calculate test coverage when running tests.
 - `lint`: If true, lint `src/` and `test/` when running tests.
 - `shimCheck`: Name of the global that, if missing, means shimming is required (e.g., "Reflect").
+- `test`: If true, run tests and calculate test coverage during build process.
 
 # Consumers
 
@@ -129,7 +129,7 @@ After a consumer runs `npm install cheeseball`, they can import your library int
 
 Alternatively, they can grab a browser bundle for any of the three builds of your library from their project's `node_modules/cheeseball/bundle` folder. These bundles expose the default export of your library as a global variable.
 
-It's recommended that consumers use either the **current** or **legacy** builds and bundles. The **legacy-shim** build is a nuclear option. It drastically increases the size of the code. When it comes to shimming, it's typically better for you to inform consumers which shims your project requires, and then advise them on the best way to obtain those shims.
+It's recommended that consumers use either the **current** or **legacy** builds and bundles. The **legacy-shim** build is a nuclear option. It drastically increases the size of the code. When it comes to shimming, it's typically better for you to inform consumers which features your project requires, and then advise them on the best way to obtain shims for those features if needed.
 
 # Examples
 
