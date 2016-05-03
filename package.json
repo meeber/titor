@@ -24,6 +24,9 @@
     "source-map-support": "^0.4.0",
     "titor-util": "^0.1.2"
   },
+  "devDependencies": {
+    "eslint-config-tt": "^1.2.0"
+  },
   "bin": {
     "titor-build": "./bin/build.js",
     "titor-bundle": "./bin/bundle.js",
@@ -32,9 +35,9 @@
     "titor-test": "./bin/test.js"
   },
   "scripts": {
-    "lint": "eslint --fix ."
-  },
-  "devDependencies": {
-    "eslint-config-tt": "^1.2.0"
+    "lint": "eslint --fix .",
+    "postversion": "git checkout dev && git merge master && git push && git push --tags && npm publish",
+    "preversion": "git checkout master && git merge dev && npm test",
+    "release": "npm version -m 'Finalize v%s'"
   }
 }
