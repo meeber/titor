@@ -1,3 +1,5 @@
+[![build status](https://img.shields.io/travis/meeber/titor.svg)](https://travis-ci.org/meeber/titor)
+
 # Titor
 
 JavaScript build and bundle assistant.
