@@ -6,4 +6,4 @@ var util = require("titor-util");
 
 var config = util.loadConfig();
 
-global[config.mainExport] = require(process.env.PWD + "/build/legacy");
+global[config.export] = require(process.env.PWD + "/build/legacy");

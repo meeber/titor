@@ -23,7 +23,7 @@ function createBundle (bundle) {
 
   sh.exec("browserify"
         + " -d"
-        + " -s " + config.mainExport
+        + " -s " + config.export
         + " build/" + bundle
         + " | exorcist " + buildBundleMap
         + " > " + path.join("bundle", bundle, "bundle.js"));
