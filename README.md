@@ -28,8 +28,8 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 # Install
 
-`npm install --save-dev titor`
-`npm install --save titor-util`
+- `npm install --save-dev titor`
+- `npm install --save titor-util`
 
 # Setup
 
@@ -50,7 +50,7 @@ Add to your package.json:
   }
 ```
 
-Create `.titorrc` in project root with a minimum of `export` and `minCurNodeVer` defined. See: [Config](#Config).
+Create `.titorrc` in project root with a minimum of `export` and `minCurNodeVer` defined. See: [Config](#config).
 
 Create `src/` directory to hold all your source code. Create `src/index.js` as your project's entry-point with a `default export` named after the `export` in `.titorrc`.
 
@@ -65,7 +65,7 @@ If using Travis CI, create `.travis.yml` and add `script: npm run travis` to the
     1. Optionally lint `src/` and `test/`
     1. Optionally calculate test coverage of `src/`
     1. Create `current`, `legacy`, and `legacy-shim` builds based on `src/`
-    1. Optionally run your mainExport tests against the best build for your version of Node
+    1. Optionally run your default export tests against the best build for your version of Node
     1. Optionally create browser bundles for each build and each build's tests
 
 - `npm run bundle`:
@@ -92,19 +92,15 @@ If using Travis CI, create `.travis.yml` and add `script: npm run travis` to the
     1. Run all of your tests against `src/`
     1. Optionally calculate test coverage of `src/`
     1. Optionally lint `src/` and `test/`
-    1. Run your mainExport tests against the best build for your version of Node
-
-- `npm test coverage`:
-    1. Run all of your tests against `src/`
-    1. Calculate test coverage of `src/`
-    1. Optionally lint `src/` and `test/`
+    1. Run your default export tests against the best build for your version of Node
 
 - `npm test src`:
     1. Run all of your tests against `src/`
+    1. Optionally calculate test coverage of `src/`
     1. Optionally lint `src/` and `test/`
 
 - `npm test [current|legacy|legacy-shim]`:
-    1. Run your mainExport tests against the specified build
+    1. Run your default export tests against the specified build
 
 # Config
 
@@ -119,7 +115,7 @@ Optional:
 
 - `bundle`: If true, create browser bundles during build process.
 - `cover`: If true, calculate test coverage whenever testing `src/`.
-- `coverReport`: If true, submit test coverage to coveralls.io on travis build.
+- `coverReport`: If true, submit test coverage to coveralls.io during travis build.
 - `test`: If true, run tests during build process.
 - `lint`: If true, lint `src/` and `test/` when running tests.
 - `shimCheck`: Name of the global that, if missing, means shimming is required (e.g., "Reflect").
@@ -145,14 +141,14 @@ Let's pretend you create a library named "cheeseball" using Titor, and then publ
 
 After a consumer runs `npm install cheeseball`, they can import your library into their project in one of four ways:
 
-- `var cheeseball = require("cheeseball")`: Automatically import the best build based on the consumer's Node version and the config you specified in `.titorrc`.
-- `var cheeseball = require("cheeseball/build/current")`: Import the current build of your library.
-- `var cheeseball = require("cheeseball/build/legacy")`: Import the legacy build of your library.
-- `var cheeseball = require("cheeseball/build/legacy-shim")`: Import the legacy build of your library along with shims.
+- `var cheeseball = require("cheeseball")`: Automatically import the best build based on the consumer's Node version.
+- `var cheeseball = require("cheeseball/build/current")`: Import the **current** build of your library.
+- `var cheeseball = require("cheeseball/build/legacy")`: Import the **legacy** build of your library.
+- `var cheeseball = require("cheeseball/build/legacy-shim")`: Import the **legacy** build of your library along with shims.
 
 Alternatively, they can grab a browser bundle for any of the three builds of your library from their project's `node_modules/cheeseball/bundle` folder. These bundles expose the default export of your library as a global variable.
 
-It's recommended that consumers use either the **current** or **legacy** builds and bundles. The **legacy-shim** build is a nuclear option. It drastically increases the size of the code. When it comes to shimming, it's typically better for you to inform consumers which features your project requires, and then advise them on the best way to obtain shims for those features if needed.
+It's recommended that consumers use either the **current** or **legacy** builds and bundles. The **legacy-shim** build is a nuclear option. It drastically increases the size of the package. When it comes to shimming, it's typically better for you to inform consumers which features your project requires, and then advise them on the best way to obtain shims for those features if needed.
 
 # Examples
 
