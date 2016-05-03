@@ -8,12 +8,13 @@ Write your source code and tests using the latest language features, and then si
     1. **Current**: Minimally transpiled to the latest version of Node
     2. **Legacy**: Fully transpiled to ES5
     3. **Legacy-shim**: Fully transpiled to ES5 + fully shimmed
-- Serves your consumers the best build based on their Node version
 - Runs your tests (with lint & coverage) on your source and builds
 - Creates a browser bundle for each build
 - Creates a browser bundle for each build's tests 
 
 All builds and bundles come with full source map support.
+
+Consumers who import your library automatically receive the best build based on their Node version.
 
 # Background
 
@@ -122,7 +123,7 @@ Let's pretend you create a library named "cheeseball" using Titor, and then publ
 
 After a consumer runs `npm install cheeseball`, they can import your library into their project in one of four ways:
 
-- `var cheeseball = require("cheeseball")`: Auto-detect which build to import based on the version of the consumer's Node and the config you specified in `.titorrc`.
+- `var cheeseball = require("cheeseball")`: Automatically import the best build based on the consumer's Node version and the config you specified in `.titorrc`.
 - `var cheeseball = require("cheeseball/build/current")`: Import the current build of your library.
 - `var cheeseball = require("cheeseball/build/legacy")`: Import the legacy build of your library.
 - `var cheeseball = require("cheeseball/build/legacy-shim")`: Import the legacy build of your library along with shims.
@@ -141,6 +142,6 @@ MIT
 
 # Beware
 
-- This project is in its infancy and subject to jarring change
+- This project is in its infancy and subject to jarring improvements
 
 # GLHFDD
