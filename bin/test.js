@@ -6,10 +6,10 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var path = require("path");
 var util = require("titor-util");
 
 var build = util.detectBuild();
-var config = util.loadConfig();
 
 function runBuildTest (test) {
   // Note: There isn't a legacy-shim test build. Instead, use legacy test build.
@@ -18,8 +18,8 @@ function runBuildTest (test) {
   var env = test.split("-")[0];
 
   sh.exec("mocha -c"
-        + " -r " + __dirname + "/../test-bootstrap/" + test
-        + " build/" + env + "/test/");
+        + " -r " + path.join(__dirname, "../test-bootstrap", test)
+        + " " + path.join("build", env, "test"));
 }
 
 function runCoverageTest () {
@@ -34,7 +34,7 @@ function runCoverageTest () {
         + " --root src/"
         + " _mocha -- -c "
         + shim
-        + " -r " + __dirname + "/../test-bootstrap/src"
+        + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
 
   sh.exec("npm run lint");
@@ -48,7 +48,7 @@ function runSrcTest () {
   sh.exec("BABEL_ENV=" + env
         + " mocha -c "
         + shim
-        + " -r " + __dirname + "/../test-bootstrap/src"
+        + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
 
   sh.exec("npm run lint");

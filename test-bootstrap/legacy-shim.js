@@ -1,3 +1,5 @@
+"use strict";
+
 require("./common");
 
 var util = require("titor-util");

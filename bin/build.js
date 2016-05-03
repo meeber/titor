@@ -6,6 +6,7 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var path = require("path");
 var util = require("titor-util");
 
 var config = util.loadConfig();
@@ -13,14 +14,14 @@ var config = util.loadConfig();
 function createBuild (build) {
   sh.exec("BABEL_ENV=" + build + " babel"
         + " -s inline"
-        + " -d build/" + build + "/"
+        + " -d " + path.join("build", build)
         + " src/");
 
   sh.mkdir("build/" + build + "/test");
 
   sh.exec("BABEL_ENV=" + build + " babel"
         + " -s inline"
-        + " -o build/" + build + "/test/index.js"
+        + " -o " + path.join("build", build, "test/index.js")
         + " test/index.js");
 }
 
@@ -42,7 +43,7 @@ function main () {
         break;
       case "legacy-shim":
         sh.cp(
-          __dirname + "/../resource/build-legacy-shim.js",
+          path.join(__dirname, "../resource/build-legacy-shim.js"),
           "build/legacy-shim.js"
         );
         break;
@@ -50,7 +51,7 @@ function main () {
         throw Error("Invalid build: " + builds[i]);
     }
 
-    sh.cp(__dirname + "/../resource/build-index.js", "build/index.js");
+    sh.cp(path.join(__dirname, "../resource/build-index.js"), "build/index.js");
 
     sh.echo("*** END BUILD " + builds[i]);
   }

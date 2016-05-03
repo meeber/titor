@@ -1,3 +1,5 @@
+"use strict";
+
 require("./common");
 require("babel-core/register");
 

@@ -6,6 +6,7 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var path = require("path");
 var util = require("titor-util");
 
 var config = util.loadConfig();
@@ -16,16 +17,16 @@ function createBundle (bundle) {
 
   var env = bundle.split("-")[0];
 
-  sh.mkdir("-p", "bundle/" + bundle + "/test/");
+  sh.mkdir("-p", path.join("bundle", bundle, "test"));
 
-  var buildBundleMap = "bundle/" + bundle + "/bundle.js.map";
+  var buildBundleMap = path.join("bundle", bundle, "bundle.js.map");
 
   sh.exec("browserify"
         + " -d"
         + " -s " + config.mainExport
         + " build/" + bundle
         + " | exorcist " + buildBundleMap
-        + " > bundle/" + bundle + "/bundle.js");
+        + " > " + path.join("bundle", bundle, "bundle.js"));
 
   // TODO: Remove this if exorcist updated to throw errors
   if (!sh.test("-e", buildBundleMap))
@@ -33,16 +34,16 @@ function createBundle (bundle) {
 
   sh.exec("browserify"
         + " -d "
-        + __dirname + "/../test-bootstrap/common.js"
-        + " -o bundle/" + bundle + "/test/bootstrap.js");
+        + path.join(__dirname, "../test-bootstrap/common.js")
+        + " -o " + path.join("bundle", bundle, "test/bootstrap.js"));
 
-  var testBundleMap = "bundle/" + bundle + "/test/test.js.map";
+  var testBundleMap = path.join("bundle", bundle, "test/test.js.map");
 
   sh.exec("browserify"
-        + " -d"
-        + " build/" + env + "/test/"
+        + " -d "
+        + path.join("build", env, "test/")
         + " | exorcist " + testBundleMap
-        + " > bundle/" + bundle + "/test/test.js");
+        + " > " + path.join("bundle", bundle, "test/test.js"));
 
   // TODO: Remove this if exorcist updated to throw errors
   if (!sh.test("-e", testBundleMap))
@@ -51,12 +52,12 @@ function createBundle (bundle) {
   sh.cp(
     "node_modules/mocha/mocha.css",
     "node_modules/mocha/mocha.js",
-    "bundle/" + bundle + "/test/"
+    path.join("bundle", bundle, "test")
   );
 
   sh.cp(
-    __dirname + "/../resource/test.html",
-    "bundle/" + bundle + "/test/index.html"
+    path.join(__dirname, "../resource/test.html"),
+    path.join("bundle", bundle, "test/index.html")
   );
 }
 

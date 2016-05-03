@@ -30,5 +30,11 @@
     "titor-clean": "./bin/clean.js",
     "titor-lint": "./bin/lint.js",
     "titor-test": "./bin/test.js"
+  },
+  "scripts": {
+    "lint": "eslint --fix ."
+  },
+  "devDependencies": {
+    "eslint-config-tt": "^1.2.0"
   }
 }
