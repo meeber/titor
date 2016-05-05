@@ -3,8 +3,7 @@
 require("source-map-support/register");
 
 if (typeof window === "object") {
-  // eslint-disable-next-line no-native-reassign
-  global = window;
+  window.global = window;
   mocha.setup("bdd");
 }
 
