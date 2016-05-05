@@ -3,8 +3,10 @@
 require("./common");
 require("babel-core/register");
 
-var util = require("titor-util");
+var detectBuild = require("../util/detect-build");
+var loadConfig = require("../util/load-config");
 
-var config = util.loadConfig();
+// eslint-disable-next-line global-require
+if (detectBuild() === "legacy") require("babel-polyfill");
 
-global[config.export] = require(process.env.PWD + "/src/");
+global[loadConfig().export] = require(process.env.PWD + "/src/");

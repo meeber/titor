@@ -1,5 +1,5 @@
 "use strict";
 
-var util = require("titor-util");
+var detectBuild = require("./detect-build");
 
-module.exports = require("./" + util.detectBuild());
+module.exports = require("./" + detectBuild());

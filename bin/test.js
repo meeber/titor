@@ -6,50 +6,36 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var detectBuild = require("../util/detect-build");
+var loadConfig = require("../util/load-config");
 var path = require("path");
-var util = require("titor-util");
 
-var build = util.detectBuild();
-var config = util.loadConfig();
+var build = detectBuild();
+var config = loadConfig();
 
 function runBuildTest (test) {
-  // Note: There isn't a legacy-shim test build. Instead, use legacy test build.
-  // The shim gets added by build/legacy-shim.js which is required by bootstrap.
-
-  var env = test.split("-")[0];
-
   sh.exec("mocha -c"
         + " -r " + path.join(__dirname, "../test-bootstrap", test)
-        + " " + path.join("build", env, "test"));
+        + " " + path.join("build", build, "test"));
 }
 
 function runCoverTest () {
-  var tokens = build.split("-");
-  var env = tokens[0];
-  var shim = tokens[1] === "shim" ? "-r babel-polyfill" : "";
-
   sh.exec("npm run clean coverage");
 
-  sh.exec("BABEL_ENV=" + env
+  sh.exec("BABEL_ENV=" + build
         + " istanbul cover"
         + " --report lcovonly"
         + " --root src/"
         + " _mocha -- -c "
-        + shim
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
-  
+
   if (config.lint) sh.exec("npm run lint");
 }
 
 function runSrcTest () {
-  var tokens = build.split("-");
-  var env = tokens[0];
-  var shim = tokens[1] === "shim" ? "-r babel-polyfill" : "";
-
-  sh.exec("BABEL_ENV=" + env
+  sh.exec("BABEL_ENV=" + build
         + " mocha -c "
-        + shim
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
         + " test/");
 
@@ -67,7 +53,6 @@ function main () {
     switch (tests[i]) {
       case "current":
       case "legacy":
-      case "legacy-shim":
         runBuildTest(tests[i]);
         break;
       case "src":

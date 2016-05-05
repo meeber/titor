@@ -2,8 +2,6 @@
 
 require("./common");
 
-var util = require("titor-util");
+var loadConfig = require("../util/load-config");
 
-var config = util.loadConfig();
-
-global[config.export] = require(process.env.PWD + "/build/current");
+global[loadConfig().export] = require(process.env.PWD + "/build/current");

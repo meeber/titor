@@ -6,17 +6,12 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var loadConfig = require("../util/load-config");
 var path = require("path");
-var util = require("titor-util");
 
-var config = util.loadConfig();
+var config = loadConfig();
 
 function createBundle (bundle) {
-  // Note: The legacy-shim and legacy bootstrap/test are identical. The shim for
-  // legacy-shim is provided via its bundle.js; it will apply to tests too.
-
-  var env = bundle.split("-")[0];
-
   sh.mkdir("-p", path.join("bundle", bundle, "test"));
 
   var buildBundleMap = path.join("bundle", bundle, "bundle.js.map");
@@ -32,7 +27,10 @@ function createBundle (bundle) {
   if (!sh.test("-e", buildBundleMap))
     throw Error("Failed to create " + buildBundleMap);
 
-  sh.exec("browserify"
+  var shim = bundle === "legacy" ? "-r babel-polyfill" : "";
+
+  sh.exec("browserify "
+        + shim
         + " -d "
         + path.join(__dirname, "../test-bootstrap/common.js")
         + " -o " + path.join("bundle", bundle, "test/bootstrap.js"));
@@ -41,7 +39,7 @@ function createBundle (bundle) {
 
   sh.exec("browserify"
         + " -d "
-        + path.join("build", env, "test/")
+        + path.join("build", bundle, "test/")
         + " | exorcist " + testBundleMap
         + " > " + path.join("bundle", bundle, "test/test.js"));
 
@@ -64,7 +62,7 @@ function createBundle (bundle) {
 function main () {
   sh.exec("npm run clean bundle");
 
-  var bundles = ["current", "legacy", "legacy-shim"];
+  var bundles = ["current", "legacy"];
 
   var i;
 
@@ -74,7 +72,6 @@ function main () {
     switch (bundles[i]) {
       case "current":
       case "legacy":
-      case "legacy-shim":
         createBundle(bundles[i]);
         break;
       default:

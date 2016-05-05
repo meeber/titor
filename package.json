@@ -22,8 +22,7 @@
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^2.4.5",
     "shelljs": "^0.7.0",
-    "source-map-support": "^0.4.0",
-    "titor-util": "^0.1.3"
+    "source-map-support": "^0.4.0"
   },
   "devDependencies": {
     "eslint-config-tt": "^1.2.0"
@@ -40,11 +39,13 @@
     "titor-travis": "./bin/travis.js"
   },
   "scripts": {
+    "cover": "rm -R -f coverage/ && istanbul cover --report lcovonly _mocha",
+    "cover-report": "npm run cover; cat coverage/lcov.info | coveralls",
     "lint": "eslint --fix .",
     "postversion": "git checkout dev && git merge master && git push && git push --tags && npm publish",
     "preversion": "git checkout master && git merge dev && npm test",
     "release": "npm version -m 'Finalize v%s'",
-    "test": "npm run lint",
-    "travis": "npm run test"
+    "test": "mocha && npm run lint",
+    "travis": "npm run lint && npm run cover-report"
   }
 }

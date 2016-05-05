@@ -6,9 +6,9 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-var util = require("titor-util");
+var loadConfig = require("../util/load-config");
 
-var config = util.loadConfig();
+var config = loadConfig();
 
 function main () {
   sh.echo("*** BEGIN TRAVIS");
