@@ -37,6 +37,7 @@
     "titor-postversion": "./bin/postversion.js",
     "titor-preversion": "./bin/preversion.js",
     "titor-release": "./bin/release.js",
+    "titor-setup": "./bin/setup.js",
     "titor-test": "./bin/test.js",
     "titor-travis": "./bin/travis.js"
   },

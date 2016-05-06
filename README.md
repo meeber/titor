@@ -46,10 +46,13 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
             "postversion": "titor-postversion",
             "preversion": "titor-preversion",
             "release": "titor-release",
+            "setup": "titor-setup",
             "test": "titor-test",
             "travis": "titor-travis"
           }
         ```
+
+1. `npm run setup`
 
 1. Create `.titorrc` in project root with a minimum of `export`. See: [Config](#config).
 
@@ -88,6 +91,9 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Merge master branch into dev branch
     1. Push changes
     1. Publish to npm
+
+- `npm run setup`:
+    1. Create .babelrc
 
 - `npm test`:
     1. Run all of your tests against `src/`
