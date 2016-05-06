@@ -36,21 +36,19 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 1. Add to your package.json:
 
-        ```js
-          "main": "build/",
-          "scripts": {
-            "build": "titor-build",
-            "bundle": "titor-bundle",
-            "clean": "titor-clean",
-            "lint": "titor-lint",
-            "postversion": "titor-postversion",
-            "preversion": "titor-preversion",
-            "release": "titor-release",
-            "setup": "titor-setup",
-            "test": "titor-test",
-            "travis": "titor-travis"
-          }
-        ```
+        "main": "build/",
+        "scripts": {
+          "build": "titor-build",
+          "bundle": "titor-bundle",
+          "clean": "titor-clean",
+          "lint": "titor-lint",
+          "postversion": "titor-postversion",
+          "preversion": "titor-preversion",
+          "release": "titor-release",
+          "setup": "titor-setup",
+          "test": "titor-test",
+          "travis": "titor-travis"
+        }
 
 1. `npm run setup`
 
