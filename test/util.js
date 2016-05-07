@@ -5,6 +5,7 @@ var path = require("path");
 var sh = require("shelljs");
 
 var copyBabelrc = require("../util/copy-babelrc");
+var copySrcIndex = require("../util/copy-src-index");
 var copyTitorrc = require("../util/copy-titorrc");
 var detectBuild = require("../util/detect-build");
 var loadConfig = require("../util/load-config");
@@ -15,10 +16,17 @@ var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
 
 describe("util", function () {
+  var tmpPackageJson = path.join(tmpRoot, "package.json");
+  var goodPackageJson = path.join(resource, "good.package.json");
+  var badFormatPackageJson = path.join(resource, "bad-format.package.json");
+  var badNamePackageJson = path.join(resource, "bad-name.package.json");
+
   beforeEach(function () {
     if (sh.test("-e", tmpRoot)) sh.rm("-rf", tmpRoot);
+
     sh.mkdir(tmpRoot);
     sh.cd(tmpRoot);
+    sh.cp(goodPackageJson, tmpPackageJson);
   });
 
   afterEach(function () {
@@ -41,19 +49,47 @@ describe("util", function () {
     });
   });
 
-  describe("copyTitorrc", function () {
-    var tmpTitorrc = path.join(tmpRoot, ".titorrc");
-    var tmpPackageJson = path.join(tmpRoot, "package.json");
-    var goodPackageJson = path.join(resource, "good.package.json");
-    var badFormatPackageJson = path.join(resource, "bad-format.package.json");
-    var badNamePackageJson = path.join(resource, "bad-name.package.json");
+  describe("copySrcIndex", function () {
+    var tmpSrcIndex = path.join(tmpRoot, "src/index.js");
 
-    beforeEach(function () {
-      sh.cp(goodPackageJson, tmpPackageJson);
+    it("should create src/index.js, set default export to a function named"
+     + " after project converted to CamelCase, and return true", function () {
+      expect(copySrcIndex()).to.be.true;
+      expect(sh.test("-e", tmpSrcIndex)).to.be.true;
+      expect(sh.grep("testProject", tmpSrcIndex).stdout)
+        .to.match(/testProject/);
     });
 
-    it("should copy .titorrc to project root, replace PLACEHOLDER with project"
-     + " name converted to CamelCase, and return true", function () {
+    it("should, if src/index.js already exists, return false", function () {
+      copySrcIndex();
+
+      expect(copySrcIndex()).to.be.false;
+    });
+
+    it("should, if no package.json, throw", function () {
+      sh.rm(tmpPackageJson);
+
+      expect(copySrcIndex).to.throw(/no such file/);
+    });
+
+    it("should, if invalid package.json, throw", function () {
+      sh.cp(badFormatPackageJson, tmpPackageJson);
+
+      expect(copySrcIndex).to.throw(/Unexpected token/);
+    });
+
+    it("should, if missing name in package.json, throw", function () {
+      sh.cp(badNamePackageJson, tmpPackageJson);
+
+      expect(copySrcIndex).to.throw("Missing name in package.json");
+    });
+  });
+
+  describe("copyTitorrc", function () {
+    var tmpTitorrc = path.join(tmpRoot, ".titorrc");
+
+    it("should copy .titorrc to project root, set export to project name"
+     + " converted to CamelCase, and return true", function () {
       expect(copyTitorrc()).to.be.true;
       expect(sh.test("-e", tmpTitorrc)).to.be.true;
       expect(sh.grep("testProject", tmpTitorrc).stdout).to.match(/testProject/);

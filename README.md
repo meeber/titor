@@ -52,8 +52,6 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 1. `npm run setup`
 
-1. Create `src/` directory to hold all your source code. Create `src/index.js` as your project's entry-point with a `default export` named after the `export` in `.titorrc`.
-
 1. Create `test/` directory to hold all your tests. Create `test/index.js` to test your `export`. Don't `require("../src/index.js")` from within `test/index.js`; your `export` will automatically be provided as a global during tests. However, other test files will need to require their associated source files.
 
 1. If using Travis CI, create `.travis.yml` and add `script: npm run travis` to the end.
@@ -91,6 +89,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 - `npm run setup`:
     1. Create `.babelrc` if it doesn't exist
     1. Create `.titorrc` if it doesn't exist
+    1. Create `src/index.js` if it doesn't exist
 
 - `npm test`:
     1. Run all of your tests against `src/`
