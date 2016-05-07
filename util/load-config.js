@@ -1,10 +1,13 @@
 "use strict";
 
-var fs = require("fs");
+var sh = require("shelljs");
+
+sh.set("-e");
+
 var yaml = require("js-yaml");
 
 module.exports = function loadConfig () {
-  var config = yaml.safeLoad(fs.readFileSync(".titorrc", "utf8"));
+  var config = yaml.safeLoad(sh.cat(".titorrc"));
 
   if (typeof config !== "object") throw Error("Invalid .titorrc");
 
