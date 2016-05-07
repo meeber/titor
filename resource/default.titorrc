@@ -1,0 +1,8 @@
+{
+  bundle: true,
+  cover: true,
+  coverReport: true,
+  export: "PLACEHOLDER",
+  lint: true,
+  test: true,
+}

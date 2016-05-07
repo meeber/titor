@@ -9,7 +9,7 @@ var path = require("path");
 module.exports = function copyBabelrc () {
   if (sh.test("-e", ".babelrc")) return false;
 
-  sh.cp(path.join(__dirname, "../resource/babelrc"), ".babelrc");
+  sh.cp(path.join(__dirname, "../resource/default.babelrc"), ".babelrc");
 
   return true;
 };

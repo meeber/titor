@@ -6,6 +6,7 @@ var path = require("path");
 var sh = require("shelljs");
 
 var copyBabelrc = require("../util/copy-babelrc");
+var copyTitorrc = require("../util/copy-titorrc");
 var detectBuild = require("../util/detect-build");
 var loadConfig = require("../util/load-config");
 
@@ -29,8 +30,7 @@ describe("util", function () {
   describe("copyBabelrc", function () {
     var tmpBabelrc = path.join(tmpRoot, ".babelrc");
 
-    it("should copy a .babelrc file to project root and return true",
-    function () {
+    it("should copy .babelrc to project root and return true", function () {
       expect(copyBabelrc()).to.be.true;
       expect(sh.test("-e", tmpBabelrc)).to.be.true;
     });
@@ -39,6 +39,49 @@ describe("util", function () {
       copyBabelrc();
 
       expect(copyBabelrc()).to.be.false;
+    });
+  });
+
+  describe("copyTitorrc", function () {
+    var tmpTitorrc = path.join(tmpRoot, ".titorrc");
+    var tmpPackageJson = path.join(tmpRoot, "package.json");
+    var goodPackageJson = path.join(resource, "good.package.json");
+    var badFormatPackageJson = path.join(resource, "bad-format.package.json");
+    var badNamePackageJson = path.join(resource, "bad-name.package.json");
+
+    beforeEach(function () {
+      sh.cp(goodPackageJson, tmpPackageJson);
+    });
+
+    it("should copy .titorrc to project root, replace PLACEHOLDER with project"
+     + " name converted to CamelCase, and return true", function () {
+      expect(copyTitorrc()).to.be.true;
+      expect(sh.test("-e", tmpTitorrc)).to.be.true;
+      expect(sh.grep("testProject", tmpTitorrc)).to.match(/testProject/);
+    });
+
+    it("should, if .titorrc already exists, return false", function () {
+      copyTitorrc();
+
+      expect(copyTitorrc()).to.be.false;
+    });
+
+    it("should, if no package.json, throw", function () {
+      sh.rm(tmpPackageJson);
+
+      expect(copyTitorrc).to.throw(/no such file/);
+    });
+
+    it("should, if invalid package.json, throw", function () {
+      sh.cp(badFormatPackageJson, tmpPackageJson);
+
+      expect(copyTitorrc).to.throw(/Unexpected token/);
+    });
+
+    it("should, if missing name in package.json, throw", function () {
+      sh.cp(badNamePackageJson, tmpPackageJson);
+
+      expect(copyTitorrc).to.throw("Missing name in package.json");
     });
   });
 
