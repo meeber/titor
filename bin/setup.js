@@ -6,19 +6,19 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-var copyBabelrc = require("../util/copy-babelrc");
-var copySrcIndex = require("../util/copy-src-index");
-var copyTitorrc = require("../util/copy-titorrc");
+var createBabelrc = require("../util/create-babelrc");
+var createSrcIndex = require("../util/create-src-index");
+var createTitorrc = require("../util/create-titorrc");
 
 sh.echo("*** BEGIN SETUP");
 
-if (copyTitorrc()) sh.echo("Copied .titorrc");
+if (createTitorrc()) sh.echo("Created .titorrc");
 else sh.echo(".titorrc already exists; skipping");
 
-if (copyBabelrc()) sh.echo("Copied .babelrc");
+if (createBabelrc()) sh.echo("Created .babelrc");
 else sh.echo(".babelrc already exists; skipping");
 
-if (copySrcIndex()) sh.echo("Copied src/index.js");
+if (createSrcIndex()) sh.echo("Created src/index.js");
 else sh.echo("src/index.js already exists; skipping");
 
 sh.echo("*** END SETUP");

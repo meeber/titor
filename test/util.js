@@ -4,9 +4,9 @@ var chai = require("chai");
 var path = require("path");
 var sh = require("shelljs");
 
-var copyBabelrc = require("../util/copy-babelrc");
-var copySrcIndex = require("../util/copy-src-index");
-var copyTitorrc = require("../util/copy-titorrc");
+var createBabelrc = require("../util/create-babelrc");
+var createSrcIndex = require("../util/create-src-index");
+var createTitorrc = require("../util/create-titorrc");
 var detectBuild = require("../util/detect-build");
 var loadConfig = require("../util/load-config");
 
@@ -34,89 +34,89 @@ describe("util", function () {
     sh.rm("-rf", tmpRoot);
   });
 
-  describe("copyBabelrc", function () {
+  describe("createBabelrc", function () {
     var tmpBabelrc = path.join(tmpRoot, ".babelrc");
 
-    it("should copy .babelrc to project root and return true", function () {
-      expect(copyBabelrc()).to.be.true;
+    it("should create .babelrc and return true", function () {
+      expect(createBabelrc()).to.be.true;
       expect(sh.test("-e", tmpBabelrc)).to.be.true;
     });
 
     it("should, if .babelrc already exists, return false", function () {
-      copyBabelrc();
+      createBabelrc();
 
-      expect(copyBabelrc()).to.be.false;
+      expect(createBabelrc()).to.be.false;
     });
   });
 
-  describe("copySrcIndex", function () {
+  describe("createSrcIndex", function () {
     var tmpSrcIndex = path.join(tmpRoot, "src/index.js");
 
     it("should create src/index.js, set default export to a function named"
      + " after project converted to CamelCase, and return true", function () {
-      expect(copySrcIndex()).to.be.true;
+      expect(createSrcIndex()).to.be.true;
       expect(sh.test("-e", tmpSrcIndex)).to.be.true;
       expect(sh.grep("testProject", tmpSrcIndex).stdout)
         .to.match(/testProject/);
     });
 
     it("should, if src/index.js already exists, return false", function () {
-      copySrcIndex();
+      createSrcIndex();
 
-      expect(copySrcIndex()).to.be.false;
+      expect(createSrcIndex()).to.be.false;
     });
 
     it("should, if no package.json, throw", function () {
       sh.rm(tmpPackageJson);
 
-      expect(copySrcIndex).to.throw(/no such file/);
+      expect(createSrcIndex).to.throw(/no such file/);
     });
 
     it("should, if invalid package.json, throw", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
-      expect(copySrcIndex).to.throw(/Unexpected token/);
+      expect(createSrcIndex).to.throw(/Unexpected token/);
     });
 
     it("should, if missing name in package.json, throw", function () {
       sh.cp(badNamePackageJson, tmpPackageJson);
 
-      expect(copySrcIndex).to.throw("Missing name in package.json");
+      expect(createSrcIndex).to.throw("Missing name in package.json");
     });
   });
 
-  describe("copyTitorrc", function () {
+  describe("createTitorrc", function () {
     var tmpTitorrc = path.join(tmpRoot, ".titorrc");
 
-    it("should copy .titorrc to project root, set export to project name"
-     + " converted to CamelCase, and return true", function () {
-      expect(copyTitorrc()).to.be.true;
+    it("should create .titorrc, set export to project name converted to"
+     + " CamelCase, and return true", function () {
+      expect(createTitorrc()).to.be.true;
       expect(sh.test("-e", tmpTitorrc)).to.be.true;
       expect(sh.grep("testProject", tmpTitorrc).stdout).to.match(/testProject/);
     });
 
     it("should, if .titorrc already exists, return false", function () {
-      copyTitorrc();
+      createTitorrc();
 
-      expect(copyTitorrc()).to.be.false;
+      expect(createTitorrc()).to.be.false;
     });
 
     it("should, if no package.json, throw", function () {
       sh.rm(tmpPackageJson);
 
-      expect(copyTitorrc).to.throw(/no such file/);
+      expect(createTitorrc).to.throw(/no such file/);
     });
 
     it("should, if invalid package.json, throw", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
-      expect(copyTitorrc).to.throw(/Unexpected token/);
+      expect(createTitorrc).to.throw(/Unexpected token/);
     });
 
     it("should, if missing name in package.json, throw", function () {
       sh.cp(badNamePackageJson, tmpPackageJson);
 
-      expect(copyTitorrc).to.throw("Missing name in package.json");
+      expect(createTitorrc).to.throw("Missing name in package.json");
     });
   });
 

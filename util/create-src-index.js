@@ -7,7 +7,7 @@ sh.set("-e");
 var camelCase = require("camelcase");
 var path = require("path");
 
-module.exports = function copySrcIndex () {
+module.exports = function createSrcIndex () {
   if (sh.test("-e", "src/index.js")) return false;
 
   var packageJson = JSON.parse(sh.cat("package.json"));

@@ -7,7 +7,7 @@ sh.set("-e");
 var camelCase = require("camelcase");
 var path = require("path");
 
-module.exports = function copyTitorrc () {
+module.exports = function createTitorrc () {
   if (sh.test("-e", ".titorrc")) return false;
 
   var packageJson = JSON.parse(sh.cat("package.json"));
