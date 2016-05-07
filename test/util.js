@@ -1,7 +1,6 @@
 "use strict";
 
 var chai = require("chai");
-var os = require("os");
 var path = require("path");
 var sh = require("shelljs");
 
@@ -13,7 +12,7 @@ var loadConfig = require("../util/load-config");
 var expect = chai.expect;
 
 var resource = path.join(__dirname, "resource");
-var tmpRoot = path.join(os.tmpdir(), "titor-test-root");
+var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
 
 describe("util", function () {
   beforeEach(function () {
