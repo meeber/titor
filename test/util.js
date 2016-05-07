@@ -56,7 +56,7 @@ describe("util", function () {
      + " name converted to CamelCase, and return true", function () {
       expect(copyTitorrc()).to.be.true;
       expect(sh.test("-e", tmpTitorrc)).to.be.true;
-      expect(sh.grep("testProject", tmpTitorrc)).to.match(/testProject/);
+      expect(sh.grep("testProject", tmpTitorrc).stdout).to.match(/testProject/);
     });
 
     it("should, if .titorrc already exists, return false", function () {
