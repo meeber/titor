@@ -6,19 +6,19 @@ sh.set("-e");
 
 var path = require("path");
 
-module.exports = function createSrcIndex (packageExport) {
-  if (sh.test("-e", "src/index.js")) return false;
+module.exports = function createTestIndexJs (packageExport) {
+  if (sh.test("-e", "test/index.js")) return false;
 
   if (typeof packageExport !== "string")
     throw Error("Missing or invalid packageExport");
 
-  if (!sh.test("-e", "src")) sh.mkdir("src");
+  if (!sh.test("-e", "test")) sh.mkdir("test");
 
   sh.sed(
     "PLACEHOLDER",
     packageExport,
-    path.join(__dirname, "../resource/default-src-index.js")
-  ).to("src/index.js");
+    path.join(__dirname, "../resource/default-test-index.js")
+  ).to("test/index.js");
 
   return true;
 };

@@ -7,8 +7,8 @@ var sh = require("shelljs");
 var createBabelrc = require("../util/create-babelrc");
 var createEslintignore = require("../util/create-eslintignore");
 var createEslintrcYml = require("../util/create-eslintrc-yml");
-var createSrcIndex = require("../util/create-src-index");
-var createTestIndex = require("../util/create-test-index");
+var createSrcIndexJs = require("../util/create-src-index-js");
+var createTestIndexJs = require("../util/create-test-index-js");
 var createTitorrcYml = require("../util/create-titorrc-yml");
 var createTravisYml = require("../util/create-travis-yml");
 var detectBuild = require("../util/detect-build");
@@ -79,48 +79,48 @@ describe("util", function () {
     });
   });
 
-  describe("createSrcIndex", function () {
+  describe("createSrcIndexJs", function () {
     var tmpSrcIndex = path.join(tmpRoot, "src/index.js");
 
     it("should create src/index.js, set default export to a function named"
      + " after packageExport, and return true", function () {
-      expect(createSrcIndex("testPackage")).to.be.true;
+      expect(createSrcIndexJs("testPackage")).to.be.true;
       expect(sh.test("-e", tmpSrcIndex)).to.be.true;
       expect(sh.grep("testPackage", tmpSrcIndex).stdout)
         .to.match(/testPackage/);
     });
 
     it("should, if src/index.js already exists, return false", function () {
-      createSrcIndex("testPackage");
+      createSrcIndexJs("testPackage");
 
-      expect(createSrcIndex("testPackage")).to.be.false;
+      expect(createSrcIndexJs("testPackage")).to.be.false;
     });
 
     it("should, if missing packageExport, throw", function () {
-      expect(function () { createSrcIndex() })
+      expect(function () { createSrcIndexJs() })
         .to.throw("Missing or invalid packageExport");
     });
   });
 
-  describe("createTestIndex", function () {
+  describe("createTestIndexJs", function () {
     var tmpTestIndex = path.join(tmpRoot, "test/index.js");
 
     it("should create test/index.js, create a mocha describe function for"
      + " packageExport, and return true", function () {
-      expect(createTestIndex("testPackage")).to.be.true;
+      expect(createTestIndexJs("testPackage")).to.be.true;
       expect(sh.test("-e", tmpTestIndex)).to.be.true;
       expect(sh.grep("testPackage", tmpTestIndex).stdout)
         .to.match(/testPackage/);
     });
 
     it("should, if test/index.js already exists, return false", function () {
-      createTestIndex("testPackage");
+      createTestIndexJs("testPackage");
 
-      expect(createTestIndex("testPackage")).to.be.false;
+      expect(createTestIndexJs("testPackage")).to.be.false;
     });
 
     it("should, if missing packageExport, throw", function () {
-      expect(function () { createTestIndex() })
+      expect(function () { createTestIndexJs() })
         .to.throw("Missing or invalid packageExport");
     });
   });
