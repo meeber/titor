@@ -6,6 +6,7 @@ var sh = require("shelljs");
 
 var createBabelrc = require("../util/create-babelrc");
 var createSrcIndex = require("../util/create-src-index");
+var createTestIndex = require("../util/create-test-index");
 var createTitorrc = require("../util/create-titorrc");
 var detectBuild = require("../util/detect-build");
 var getPackageExport = require("../util/get-package-export");
@@ -64,6 +65,29 @@ describe("util", function () {
 
     it("should, if missing packageExport, throw", function () {
       expect(function () { createSrcIndex() })
+        .to.throw("Missing or invalid packageExport");
+    });
+  });
+
+  describe("createTestIndex", function () {
+    var tmpTestIndex = path.join(tmpRoot, "test/index.js");
+
+    it("should create test/index.js, create a mocha describe function for"
+     + " packageExport, and return true", function () {
+      expect(createTestIndex("testPackage")).to.be.true;
+      expect(sh.test("-e", tmpTestIndex)).to.be.true;
+      expect(sh.grep("testPackage", tmpTestIndex).stdout)
+        .to.match(/testPackage/);
+    });
+
+    it("should, if test/index.js already exists, return false", function () {
+      createTestIndex("testPackage");
+
+      expect(createTestIndex("testPackage")).to.be.false;
+    });
+
+    it("should, if missing packageExport, throw", function () {
+      expect(function () { createTestIndex() })
         .to.throw("Missing or invalid packageExport");
     });
   });
