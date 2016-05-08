@@ -43,8 +43,9 @@
     "titor-travis": "./bin/travis.js"
   },
   "scripts": {
-    "cover": "rm -R -f coverage/ && istanbul cover --report lcovonly _mocha",
-    "cover-report": "npm run cover; cat coverage/lcov.info | coveralls",
+    "clean": "rm -R -f coverage/",
+    "cover": "npm run clean && istanbul cover --report lcovonly _mocha",
+    "cover-report": "npm run cover && cat coverage/lcov.info | coveralls",
     "lint": "eslint --fix .",
     "postversion": "git checkout dev && git merge master && git push && git push --tags && npm publish",
     "preversion": "git checkout master && git merge dev && npm test",
