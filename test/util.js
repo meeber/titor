@@ -8,6 +8,7 @@ var createBabelrc = require("../util/create-babelrc");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
 var createTitorrc = require("../util/create-titorrc");
+var createTravisYml = require("../util/create-travis-yml");
 var detectBuild = require("../util/detect-build");
 var getPackageExport = require("../util/get-package-export");
 var loadConfig = require("../util/load-config");
@@ -111,6 +112,21 @@ describe("util", function () {
     it("should, if missing packageExport, throw", function () {
       expect(function () { createTitorrc() })
         .to.throw("Missing or invalid packageExport");
+    });
+  });
+
+  describe("createTravisYml", function () {
+    var tmpTravisYml = path.join(tmpRoot, ".travis.yml");
+
+    it("should create .travis.yml and return true", function () {
+      expect(createTravisYml()).to.be.true;
+      expect(sh.test("-e", tmpTravisYml)).to.be.true;
+    });
+
+    it("should, if .travis.yml already exists, return false", function () {
+      createTravisYml();
+
+      expect(createTravisYml()).to.be.false;
     });
   });
 

@@ -51,8 +51,6 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 1. `npm run setup`
 
-1. If using Travis CI, create `.travis.yml` and add `script: npm run travis` to the end.
-
 # Usage
 
 - `npm run build`:
@@ -87,6 +85,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Install `semver` dependency
     1. Create `.babelrc` if it doesn't exist
     1. Create `.titorrc` if it doesn't exist
+    1. Create `.travis.yml` if it doesn't exist
     1. Create `src/index.js` if it doesn't exist
     1. Create `test/index.js` if it doesn't exist
 

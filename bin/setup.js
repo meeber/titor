@@ -10,6 +10,7 @@ var createBabelrc = require("../util/create-babelrc");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
 var createTitorrc = require("../util/create-titorrc");
+var createTravisYml = require("../util/create-travis-yml");
 var getPackageExport = require("../util/get-package-export");
 var loadPackageJson = require("../util/load-package-json");
 
@@ -31,5 +32,8 @@ else sh.echo("test/index.js already exists; skipping");
 
 if (createTitorrc(packageExport)) sh.echo("Created .titorrc");
 else sh.echo(".titorrc already exists; skipping");
+
+if (createTravisYml()) sh.echo("Created .travis.yml");
+else sh.echo(".travis.yml already exists; skipping");
 
 sh.echo("*** END SETUP");
