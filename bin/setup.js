@@ -15,7 +15,9 @@ sh.echo("*** BEGIN SETUP");
 var packageJson = loadPackageJson();
 var packageExport = getPackageExport(packageJson);
 
+sh.echo("Working...");
 sh.exec("npm install --save semver");
+sh.echo("Installed semver and saved as dependency in package.json");
 
 [
   [".babelrc"],
