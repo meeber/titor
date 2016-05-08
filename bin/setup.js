@@ -7,6 +7,7 @@ var sh = require("shelljs");
 sh.set("-e");
 
 var createBabelrc = require("../util/create-babelrc");
+var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
 var createTitorrc = require("../util/create-titorrc");
@@ -23,6 +24,9 @@ sh.exec("npm install --save semver");
 
 if (createBabelrc()) sh.echo("Created .babelrc");
 else sh.echo(".babelrc already exists; skipping");
+
+if (createEslintrcYml()) sh.echo("Created .eslintrc.yml");
+else sh.echo(".eslintrc.yml already exists; skipping");
 
 if (createSrcIndex(packageExport)) sh.echo("Created src/index.js");
 else sh.echo("src/index.js already exists; skipping");

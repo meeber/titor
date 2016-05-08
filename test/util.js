@@ -5,6 +5,7 @@ var path = require("path");
 var sh = require("shelljs");
 
 var createBabelrc = require("../util/create-babelrc");
+var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
 var createTitorrc = require("../util/create-titorrc");
@@ -44,6 +45,21 @@ describe("util", function () {
       createBabelrc();
 
       expect(createBabelrc()).to.be.false;
+    });
+  });
+
+  describe("createEslintrcYml", function () {
+    var tmpEslintrcYml = path.join(tmpRoot, ".eslintrc.yml");
+
+    it("should create .eslintrc.yml and return true", function () {
+      expect(createEslintrcYml()).to.be.true;
+      expect(sh.test("-e", tmpEslintrcYml)).to.be.true;
+    });
+
+    it("should, if .eslintrc.yml already exists, return false", function () {
+      createEslintrcYml();
+
+      expect(createEslintrcYml()).to.be.false;
     });
   });
 

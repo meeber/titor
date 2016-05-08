@@ -84,6 +84,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 - `npm run setup`:
     1. Install `semver` dependency
     1. Create `.babelrc` if it doesn't exist
+    1. Create `.eslintrc.yml` if it doesn't exist
     1. Create `.titorrc` if it doesn't exist
     1. Create `.travis.yml` if it doesn't exist
     1. Create `src/index.js` if it doesn't exist
