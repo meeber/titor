@@ -17,6 +17,8 @@ sh.echo("*** BEGIN SETUP");
 var packageJson = loadPackageJson();
 var packageExport = getPackageExport(packageJson);
 
+sh.exec("npm install --save semver");
+
 if (createBabelrc()) sh.echo("Created .babelrc");
 else sh.echo(".babelrc already exists; skipping");
 

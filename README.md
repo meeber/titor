@@ -30,7 +30,6 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 # Install
 
 - `npm install --save-dev titor`
-- `npm install --save semver`
 
 # Setup
 
@@ -87,6 +86,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Publish to npm
 
 - `npm run setup`:
+    1. Install `semver` dependency
     1. Create `.babelrc` if it doesn't exist
     1. Create `.titorrc` if it doesn't exist
     1. Create `src/index.js` if it doesn't exist
