@@ -17,7 +17,7 @@ Write your source code and tests using the latest language features, and then si
 
 All builds and bundles come with full source map support.
 
-Consumers who import your library automatically receive the best build based on their Node version.
+Consumers who import your package automatically receive the best build based on their Node version.
 
 # Background
 
@@ -63,7 +63,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Optionally lint `src/` and `test/`
     1. Optionally calculate test coverage of `src/`
     1. Create `current` and `legacy` builds based on `src/`
-    1. Optionally run your default export tests against the best build for your version of Node
+    1. Optionally run your package export tests against the best build for your version of Node
     1. Optionally create browser bundles for each build and each build's tests
 
 - `npm run bundle`:
@@ -95,7 +95,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Run all of your tests against `src/`
     1. Optionally calculate test coverage of `src/`
     1. Optionally lint `src/` and `test/`
-    1. Run your default export tests against the best build for your version of Node
+    1. Run your package export tests against the best build for your version of Node
 
 - `npm test src`:
     1. Run all of your tests against `src/`
@@ -103,15 +103,15 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Optionally lint `src/` and `test/`
 
 - `npm test [current|legacy]`:
-    1. Run your default export tests against the specified build
+    1. Run your package export tests against the specified build
 
 # Config
 
-Titor requires a `.titorrc` file in the root of the project. This file may be in YAML or JSON format.
+Titor requires a `.titorrc` file in your package root. This file may be in YAML or JSON format.
 
 Required:
 
-- `export`: Variable name of your project's default export. Typically your project's name written in CamelCase. Browser bundles expose this variable as a global.
+- `export`: Variable name of your package export. Typically your package name written in CamelCase. Browser bundles expose this variable as a global.
 
 Optional:
 
@@ -136,27 +136,27 @@ Example:
 
 # Consumers
 
-Let's pretend you create a library named "cheeseball" using Titor, and then publish it on npm.
+Let's pretend you create a package named "cheeseball" using Titor, and then publish it on npm.
 
-After a consumer runs `npm install cheeseball`, they can import your library into their project in one of three ways:
+After a consumer runs `npm install cheeseball`, they can import your package into their package in one of three ways:
 
 1. `var cheeseball = require("cheeseball")`: Automatically import the best build based on the consumer's Node version.
-1. `var cheeseball = require("cheeseball/build/current")`: Import the **current** build of your library.
-1. `var cheeseball = require("cheeseball/build/legacy")`: Import the **legacy** build of your library.
+1. `var cheeseball = require("cheeseball/build/current")`: Import the **current** build of your package.
+1. `var cheeseball = require("cheeseball/build/legacy")`: Import the **legacy** build of your package.
 
-Alternatively, they can grab a browser bundle for either build of your library from your project's `bundle` folder. These bundles expose the default export of your library as a global variable.
+Alternatively, they can grab a browser bundle for either build of your package from the `bundle` folder. These bundles expose your package export as a global variable.
 
 # Shims and Polyfills
 
-For many projects using the latest language features, shims are needed in order for your code to work in legacy versions of node and browsers. Shims are not included in the legacy builds created by Titor. This is on purpose because it's considered a bad practice among the JavaScript community for a library to include shims.
+For many packages using the latest language features, shims are needed in order for your code to work in legacy versions of node and browsers. Shims are not included in the legacy builds created by Titor. This is on purpose because it's considered a bad practice among the JavaScript community for a package to muck with globals.
 
-Therefore, it's your responsibilty to inform consumers which shims they will need (if any) when using your library in legacy environments. The nuclear option is to advise consumers to `npm install babel-polyfill` and `require("babel-polyfill")` in the entry point of their application. One alternative is to pick and choose shims from the [core-js](https://github.com/zloirock/core-js) library.
+Therefore, it's your responsibilty to inform consumers which shims they will need (if any) when importing your package in legacy environments. The nuclear option is to advise consumers to `npm install babel-polyfill` and `require("babel-polyfill")` in the entry point of their package. One alternative is to pick and choose shims from the [core-js](https://github.com/zloirock/core-js) package.
 
 Titor automatically registers shims when:
 
 1. Running tests of your legacy build
 1. Running tests of your source code from within a legacy environment
-1. Creating the legacy test bundle for your library.
+1. Creating the legacy test bundle for your package.
 
 # Examples
 
@@ -168,6 +168,6 @@ MIT
 
 # Beware
 
-- This project is in its infancy and subject to jarring improvements
+- This package is in its infancy and subject to jarring improvements
 
 # GLHFDD
