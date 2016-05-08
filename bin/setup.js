@@ -7,6 +7,7 @@ var sh = require("shelljs");
 sh.set("-e");
 
 var createBabelrc = require("../util/create-babelrc");
+var createEslintignore = require("../util/create-eslintignore");
 var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
@@ -24,6 +25,9 @@ sh.exec("npm install --save semver");
 
 if (createBabelrc()) sh.echo("Created .babelrc");
 else sh.echo(".babelrc already exists; skipping");
+
+if (createEslintignore()) sh.echo("Created .eslintignore");
+else sh.echo(".eslintignore already exists; skipping");
 
 if (createEslintrcYml()) sh.echo("Created .eslintrc.yml");
 else sh.echo(".eslintrc.yml already exists; skipping");

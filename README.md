@@ -82,8 +82,9 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Publish to npm
 
 - `npm run setup`:
-    1. Install `semver` dependency
+    1. Install `semver` dependency and save in `package.json`
     1. Create `.babelrc` if it doesn't exist
+    1. Create `.eslintignore` if it doesn't exist
     1. Create `.eslintrc.yml` if it doesn't exist
     1. Create `.titorrc.yml` if it doesn't exist
     1. Create `.travis.yml` if it doesn't exist

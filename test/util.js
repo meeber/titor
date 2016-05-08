@@ -5,6 +5,7 @@ var path = require("path");
 var sh = require("shelljs");
 
 var createBabelrc = require("../util/create-babelrc");
+var createEslintignore = require("../util/create-eslintignore");
 var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
@@ -45,6 +46,21 @@ describe("util", function () {
       createBabelrc();
 
       expect(createBabelrc()).to.be.false;
+    });
+  });
+
+  describe("createEslintignore", function () {
+    var tmpEslintignore = path.join(tmpRoot, ".eslintignore");
+
+    it("should create .eslintignore and return true", function () {
+      expect(createEslintignore()).to.be.true;
+      expect(sh.test("-e", tmpEslintignore)).to.be.true;
+    });
+
+    it("should, if .eslintignore already exists, return false", function () {
+      createEslintignore();
+
+      expect(createEslintignore()).to.be.false;
     });
   });
 
