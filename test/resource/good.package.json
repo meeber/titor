@@ -1,6 +1,5 @@
 {
-  "name": "test-project",
+  "name": "test-package",
   "version": "0.0.0",
-  "description": "a fine test package",
-  "license": "MIT"
+  "description": "a test package"
 }

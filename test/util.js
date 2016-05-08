@@ -8,7 +8,9 @@ var createBabelrc = require("../util/create-babelrc");
 var createSrcIndex = require("../util/create-src-index");
 var createTitorrc = require("../util/create-titorrc");
 var detectBuild = require("../util/detect-build");
+var getPackageExport = require("../util/get-package-export");
 var loadConfig = require("../util/load-config");
+var loadPackageJson = require("../util/load-package-json");
 
 var expect = chai.expect;
 
@@ -16,17 +18,11 @@ var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
 
 describe("util", function () {
-  var tmpPackageJson = path.join(tmpRoot, "package.json");
-  var goodPackageJson = path.join(resource, "good.package.json");
-  var badFormatPackageJson = path.join(resource, "bad-format.package.json");
-  var badNamePackageJson = path.join(resource, "bad-name.package.json");
-
   beforeEach(function () {
     if (sh.test("-e", tmpRoot)) sh.rm("-rf", tmpRoot);
 
     sh.mkdir(tmpRoot);
     sh.cd(tmpRoot);
-    sh.cp(goodPackageJson, tmpPackageJson);
   });
 
   afterEach(function () {
@@ -53,70 +49,44 @@ describe("util", function () {
     var tmpSrcIndex = path.join(tmpRoot, "src/index.js");
 
     it("should create src/index.js, set default export to a function named"
-     + " after project converted to CamelCase, and return true", function () {
-      expect(createSrcIndex()).to.be.true;
+     + " after packageExport, and return true", function () {
+      expect(createSrcIndex("testPackage")).to.be.true;
       expect(sh.test("-e", tmpSrcIndex)).to.be.true;
-      expect(sh.grep("testProject", tmpSrcIndex).stdout)
-        .to.match(/testProject/);
+      expect(sh.grep("testPackage", tmpSrcIndex).stdout)
+        .to.match(/testPackage/);
     });
 
     it("should, if src/index.js already exists, return false", function () {
-      createSrcIndex();
+      createSrcIndex("testPackage");
 
-      expect(createSrcIndex()).to.be.false;
+      expect(createSrcIndex("testPackage")).to.be.false;
     });
 
-    it("should, if no package.json, throw", function () {
-      sh.rm(tmpPackageJson);
-
-      expect(createSrcIndex).to.throw(/no such file/);
-    });
-
-    it("should, if invalid package.json, throw", function () {
-      sh.cp(badFormatPackageJson, tmpPackageJson);
-
-      expect(createSrcIndex).to.throw(/Unexpected token/);
-    });
-
-    it("should, if missing name in package.json, throw", function () {
-      sh.cp(badNamePackageJson, tmpPackageJson);
-
-      expect(createSrcIndex).to.throw("Missing name in package.json");
+    it("should, if missing packageExport, throw", function () {
+      expect(function () { createSrcIndex() })
+        .to.throw("Missing or invalid packageExport");
     });
   });
 
   describe("createTitorrc", function () {
     var tmpTitorrc = path.join(tmpRoot, ".titorrc");
 
-    it("should create .titorrc, set export to project name converted to"
-     + " CamelCase, and return true", function () {
-      expect(createTitorrc()).to.be.true;
+    it("should create .titorrc, set export to packageExport, and return true",
+    function () {
+      expect(createTitorrc("testPackage")).to.be.true;
       expect(sh.test("-e", tmpTitorrc)).to.be.true;
-      expect(sh.grep("testProject", tmpTitorrc).stdout).to.match(/testProject/);
+      expect(sh.grep("testPackage", tmpTitorrc).stdout).to.match(/testPackage/);
     });
 
     it("should, if .titorrc already exists, return false", function () {
-      createTitorrc();
+      createTitorrc("testPackage");
 
-      expect(createTitorrc()).to.be.false;
+      expect(createTitorrc("testPackage")).to.be.false;
     });
 
-    it("should, if no package.json, throw", function () {
-      sh.rm(tmpPackageJson);
-
-      expect(createTitorrc).to.throw(/no such file/);
-    });
-
-    it("should, if invalid package.json, throw", function () {
-      sh.cp(badFormatPackageJson, tmpPackageJson);
-
-      expect(createTitorrc).to.throw(/Unexpected token/);
-    });
-
-    it("should, if missing name in package.json, throw", function () {
-      sh.cp(badNamePackageJson, tmpPackageJson);
-
-      expect(createTitorrc).to.throw("Missing name in package.json");
+    it("should, if missing packageExport, throw", function () {
+      expect(function () { createTitorrc() })
+        .to.throw("Missing or invalid packageExport");
     });
   });
 
@@ -142,15 +112,28 @@ describe("util", function () {
     });
   });
 
+  describe("getPackageExport", function () {
+    it("should return camelcased project name", function () {
+      expect(getPackageExport({name: "test-package"})).to.equal("testPackage");
+    });
+
+    it("should, if missing packageJson, throw", function () {
+      expect(getPackageExport).to.throw("Missing or invalid packageJson");
+    });
+
+    it("should, if missing name in packageJson, throw", function () {
+      expect(function () { getPackageExport({}) })
+        .to.throw("Missing or invalid name");
+    });
+  });
+
   describe("loadConfig", function () {
     var tmpTitorrc = path.join(tmpRoot, ".titorrc");
     var goodTitorrc = path.join(resource, "good.titorrc");
     var badFormatTitorrc = path.join(resource, "bad-format.titorrc");
     var badExportTitorrc = path.join(resource, "bad-export.titorrc");
 
-    beforeEach(function () {
-      sh.cp(goodTitorrc, tmpTitorrc);
-    });
+    beforeEach(function () { sh.cp(goodTitorrc, tmpTitorrc) });
 
     it("should return a config object", function () {
       expect(loadConfig()).to.be.an("object").with.property("export");
@@ -172,6 +155,34 @@ describe("util", function () {
       sh.cp(badExportTitorrc, tmpTitorrc);
 
       expect(loadConfig).to.throw(/Invalid or missing export/);
+    });
+  });
+
+  describe("loadPackageJson", function () {
+    var tmpPackageJson = path.join(tmpRoot, "package.json");
+    var goodPackageJson = path.join(resource, "good.package.json");
+    var badFormatPackageJson = path.join(resource, "bad-format.package.json");
+
+    beforeEach(function () { sh.cp(goodPackageJson, tmpPackageJson) });
+
+    it("should return package object", function () {
+      expect(loadPackageJson()).to.deep.equal({
+        name: "test-package",
+        version: "0.0.0",
+        description: "a test package",
+      });
+    });
+
+    it("should, if no package.json, throw", function () {
+      sh.rm(tmpPackageJson);
+
+      expect(loadPackageJson).to.throw(/no such file/);
+    });
+
+    it("should, if invalid package.json, throw", function () {
+      sh.cp(badFormatPackageJson, tmpPackageJson);
+
+      expect(loadPackageJson).to.throw(/Unexpected token/);
     });
   });
 });
