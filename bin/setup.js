@@ -10,6 +10,7 @@ var createBabelrc = require("../util/create-babelrc");
 var createEslintignore = require("../util/create-eslintignore");
 var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndexJs = require("../util/create-src-index-js");
+var createTestEslintrcYml = require("../util/create-test-eslintrc-yml");
 var createTestIndexJs = require("../util/create-test-index-js");
 var createTitorrcYml = require("../util/create-titorrc-yml");
 var createTravisYml = require("../util/create-travis-yml");
@@ -34,6 +35,9 @@ else sh.echo(".eslintrc.yml already exists; skipping");
 
 if (createSrcIndexJs(packageExport)) sh.echo("Created src/index.js");
 else sh.echo("src/index.js already exists; skipping");
+
+if (createTestEslintrcYml()) sh.echo("Created test/.eslintrc.yml");
+else sh.echo("test/.eslintrc.yml already exists; skipping");
 
 if (createTestIndexJs(packageExport)) sh.echo("Created test/index.js");
 else sh.echo("test/index.js already exists; skipping");

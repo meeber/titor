@@ -8,6 +8,7 @@ var createBabelrc = require("../util/create-babelrc");
 var createEslintignore = require("../util/create-eslintignore");
 var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndexJs = require("../util/create-src-index-js");
+var createTestEslintrcYml = require("../util/create-test-eslintrc-yml");
 var createTestIndexJs = require("../util/create-test-index-js");
 var createTitorrcYml = require("../util/create-titorrc-yml");
 var createTravisYml = require("../util/create-travis-yml");
@@ -99,6 +100,22 @@ describe("util", function () {
     it("should, if missing packageExport, throw", function () {
       expect(function () { createSrcIndexJs() })
         .to.throw("Missing or invalid packageExport");
+    });
+  });
+
+  describe("createTestEslintrcYml", function () {
+    var tmpTestEslintrcYml = path.join(tmpRoot, "test/.eslintrc.yml");
+
+    it("should create test/.eslintrc.yml and return true", function () {
+      expect(createTestEslintrcYml()).to.be.true;
+      expect(sh.test("-e", tmpTestEslintrcYml)).to.be.true;
+    });
+
+    it("should, if test/.eslintrc.yml already exists, return false",
+    function () {
+      createTestEslintrcYml();
+
+      expect(createTestEslintrcYml()).to.be.false;
     });
   });
 

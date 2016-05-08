@@ -89,6 +89,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Create `.titorrc.yml` if it doesn't exist
     1. Create `.travis.yml` if it doesn't exist
     1. Create `src/index.js` if it doesn't exist
+    1. Create `test/.eslintrc.yml` if it doesn't exist
     1. Create `test/index.js` if it doesn't exist
 
 - `npm test`:
@@ -111,7 +112,7 @@ Titor requires a `.titorrc.yml` file in your package root.
 
 Required:
 
-- `export`: Variable name of your package export. Typically your package name written in CamelCase. Browser bundles expose this variable as a global.
+- `export`: Name of your package export. Typically your package name written in camelCase. Browser bundles expose this variable as a global.
 
 Optional:
 
