@@ -4,20 +4,40 @@
 
 # Titor
 
-JavaScript build and bundle assistant.
+JavaScript package assistant.
 
-Write your source code and tests using the latest language features, and then sit back and relax while Titor:
+With a single command, Titor kick-starts your package with:
 
+- Transpiling via [Babel](https://babeljs.io/)
+- Bundling via [Browserify](http://browserify.org/)
+- Testing via [Mocha](https://mochajs.org/) and [Chai](http://chaijs.com/)
+- Test Coverage via [Istanbul](https://github.com/gotwarlost/istanbul) and [Coveralls](https://coveralls.io/)
+- Linting via [ESLint](http://eslint.org/)
+- Continuous Integration via [Travis CI](https://travis-ci.org/)
+- Source Mapping via [Source Map Support](https://github.com/evanw/node-source-map-support)
+
+Write your source code and tests using the latest ECMAScript features.
+
+When you're ready to build, Titor:
+
+- Tests, lints, and calculates test coverage on your source
 - Creates two builds:
-    1. **Current**: Minimally transpiled to Node v6.0.0
+    1. **Current**: Minimally transpiled to Node v6.x.x
     2. **Legacy**: Fully transpiled to ES5
-- Runs your tests (with lint & coverage) on your source and builds
+- Creates an entry point for your package so that when its imported, it automatically serves the best build based on the consumer's Node version
+- Tests your builds
 - Creates a browser bundle for each build
 - Creates a browser bundle for each build's tests 
+- Reports test coverage to Coveralls if built from within Travis CI
 
-All builds and bundles come with full source map support.
+When you're ready to publish, Titor:
 
-Consumers who import your package automatically receive the best build based on their Node version.
+- Merges your dev branch with master
+- Builds and tests your package
+- Updates your `package.json` version
+- Tags the release
+- Pushes to github
+- Publishes to npm
 
 # Background
 
@@ -51,6 +71,24 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 1. `npm run setup`
 
+# Code
+
+Write your code in `/src` using the latest ECMAScript features.
+
+The Titor setup script creates a barebones `/src/index.js` with a default export named after your package. This is your **package export**.
+
+Your **package export** is served to consumers who import your package, and is exposed as a global variable via your browser bundles. It can be of any type but is typically an object, function, or ES6 class.
+
+# Tests
+
+Write your tests in `/test` using the latest ECMAScript features.
+
+The Titor setup script creates a barebones `/test/index.js`. This test file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
+
+Your `/test/index.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script will automatically register your **package export** as a global. Don't import it manually.
+
+If you'd like to unit test other source files, create additional test files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
+
 # Usage
 
 - `npm run build`:
@@ -58,7 +96,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Optionally lint `src/` and `test/`
     1. Optionally calculate test coverage of `src/`
     1. Create `current` and `legacy` builds based on `src/`
-    1. Optionally run your package export tests against the best build for your version of Node
+    1. Optionally run your **package export tests** against the best build for your version of Node
     1. Optionally create browser bundles for each build and each build's tests
 
 - `npm run bundle`:
@@ -97,7 +135,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Run all of your tests against `src/`
     1. Optionally calculate test coverage of `src/`
     1. Optionally lint `src/` and `test/`
-    1. Run your package export tests against the best build for your version of Node
+    1. Run your **package export tests** against the best build for your version of Node
 
 - `npm test src`:
     1. Run all of your tests against `src/`
@@ -105,7 +143,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Optionally lint `src/` and `test/`
 
 - `npm test [current|legacy]`:
-    1. Run your package export tests against the specified build
+    1. Run your **package export tests** against the specified build
 
 # Config
 
@@ -113,15 +151,15 @@ Titor requires a `.titorrc.yml` file in your package root.
 
 Required:
 
-- `export`: Name of your package export. Typically your package name written in camelCase. Browser bundles expose this variable as a global.
+- `export`: Name of your **package export**. Typically your package name written in camelCase. Browser bundles expose this variable as a global.
 
 Optional:
 
-- `bundle`: If true, create browser bundles during build process.
-- `cover`: If true, calculate test coverage whenever testing `src/`.
-- `coverReport`: If true, submit test coverage to coveralls.io during travis build.
-- `test`: If true, run tests during build process.
-- `lint`: If true, lint `src/` and `test/` when running tests.
+- `bundle`: If true, create browser bundles during build process
+- `cover`: If true, calculate test coverage whenever testing `src/`
+- `coverReport`: If true, submit test coverage to coveralls.io during travis build
+- `test`: If true, run tests during build process
+- `lint`: If true, lint `src/` and `test/` when running tests
 
 Example:
 
@@ -130,7 +168,7 @@ Example:
   bundle: true,
   cover: true,
   coverReport: true,
-  export: "chaiAssertX",
+  export: "myPackageExport",
   lint: true,
   test: true,
 }
@@ -140,29 +178,35 @@ Example:
 
 Let's pretend you create a package named "cheeseball" using Titor, and then publish it on npm.
 
-After a consumer runs `npm install cheeseball`, they can import your package into their package in one of three ways:
+After a consumer runs `npm install cheeseball`, they can import your package in one of three ways:
 
-1. `var cheeseball = require("cheeseball")`: Automatically import the best build based on the consumer's Node version.
-1. `var cheeseball = require("cheeseball/build/current")`: Import the **current** build of your package.
-1. `var cheeseball = require("cheeseball/build/legacy")`: Import the **legacy** build of your package.
+1. `var cheeseball = require("cheeseball")`: Automatically import the best build based on the consumer's Node version
+1. `var cheeseball = require("cheeseball/build/current")`: Import the **current** build of your package
+1. `var cheeseball = require("cheeseball/build/legacy")`: Import the **legacy** build of your package
 
-Alternatively, they can grab a browser bundle for either build of your package from the `bundle` folder. These bundles expose your package export as a global variable.
+Alternatively, they can grab a browser bundle for either build of your package from the `bundle` folder. These bundles expose your **package export** as a global variable.
 
 # Shims and Polyfills
 
-For many packages using the latest language features, shims are needed in order for your code to work in legacy versions of node and browsers. Shims are not included in the legacy builds created by Titor. This is on purpose because it's considered a bad practice among the JavaScript community for a package to muck with globals.
+For many packages using the latest language features, shims are needed in order for your code to work in legacy versions of node and browsers. Shims aren't included in any builds or bundles created by Titor. This is on purpose. It's considered a bad practice among the JavaScript community for a package to muck with globals.
 
-Therefore, it's your responsibilty to inform consumers which shims they will need (if any) when importing your package in legacy environments. The nuclear option is to advise consumers to `npm install babel-polyfill` and `require("babel-polyfill")` in the entry point of their package. One alternative is to pick and choose shims from the [core-js](https://github.com/zloirock/core-js) package.
+Therefore, it's your responsibilty to inform consumers which shims they'll need (if any) when importing your package in legacy environments. The nuclear option is to advise consumers to `npm install babel-polyfill` and `require("babel-polyfill")` in the entry point of their package. One alternative is to pick and choose shims from [core-js](https://github.com/zloirock/core-js).
 
 Titor automatically registers shims when:
 
 1. Running tests of your legacy build
 1. Running tests of your source code from within a legacy environment
-1. Creating the legacy test bundle for your package.
+1. Creating the legacy test bundle for your package
 
 # Examples
 
 - https://github.com/meeber/chai-assert-x
+
+# Uninstall
+
+`npm uninstall --save-dev titor`
+
+Titor is nothing more than a collection of popular packages and config files, wired together by some scripts. There's no secret sauce. This means that you can use it to kick-start your package, and then uninstall it later on when your package outgrows it, while still using the packages it provided and the config files it created.
 
 # License
 
