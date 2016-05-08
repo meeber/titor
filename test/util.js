@@ -8,7 +8,7 @@ var createBabelrc = require("../util/create-babelrc");
 var createEslintrcYml = require("../util/create-eslintrc-yml");
 var createSrcIndex = require("../util/create-src-index");
 var createTestIndex = require("../util/create-test-index");
-var createTitorrc = require("../util/create-titorrc");
+var createTitorrcYml = require("../util/create-titorrc-yml");
 var createTravisYml = require("../util/create-travis-yml");
 var detectBuild = require("../util/detect-build");
 var getPackageExport = require("../util/get-package-export");
@@ -109,24 +109,25 @@ describe("util", function () {
     });
   });
 
-  describe("createTitorrc", function () {
-    var tmpTitorrc = path.join(tmpRoot, ".titorrc");
+  describe("createTitorrcYml", function () {
+    var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
 
-    it("should create .titorrc, set export to packageExport, and return true",
-    function () {
-      expect(createTitorrc("testPackage")).to.be.true;
-      expect(sh.test("-e", tmpTitorrc)).to.be.true;
-      expect(sh.grep("testPackage", tmpTitorrc).stdout).to.match(/testPackage/);
+    it("should create .titorrc.yml, set export to packageExport, and return"
+     + " true", function () {
+      expect(createTitorrcYml("testPackage")).to.be.true;
+      expect(sh.test("-e", tmpTitorrcYml)).to.be.true;
+      expect(sh.grep("testPackage", tmpTitorrcYml).stdout)
+        .to.match(/testPackage/);
     });
 
-    it("should, if .titorrc already exists, return false", function () {
-      createTitorrc("testPackage");
+    it("should, if .titorrc.yml already exists, return false", function () {
+      createTitorrcYml("testPackage");
 
-      expect(createTitorrc("testPackage")).to.be.false;
+      expect(createTitorrcYml("testPackage")).to.be.false;
     });
 
     it("should, if missing packageExport, throw", function () {
-      expect(function () { createTitorrc() })
+      expect(function () { createTitorrcYml() })
         .to.throw("Missing or invalid packageExport");
     });
   });
@@ -184,31 +185,31 @@ describe("util", function () {
   });
 
   describe("loadConfig", function () {
-    var tmpTitorrc = path.join(tmpRoot, ".titorrc");
-    var goodTitorrc = path.join(resource, "good.titorrc");
-    var badFormatTitorrc = path.join(resource, "bad-format.titorrc");
-    var badExportTitorrc = path.join(resource, "bad-export.titorrc");
+    var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
+    var goodTitorrcYml = path.join(resource, "good.titorrc.yml");
+    var badFormatTitorrcYml = path.join(resource, "bad-format.titorrc.yml");
+    var badExportTitorrcYml = path.join(resource, "bad-export.titorrc.yml");
 
-    beforeEach(function () { sh.cp(goodTitorrc, tmpTitorrc) });
+    beforeEach(function () { sh.cp(goodTitorrcYml, tmpTitorrcYml) });
 
     it("should return a config object", function () {
       expect(loadConfig()).to.be.an("object").with.property("export");
     });
 
-    it("should, if no .titorrc, throw", function () {
-      sh.rm(tmpTitorrc);
+    it("should, if no .titorrc.yml, throw", function () {
+      sh.rm(tmpTitorrcYml);
 
       expect(loadConfig).to.throw(/no such file/);
     });
 
-    it("should, if invalid .titorrc, throw", function () {
-      sh.cp(badFormatTitorrc, tmpTitorrc);
+    it("should, if invalid .titorrc.yml, throw", function () {
+      sh.cp(badFormatTitorrcYml, tmpTitorrcYml);
 
-      expect(loadConfig).to.throw("Invalid .titorrc");
+      expect(loadConfig).to.throw("Invalid .titorrc.yml");
     });
 
     it("should, if invalid export, throw", function () {
-      sh.cp(badExportTitorrc, tmpTitorrc);
+      sh.cp(badExportTitorrcYml, tmpTitorrcYml);
 
       expect(loadConfig).to.throw(/Invalid or missing export/);
     });

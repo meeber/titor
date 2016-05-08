@@ -85,7 +85,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Install `semver` dependency
     1. Create `.babelrc` if it doesn't exist
     1. Create `.eslintrc.yml` if it doesn't exist
-    1. Create `.titorrc` if it doesn't exist
+    1. Create `.titorrc.yml` if it doesn't exist
     1. Create `.travis.yml` if it doesn't exist
     1. Create `src/index.js` if it doesn't exist
     1. Create `test/index.js` if it doesn't exist
@@ -106,7 +106,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 # Config
 
-Titor requires a `.titorrc` file in your package root. This file may be in YAML or JSON format.
+Titor requires a `.titorrc.yml` file in your package root.
 
 Required:
 
