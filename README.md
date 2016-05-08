@@ -86,6 +86,7 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
     1. Create `.babelrc` if it doesn't exist
     1. Create `.eslintignore` if it doesn't exist
     1. Create `.eslintrc.yml` if it doesn't exist
+    1. Create `.gitignore` if it doesn't exist
     1. Create `.titorrc.yml` if it doesn't exist
     1. Create `.travis.yml` if it doesn't exist
     1. Create `src/index.js` if it doesn't exist

@@ -21,6 +21,7 @@ sh.exec("npm install --save semver");
   [".babelrc"],
   [".eslintignore"],
   [".eslintrc.yml"],
+  [".gitignore"],
   [".titorrc.yml", packageExport],
   [".travis.yml"],
   ["src/index.js", packageExport],

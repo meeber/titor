@@ -53,6 +53,14 @@ describe("util", function () {
       expect(sh.grep("parser", tmpEslintrcYml).stdout).to.match(/parser/);
     });
 
+    it("should create .gitignore and return true", function () {
+      var tmpGitignore = path.join(tmpRoot, ".gitignore");
+
+      expect(createResource(".gitignore")).to.be.true;
+      expect(sh.test("-e", tmpGitignore)).to.be.true;
+      expect(sh.grep("npm-debug", tmpGitignore).stdout).to.match(/npm-debug/);
+    });
+
     it("should create .titorrc.yml, replace PACKAGE_EXPORT, and return true",
     function () {
       var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
