@@ -1,6 +1,6 @@
 bundle: true
 cover: true
 coverReport: true
-export: PLACEHOLDER
+export: PACKAGE_EXPORT
 lint: true
 test: true

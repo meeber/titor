@@ -48,7 +48,10 @@ function main () {
         throw Error("Invalid build: " + builds[i]);
     }
 
-    sh.cp(path.join(__dirname, "../resource/build-index.js"), "build/index.js");
+    sh.cp(
+      path.join(__dirname, "../resource/build/_index.js"),
+      "build/index.js"
+    );
     sh.cp(path.join(__dirname, "../util/detect-build.js"), "build/");
 
     sh.echo("*** END BUILD " + builds[i]);

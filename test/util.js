@@ -4,14 +4,7 @@ var chai = require("chai");
 var path = require("path");
 var sh = require("shelljs");
 
-var createBabelrc = require("../util/create-babelrc");
-var createEslintignore = require("../util/create-eslintignore");
-var createEslintrcYml = require("../util/create-eslintrc-yml");
-var createSrcIndexJs = require("../util/create-src-index-js");
-var createTestEslintrcYml = require("../util/create-test-eslintrc-yml");
-var createTestIndexJs = require("../util/create-test-index-js");
-var createTitorrcYml = require("../util/create-titorrc-yml");
-var createTravisYml = require("../util/create-travis-yml");
+var createResource = require("../util/create-resource");
 var detectBuild = require("../util/detect-build");
 var getPackageExport = require("../util/get-package-export");
 var loadConfig = require("../util/load-config");
@@ -35,61 +28,95 @@ describe("util", function () {
     sh.rm("-rf", tmpRoot);
   });
 
-  describe("createBabelrc", function () {
-    var tmpBabelrc = path.join(tmpRoot, ".babelrc");
-
+  describe("createResource", function () {
     it("should create .babelrc and return true", function () {
-      expect(createBabelrc()).to.be.true;
+      var tmpBabelrc = path.join(tmpRoot, ".babelrc");
+
+      expect(createResource(".babelrc")).to.be.true;
       expect(sh.test("-e", tmpBabelrc)).to.be.true;
+      expect(sh.grep("plugins", tmpBabelrc).stdout).to.match(/plugins/);
     });
-
-    it("should, if .babelrc already exists, return false", function () {
-      createBabelrc();
-
-      expect(createBabelrc()).to.be.false;
-    });
-  });
-
-  describe("createEslintignore", function () {
-    var tmpEslintignore = path.join(tmpRoot, ".eslintignore");
 
     it("should create .eslintignore and return true", function () {
-      expect(createEslintignore()).to.be.true;
+      var tmpEslintignore = path.join(tmpRoot, ".eslintignore");
+
+      expect(createResource(".eslintignore")).to.be.true;
       expect(sh.test("-e", tmpEslintignore)).to.be.true;
+      expect(sh.grep("build", tmpEslintignore).stdout).to.match(/build/);
     });
-
-    it("should, if .eslintignore already exists, return false", function () {
-      createEslintignore();
-
-      expect(createEslintignore()).to.be.false;
-    });
-  });
-
-  describe("createEslintrcYml", function () {
-    var tmpEslintrcYml = path.join(tmpRoot, ".eslintrc.yml");
 
     it("should create .eslintrc.yml and return true", function () {
-      expect(createEslintrcYml()).to.be.true;
+      var tmpEslintrcYml = path.join(tmpRoot, ".eslintrc.yml");
+
+      expect(createResource(".eslintrc.yml")).to.be.true;
       expect(sh.test("-e", tmpEslintrcYml)).to.be.true;
+      expect(sh.grep("parser", tmpEslintrcYml).stdout).to.match(/parser/);
     });
 
-    it("should, if .eslintrc.yml already exists, return false", function () {
-      createEslintrcYml();
+    it("should create .titorrc.yml, replace PACKAGE_EXPORT, and return true",
+    function () {
+      var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
 
-      expect(createEslintrcYml()).to.be.false;
+      expect(createResource(".titorrc.yml", "testPackage")).to.be.true;
+      expect(sh.test("-e", tmpTitorrcYml)).to.be.true;
+      expect(sh.grep("testPackage", tmpTitorrcYml).stdout)
+        .to.match(/testPackage/);
+    });
+
+    it("should create .travis.yml and return true", function () {
+      var tmpTravisYml = path.join(tmpRoot, ".travis.yml");
+
+      expect(createResource(".travis.yml")).to.be.true;
+      expect(sh.test("-e", tmpTravisYml)).to.be.true;
+      expect(sh.grep("sudo", tmpTravisYml).stdout).to.match(/sudo/);
+    });
+
+    it("should create src/index.js, replace PACKAGE_EXPORT, and return true",
+    function () {
+      var tmpSrcIndexJs = path.join(tmpRoot, "src/index.js");
+
+      expect(createResource("src/index.js", "testPackage")).to.be.true;
+      expect(sh.test("-e", tmpSrcIndexJs)).to.be.true;
+      expect(sh.grep("testPackage", tmpSrcIndexJs).stdout)
+        .to.match(/testPackage/);
+    });
+
+    it("should create test/.eslintrc and return true", function () {
+      var tmpTestEslintrcYml = path.join(tmpRoot, "test/.eslintrc.yml");
+
+      expect(createResource("test/.eslintrc.yml")).to.be.true;
+      expect(sh.test("-e", tmpTestEslintrcYml)).to.be.true;
+      expect(sh.grep("mocha", tmpTestEslintrcYml).stdout).to.match(/mocha/);
+    });
+
+    it("should create test/index.js, replace PACKAGE_EXPORT, and return true",
+    function () {
+      var tmpTestIndexJs = path.join(tmpRoot, "test/index.js");
+
+      expect(createResource("test/index.js", "testPackage")).to.be.true;
+      expect(sh.test("-e", tmpTestIndexJs)).to.be.true;
+      expect(sh.grep("testPackage", tmpTestIndexJs).stdout)
+        .to.match(/testPackage/);
+    });
+
+    it("should, if resource already exists, return false", function () {
+      createResource(".babelrc");
+
+      expect(createResource(".babelrc")).to.be.false;
+    });
+
+    it("should, if subdirectory already exists, still create resource",
+    function () {
+      var tmpSrcIndexJs = path.join(tmpRoot, "src/index.js");
+
+      sh.mkdir(path.dirname(tmpSrcIndexJs));
+      createResource("src/index.js");
+
+      expect(sh.test("-e", tmpSrcIndexJs)).to.be.true;
     });
   });
 
-  describe("createSrcIndexJs", function () {
-    var tmpSrcIndex = path.join(tmpRoot, "src/index.js");
-
-    it("should create src/index.js, set default export to a function named"
-     + " after packageExport, and return true", function () {
-      expect(createSrcIndexJs("testPackage")).to.be.true;
-      expect(sh.test("-e", tmpSrcIndex)).to.be.true;
-      expect(sh.grep("testPackage", tmpSrcIndex).stdout)
-        .to.match(/testPackage/);
-    });
+/*  describe("createSrcIndexJs", function () {
 
     it("should, if src/index.js already exists, return false", function () {
       createSrcIndexJs("testPackage");
@@ -101,84 +128,7 @@ describe("util", function () {
       expect(function () { createSrcIndexJs() })
         .to.throw("Missing or invalid packageExport");
     });
-  });
-
-  describe("createTestEslintrcYml", function () {
-    var tmpTestEslintrcYml = path.join(tmpRoot, "test/.eslintrc.yml");
-
-    it("should create test/.eslintrc.yml and return true", function () {
-      expect(createTestEslintrcYml()).to.be.true;
-      expect(sh.test("-e", tmpTestEslintrcYml)).to.be.true;
-    });
-
-    it("should, if test/.eslintrc.yml already exists, return false",
-    function () {
-      createTestEslintrcYml();
-
-      expect(createTestEslintrcYml()).to.be.false;
-    });
-  });
-
-  describe("createTestIndexJs", function () {
-    var tmpTestIndex = path.join(tmpRoot, "test/index.js");
-
-    it("should create test/index.js, create a mocha describe function for"
-     + " packageExport, and return true", function () {
-      expect(createTestIndexJs("testPackage")).to.be.true;
-      expect(sh.test("-e", tmpTestIndex)).to.be.true;
-      expect(sh.grep("testPackage", tmpTestIndex).stdout)
-        .to.match(/testPackage/);
-    });
-
-    it("should, if test/index.js already exists, return false", function () {
-      createTestIndexJs("testPackage");
-
-      expect(createTestIndexJs("testPackage")).to.be.false;
-    });
-
-    it("should, if missing packageExport, throw", function () {
-      expect(function () { createTestIndexJs() })
-        .to.throw("Missing or invalid packageExport");
-    });
-  });
-
-  describe("createTitorrcYml", function () {
-    var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
-
-    it("should create .titorrc.yml, set export to packageExport, and return"
-     + " true", function () {
-      expect(createTitorrcYml("testPackage")).to.be.true;
-      expect(sh.test("-e", tmpTitorrcYml)).to.be.true;
-      expect(sh.grep("testPackage", tmpTitorrcYml).stdout)
-        .to.match(/testPackage/);
-    });
-
-    it("should, if .titorrc.yml already exists, return false", function () {
-      createTitorrcYml("testPackage");
-
-      expect(createTitorrcYml("testPackage")).to.be.false;
-    });
-
-    it("should, if missing packageExport, throw", function () {
-      expect(function () { createTitorrcYml() })
-        .to.throw("Missing or invalid packageExport");
-    });
-  });
-
-  describe("createTravisYml", function () {
-    var tmpTravisYml = path.join(tmpRoot, ".travis.yml");
-
-    it("should create .travis.yml and return true", function () {
-      expect(createTravisYml()).to.be.true;
-      expect(sh.test("-e", tmpTravisYml)).to.be.true;
-    });
-
-    it("should, if .travis.yml already exists, return false", function () {
-      createTravisYml();
-
-      expect(createTravisYml()).to.be.false;
-    });
-  });
+  });*/
 
   describe("detectBuild", function () {
     it("should, if node version is equal to minNodeVer, return 'current'",

@@ -54,7 +54,7 @@ function createBundle (bundle) {
   );
 
   sh.cp(
-    path.join(__dirname, "../resource/test.html"),
+    path.join(__dirname, "../resource/bundle/_test.html"),
     path.join("bundle", bundle, "test/index.html")
   );
 }

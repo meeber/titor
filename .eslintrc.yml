@@ -1,6 +1,11 @@
-env:
-  node: true
 extends: tt
+env:
+  es6: false
+  node: true
+parserOptions:
+  ecmaVersion: 5
 rules:
   no-var: 0
+  prefer-reflect: 0
+  prefer-spread: 0
   prefer-template: 0
