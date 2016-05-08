@@ -1,1 +1,3 @@
-export default function PACKAGE_EXPORT () {}
+export default function PACKAGE_EXPORT () {
+  // Your package export code
+}

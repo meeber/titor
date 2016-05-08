@@ -1,3 +1,5 @@
-/* global chai expect PACKAGE_EXPORT */
+/* global chai PACKAGE_EXPORT */
 
-describe("PACKAGE_EXPORT", function () {});
+describe("PACKAGE_EXPORT", function () {
+  // Your package export tests
+});
