@@ -124,20 +124,6 @@ describe("util", function () {
     });
   });
 
-/*  describe("createSrcIndexJs", function () {
-
-    it("should, if src/index.js already exists, return false", function () {
-      createSrcIndexJs("testPackage");
-
-      expect(createSrcIndexJs("testPackage")).to.be.false;
-    });
-
-    it("should, if missing packageExport, throw", function () {
-      expect(function () { createSrcIndexJs() })
-        .to.throw("Missing or invalid packageExport");
-    });
-  });*/
-
   describe("detectBuild", function () {
     it("should, if node version is equal to minNodeVer, return 'current'",
     function () {
