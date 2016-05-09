@@ -53,15 +53,15 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 # Setup
 
-1. `node node_modules/.bin/titor-setup`
-1. `npm install`
+`./node_modules/.bin/titor-setup`
+
+For npm v3.x or higher, you must then run `npm install` to install all of the peer dependencies that the setup script added to package.json. (Older versions of npm will install peer dependencies automatically when Titor is installed.)
 
 `titor-setup` does the following:
   1. Make a backup of your `package.json` named `package.json.save`
   1. Edit `package.json`:
     - Set `main` to `build/`
-    - Add a bunch of `devDependencies` (Titor's `peerDependencies`)
-    - Add `semver` to `dependencies` and remove it from `devDependencies`
+    - Add Titor's `peerDependencies`
   1. Create `.babelrc` if it doesn't exist
   1. Create `.eslintignore` if it doesn't exist
   1. Create `.eslintrc.yml` if it doesn't exist

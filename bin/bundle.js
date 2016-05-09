@@ -6,6 +6,7 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var configurePath = require("../util/configure-path");
 var loadConfig = require("../util/load-config");
 var path = require("path");
 
@@ -60,6 +61,8 @@ function createBundle (bundle) {
 }
 
 function main () {
+  configurePath();
+
   sh.exec("npm run clean bundle");
 
   var bundles = ["current", "legacy"];

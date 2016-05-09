@@ -6,6 +6,7 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var configurePath = require("../util/configure-path");
 var detectBuild = require("../util/detect-build");
 var loadConfig = require("../util/load-config");
 var path = require("path");
@@ -28,6 +29,8 @@ function createBuild (build) {
 }
 
 function main () {
+  configurePath();
+
   sh.exec("npm run clean build");
 
   if (config.test) sh.exec("npm run test src");

@@ -4,6 +4,7 @@ var chai = require("chai");
 var path = require("path");
 var sh = require("shelljs");
 
+var configurePath = require("../util/configure-path");
 var createResource = require("../util/create-resource");
 var detectBuild = require("../util/detect-build");
 var getPackageExport = require("../util/get-package-export");
@@ -26,6 +27,30 @@ describe("util", function () {
   afterEach(function () {
     sh.cd(__dirname);
     sh.rm("-rf", tmpRoot);
+  });
+
+  describe("configurePath", function () {
+    var fakePath = "/a/b/c:/x/y/z";
+    var origPath = process.env.PATH;
+    var rootNodeModules = path.resolve(tmpRoot, "node_modules/.bin");
+    var expected = rootNodeModules + ":" + fakePath;
+
+    afterEach(function () { process.env.PATH = origPath });
+
+    beforeEach(function () { process.env.PATH = fakePath });
+
+    it("should add root's node_modules to path", function () {
+      configurePath();
+
+      expect(process.env.PATH).to.equal(expected);
+    });
+
+    it("shouldn't modify path if already configured", function () {
+      configurePath();
+      configurePath();
+
+      expect(process.env.PATH).to.equal(expected);
+    });
   });
 
   describe("createResource", function () {

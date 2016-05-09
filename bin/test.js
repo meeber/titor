@@ -6,6 +6,7 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
+var configurePath = require("../util/configure-path");
 var detectBuild = require("../util/detect-build");
 var loadConfig = require("../util/load-config");
 var path = require("path");
@@ -43,6 +44,8 @@ function runSrcTest () {
 }
 
 function main () {
+  configurePath();
+
   var tests = process.argv.length > 2 ? process.argv.slice(2) : ["src", build];
 
   var i;
