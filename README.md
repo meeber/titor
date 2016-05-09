@@ -43,7 +43,7 @@ When you're ready to publish, Titor:
 
 In the year 2036, corporeal time-travel is added to the CERNScript specification, further widening the gap between the elite ruling class and the rest of the world's population who are still stuck using ECMAScript 5 due to browser compatibility concerns.
 
-Battling CERN tyranny, a rebel named John Titor, armed only with an IBM 5100, manages to hack CERN's database and steal the specification. With his newfound knowledge, Titor travels back in time to the year 2016.
+Armed only with an IBM 5100, a rebel named John Titor manages to hack CERN's database and steal the specification. With his newfound knowledge, Titor travels back in time to the year 2016.
 
 His goal is singular: Prevent his dystopian future from becoming a reality by empowering developers to embrace ECMAScript 2015 and beyond.
 
@@ -71,25 +71,25 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 1. `npm run setup`
 
-# Code
+# Write Code
 
-Write your code in `/src` using the latest ECMAScript features.
+Write your code in `src/` using the latest ECMAScript features.
 
-The Titor setup script creates a barebones `/src/index.js` with a default export named after your package. This is your **package export**.
+The Titor setup script creates a barebones `src/index.js` with a default export named after your package. This is your **package export**.
 
 Your **package export** is served to consumers who import your package, and is exposed as a global variable via your browser bundles. It can be of any type but is typically an object, function, or ES6 class.
 
-# Tests
+# Write Tests
 
-Write your tests in `/test` using the latest ECMAScript features.
+Write your tests in `test/` using the latest ECMAScript features.
 
-The Titor setup script creates a barebones `/test/index.js`. This test file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
+The Titor setup script creates a barebones `test/index.js`. This file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
 
-Your `/test/index.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script will automatically register your **package export** as a global. Don't import it manually.
+Your `test/index.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script will automatically register your **package export** as a global. Don't import it manually.
 
 If you'd like to unit test other source files, create additional test files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
 
-# Usage
+# Scripts
 
 - `npm run build`:
     1. Optionally run all of your tests against `src/`
