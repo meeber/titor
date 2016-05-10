@@ -49,29 +49,34 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 # Install
 
-- `npm install --save-dev titor`
+`npm install --save-dev titor`
 
 # Setup
 
-1. Add to your package.json:
+1. `node node_modules/.bin/titor-setup`
+1. `npm install`
 
-        "main": "build/",
-        "scripts": {
-          "build": "titor-build",
-          "bundle": "titor-bundle",
-          "clean": "titor-clean",
-          "lint": "titor-lint",
-          "postversion": "titor-postversion",
-          "preversion": "titor-preversion",
-          "release": "titor-release",
-          "setup": "titor-setup",
-          "test": "titor-test",
-          "travis": "titor-travis"
-        }
+`titor-setup` does the following:
+  1. Make a backup of your `package.json` named `package.json.save`
+  1. Edit `package.json`:
+    - Set `main` to `build/`
+    - Add a bunch of `devDependencies` (Titor's `peerDependencies`)
+    - Add `semver` to `dependencies` and remove it from `devDependencies`
+  1. Create `.babelrc` if it doesn't exist
+  1. Create `.eslintignore` if it doesn't exist
+  1. Create `.eslintrc.yml` if it doesn't exist
+  1. Create `.gitignore` if it doesn't exist
+  1. Create `.titorrc.yml` if it doesn't exist
+  1. Create `.travis.yml` if it doesn't exist
+  1. Create `src/index.js` if it doesn't exist
+  1. Create `test/.eslintrc.yml` if it doesn't exist
+  1. Create `test/index.js` if it doesn't exist
 
-1. `npm run setup`
+You can remove `package.json.save` after reviewing the new `package.json`.
 
-# Write Code
+# Usage
+
+## Write Code
 
 Write your code in `src/` using the latest ECMAScript features.
 
@@ -79,7 +84,7 @@ The Titor setup script creates a barebones `src/index.js` with a default export 
 
 Your **package export** is served to consumers who import your package, and is exposed as a global variable via your browser bundles. It can be of any type but is typically an object, function, or ES6 class.
 
-# Write Tests
+## Write Tests
 
 Write your tests in `test/` using the latest ECMAScript features.
 
@@ -89,7 +94,7 @@ Your `test/index.js` file is used by Titor when testing your source, your builds
 
 If you'd like to unit test other source files, create additional test files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
 
-# Scripts
+## Scripts
 
 - `npm run build`:
     1. Optionally run all of your tests against `src/`
@@ -119,18 +124,6 @@ If you'd like to unit test other source files, create additional test files in `
     1. Push changes
     1. Publish to npm
 
-- `npm run setup`:
-    1. Install `semver` dependency and save in `package.json`
-    1. Create `.babelrc` if it doesn't exist
-    1. Create `.eslintignore` if it doesn't exist
-    1. Create `.eslintrc.yml` if it doesn't exist
-    1. Create `.gitignore` if it doesn't exist
-    1. Create `.titorrc.yml` if it doesn't exist
-    1. Create `.travis.yml` if it doesn't exist
-    1. Create `src/index.js` if it doesn't exist
-    1. Create `test/.eslintrc.yml` if it doesn't exist
-    1. Create `test/index.js` if it doesn't exist
-
 - `npm test`:
     1. Run all of your tests against `src/`
     1. Optionally calculate test coverage of `src/`
@@ -147,7 +140,7 @@ If you'd like to unit test other source files, create additional test files in `
 
 # Config
 
-Titor requires a `.titorrc.yml` file in your package root.
+Titor requires a `.titorrc.yml` file to be in your package root.
 
 Required:
 
@@ -188,7 +181,7 @@ Alternatively, they can grab a browser bundle for either build of your package f
 
 # Shims and Polyfills
 
-For many packages using the latest language features, shims are needed in order for your code to work in legacy versions of node and browsers. Shims aren't included in any builds or bundles created by Titor. This is on purpose. It's considered a bad practice among the JavaScript community for a package to muck with globals.
+For many packages using the latest language features, shims are needed in order for your code to work in legacy versions of node and browsers. Shims aren't included in any builds or bundles created by Titor. This is on purpose. It's considered a bad practice for a package to muck with globals.
 
 Therefore, it's your responsibilty to inform consumers which shims they'll need (if any) when importing your package in legacy environments. The nuclear option is to advise consumers to `npm install babel-polyfill` and `require("babel-polyfill")` in the entry point of their package. One alternative is to pick and choose shims from [core-js](https://github.com/zloirock/core-js).
 
@@ -201,12 +194,6 @@ Titor automatically registers shims when:
 # Examples
 
 - https://github.com/meeber/chai-assert-x
-
-# Uninstall
-
-`npm uninstall --save-dev titor`
-
-Titor is nothing more than a collection of popular packages and config files, wired together by some scripts. There's no secret sauce. This means that you can use it to kick-start your package, and then uninstall it later on when your package outgrows it, while still using the packages it provided and the config files it created.
 
 # License
 

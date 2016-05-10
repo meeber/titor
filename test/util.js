@@ -199,8 +199,23 @@ describe("util", function () {
 
     beforeEach(function () { sh.cp(goodPackageJson, tmpPackageJson) });
 
-    it("should return package object", function () {
+    it("should return packageJson object from current directory", function () {
       expect(loadPackageJson()).to.deep.equal({
+        name: "test-package",
+        version: "0.0.0",
+        description: "a test package",
+      });
+    });
+
+    it("should, if dir given, return packageJson object from that directory",
+    function () {
+      var tmpSubDir = path.join(tmpRoot, "sub-dir");
+      var tmpSubDirPackageJson = path.join(tmpSubDir, "package.json");
+
+      sh.mkdir(tmpSubDir);
+      sh.mv(tmpPackageJson, tmpSubDirPackageJson);
+
+      expect(loadPackageJson(tmpSubDir)).to.deep.equal({
         name: "test-package",
         version: "0.0.0",
         description: "a test package",
