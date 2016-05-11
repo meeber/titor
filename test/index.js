@@ -12,6 +12,7 @@ var configurePath = require("../lib/configure-path");
 var createResource = require("../lib/create-resource");
 var detectBuild = require("../lib/detect-build");
 var getPackageExport = require("../lib/get-package-export");
+var lint = require("../lib/lint");
 var loadConfig = require("../lib/load-config");
 var loadPackageJson = require("../lib/load-package-json");
 var postversion = require("../lib/postversion");
@@ -192,6 +193,29 @@ describe("lib", function () {
     });
   });
 
+  describe("lint", function () {
+    var stubs = ["echo", "exec", "set"];
+    var stubSh;
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
+    });
+
+    // TODO: Weak test; brainstorm alternative
+    it("should call 'eslint' on current directory", function () {
+      var exp = "eslint --color --fix .";
+
+      lint(sh);
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+  });
+
   describe("loadConfig", function () {
     var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
     var goodTitorrcYml = path.join(resource, "good.titorrc.yml");
@@ -279,7 +303,7 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test, but dunno better alternative
+    // TODO: Weak test; brainstorm alternative
     it("should check out dev branch, merge master, push branch/tags, and"
      + " publish to npm", function () {
       postversion(sh);
@@ -307,7 +331,7 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test, but dunno better alternative
+    // TODO: Weak test; brainstorm alternative
     it("should check out master branch, merge dev, run build script, and stage"
      + " working files", function () {
       preversion(sh);
@@ -333,7 +357,7 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test, but dunno better alternative
+    // TODO: Weak test; brainstorm alternative
     it("should call 'npm version' with given version", function () {
       var exp = "npm version patch -m 'Finalize v%s'";
 
