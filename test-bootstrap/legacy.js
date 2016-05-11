@@ -3,6 +3,6 @@
 require("./common");
 require("babel-polyfill");
 
-var loadConfig = require("../util/load-config");
+var loadConfig = require("../lib/load-config");
 
 global[loadConfig().export] = require(process.env.PWD + "/build/legacy");

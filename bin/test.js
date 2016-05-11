@@ -6,9 +6,9 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-var configurePath = require("../util/configure-path");
-var detectBuild = require("../util/detect-build");
-var loadConfig = require("../util/load-config");
+var configurePath = require("../lib/configure-path");
+var detectBuild = require("../lib/detect-build");
+var loadConfig = require("../lib/load-config");
 var path = require("path");
 
 var build = detectBuild();

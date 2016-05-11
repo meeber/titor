@@ -6,9 +6,9 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-var configurePath = require("../util/configure-path");
-var detectBuild = require("../util/detect-build");
-var loadConfig = require("../util/load-config");
+var configurePath = require("../lib/configure-path");
+var detectBuild = require("../lib/detect-build");
+var loadConfig = require("../lib/load-config");
 var path = require("path");
 
 var config = loadConfig();
@@ -55,7 +55,7 @@ function main () {
       path.join(__dirname, "../resource/build/_index.js"),
       "build/index.js"
     );
-    sh.cp(path.join(__dirname, "../util/detect-build.js"), "build/");
+    sh.cp(path.join(__dirname, "../lib/detect-build.js"), "build/");
 
     sh.echo("*** END BUILD " + builds[i]);
   }

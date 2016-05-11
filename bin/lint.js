@@ -6,7 +6,7 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-var configurePath = require("../util/configure-path");
+var configurePath = require("../lib/configure-path");
 
 configurePath();
 

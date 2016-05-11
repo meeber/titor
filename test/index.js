@@ -4,19 +4,19 @@ var chai = require("chai");
 var path = require("path");
 var sh = require("shelljs");
 
-var configurePath = require("../util/configure-path");
-var createResource = require("../util/create-resource");
-var detectBuild = require("../util/detect-build");
-var getPackageExport = require("../util/get-package-export");
-var loadConfig = require("../util/load-config");
-var loadPackageJson = require("../util/load-package-json");
+var configurePath = require("../lib/configure-path");
+var createResource = require("../lib/create-resource");
+var detectBuild = require("../lib/detect-build");
+var getPackageExport = require("../lib/get-package-export");
+var loadConfig = require("../lib/load-config");
+var loadPackageJson = require("../lib/load-package-json");
 
 var expect = chai.expect;
 
 var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
 
-describe("util", function () {
+describe("lib", function () {
   beforeEach(function () {
     if (sh.test("-e", tmpRoot)) sh.rm("-rf", tmpRoot);
 

@@ -6,9 +6,9 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-var createResource = require("../util/create-resource");
-var getPackageExport = require("../util/get-package-export");
-var loadPackageJson = require("../util/load-package-json");
+var createResource = require("../lib/create-resource");
+var getPackageExport = require("../lib/get-package-export");
+var loadPackageJson = require("../lib/load-package-json");
 var path = require("path");
 
 sh.echo("*** BEGIN SETUP");
