@@ -3,6 +3,10 @@
 var chai = require("chai");
 var path = require("path");
 var sh = require("shelljs");
+var sinon = require("sinon");
+var sinonChai = require("sinon-chai");
+
+chai.use(sinonChai);
 
 var configurePath = require("../lib/configure-path");
 var createResource = require("../lib/create-resource");
@@ -10,9 +14,9 @@ var detectBuild = require("../lib/detect-build");
 var getPackageExport = require("../lib/get-package-export");
 var loadConfig = require("../lib/load-config");
 var loadPackageJson = require("../lib/load-package-json");
+var release = require("../lib/release");
 
 var expect = chai.expect;
-
 var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
 
@@ -257,6 +261,28 @@ describe("lib", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
       expect(loadPackageJson).to.throw(/Unexpected token/);
+    });
+  });
+
+  describe("release", function () {
+    var stubs = ["echo", "exec"];
+    var stubSh;
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
+    });
+
+    it("should call 'npm version' with given version", function () {
+      var exp = "npm version patch -m 'Finalize v%s'";
+
+      release("patch", sh);
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
     });
   });
 });
