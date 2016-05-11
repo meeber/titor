@@ -12,7 +12,7 @@ var loadConfig = require("../lib/load-config");
 var config = loadConfig();
 
 function main () {
-  configurePath();
+  configurePath(sh);
 
   sh.echo("*** BEGIN TRAVIS");
 

@@ -5,5 +5,5 @@ var configurePath = require("../lib/configure-path");
 var lint = require("../lib/lint");
 var sh = require("shelljs");
 
-configurePath();
+configurePath(sh);
 lint(sh);

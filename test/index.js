@@ -37,26 +37,39 @@ describe("lib", function () {
   });
 
   describe("configurePath", function () {
-    var fakePath = "/a/b/c:/x/y/z";
     var origPath = process.env.PATH;
     var rootNodeModules = path.resolve(tmpRoot, "node_modules/.bin");
-    var expected = rootNodeModules + ":" + fakePath;
 
     afterEach(function () { process.env.PATH = origPath });
 
-    beforeEach(function () { process.env.PATH = fakePath });
+    beforeEach(function () {
+      var goodPackageJson = path.join(resource, "good.package.json");
+      var tmpPackageJson = path.join(tmpRoot, "package.json");
 
-    it("should add root's node_modules to path", function () {
-      configurePath();
+      sh.cp(goodPackageJson, tmpPackageJson);
+    });
 
-      expect(process.env.PATH).to.equal(expected);
+    it("should add package's node_modules/.bin to path", function () {
+      configurePath(sh);
+
+      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+    });
+
+    it("should, if in subdirectory, correctly configure path", function () {
+      sh.mkdir("subdir");
+      sh.cd("subdir");
+
+      configurePath(sh);
+
+      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
     });
 
     it("shouldn't modify path if already configured", function () {
-      configurePath();
-      configurePath();
+      configurePath(sh);
+      var configuredPath = process.env.PATH;
+      configurePath(sh);
 
-      expect(process.env.PATH).to.equal(expected);
+      expect(process.env.PATH).to.equal(configuredPath);
     });
   });
 
