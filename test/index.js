@@ -14,6 +14,7 @@ var detectBuild = require("../lib/detect-build");
 var getPackageExport = require("../lib/get-package-export");
 var loadConfig = require("../lib/load-config");
 var loadPackageJson = require("../lib/load-package-json");
+var postversion = require("../lib/postversion");
 var release = require("../lib/release");
 
 var expect = chai.expect;
@@ -264,8 +265,8 @@ describe("lib", function () {
     });
   });
 
-  describe("release", function () {
-    var stubs = ["echo", "exec"];
+  describe("postversion", function () {
+    var stubs = ["echo", "exec", "set"];
     var stubSh;
 
     afterEach(function () {
@@ -277,6 +278,35 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
+    // TODO: Weak test, but dunno better alternative
+    it("should check out dev branch, merge master, push branch/tags, and"
+     + " publish to npm", function () {
+      postversion(sh);
+
+      expect(stubSh.exec.getCall(0))
+        .to.have.been.calledWith("git checkout dev");
+      expect(stubSh.exec.getCall(1))
+        .to.have.been.calledWith("git merge master");
+      expect(stubSh.exec.getCall(2)).to.have.been.calledWith("git push");
+      expect(stubSh.exec.getCall(3)).to.have.been.calledWith("git push --tags");
+      expect(stubSh.exec.getCall(4)).to.have.been.calledWith("npm publish");
+    });
+  });
+
+  describe("release", function () {
+    var stubs = ["echo", "exec", "set"];
+    var stubSh;
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
+    });
+
+    // TODO: Weak test, but dunno better alternative
     it("should call 'npm version' with given version", function () {
       var exp = "npm version patch -m 'Finalize v%s'";
 
