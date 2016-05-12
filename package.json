@@ -28,7 +28,7 @@
     "eslint-config-tt": "^1.2.0",
     "exorcist": "^0.4.0",
     "istanbul": "^1.0.0-alpha.2",
-    "js-yaml": "^3.6.0",
+    "js-yaml": "^3.6.1",
     "mocha": "^2.4.5",
     "semver": "^5.1.0",
     "sinon": "^1.17.4",
@@ -50,7 +50,7 @@
     "eslint": "^2.9.0",
     "exorcist": "^0.4.0",
     "istanbul": "^1.0.0-alpha.2",
-    "js-yaml": "^3.6.0",
+    "js-yaml": "^3.6.1",
     "mocha": "^2.4.5",
     "semver": "^5.1.0",
     "source-map-support": "^0.4.0"
