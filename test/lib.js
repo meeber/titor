@@ -8,6 +8,7 @@ var sinonChai = require("sinon-chai");
 
 chai.use(sinonChai);
 
+var clean = require("../lib/clean");
 var configurePath = require("../lib/configure-path");
 var createResource = require("../lib/create-resource");
 var detectBuild = require("../lib/detect-build");
@@ -35,6 +36,35 @@ describe("lib", function () {
   afterEach(function () {
     sh.cd(__dirname);
     sh.rm("-rf", tmpRoot);
+  });
+
+  describe("clean", function () {
+    var stubs = ["echo", "set"];
+    var stubSh;
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
+
+      sh.mkdir("-p", "build/a", "bundle/b", "coverage/c");
+    });
+
+    it("should delete target subdirectories", function () {
+      clean(["build", "coverage"], sh);
+
+      expect(sh.test("-e", "build")).to.be.false;
+      expect(sh.test("-e", "bundle")).to.be.true;
+      expect(sh.test("-e", "coverage")).to.be.false;
+    });
+
+    it("should, if invalid target, throw", function () {
+      expect(function () { clean(["invalid_target"], sh) })
+        .to.throw("Invalid clean target: invalid_target");
+    });
   });
 
   describe("configurePath", function () {
