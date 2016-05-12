@@ -18,6 +18,7 @@ var loadPackageJson = require("../lib/load-package-json");
 var postversion = require("../lib/postversion");
 var preversion = require("../lib/preversion");
 var release = require("../lib/release");
+var travis = require("../lib/travis");
 
 var expect = chai.expect;
 var resource = path.join(__dirname, "resource");
@@ -219,7 +220,6 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test; brainstorm alternative
     it("should call 'eslint' on current directory", function () {
       var exp = "eslint --color --fix .";
 
@@ -316,7 +316,6 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test; brainstorm alternative
     it("should check out dev branch, merge master, push branch/tags, and"
      + " publish to npm", function () {
       postversion(sh);
@@ -344,7 +343,6 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test; brainstorm alternative
     it("should check out master branch, merge dev, run build script, and stage"
      + " working files", function () {
       preversion(sh);
@@ -370,13 +368,47 @@ describe("lib", function () {
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
     });
 
-    // TODO: Weak test; brainstorm alternative
     it("should call 'npm version' with given version", function () {
       var exp = "npm version patch -m 'Finalize v%s'";
 
       release("patch", sh);
 
       expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+  });
+
+  describe("travis", function () {
+    var stubs = ["cat", "echo", "exec", "set"];
+    var stubSh;
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) {
+        stubSh[stub] = sinon.stub(sh, stub, function () {
+          return sh;
+        });
+      });
+    });
+
+    it("should, if config.coverReport is false, run build but not coveralls",
+    function () {
+      travis({coverReport: false}, sh);
+
+      expect(stubSh.exec).to.have.been.calledOnce;
+      expect(stubSh.exec).to.have.been.calledWith("npm run build");
+      expect(stubSh.exec).to.have.not.been.calledWith("coveralls");
+    });
+
+    it("should, if config.coverReport is true, run build and coveralls",
+    function () {
+      travis({coverReport: true}, sh);
+
+      expect(stubSh.exec).to.have.been.calledWith("npm run build");
+      expect(stubSh.exec).to.have.been.calledWith("coveralls");
     });
   });
 });
