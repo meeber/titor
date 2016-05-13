@@ -9,6 +9,7 @@ var sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 
 var clean = require("../lib/clean");
+var clone = require("../lib/clone");
 var configurePath = require("../lib/configure-path");
 var createResource = require("../lib/create-resource");
 var detectBuild = require("../lib/detect-build");
@@ -19,11 +20,53 @@ var loadPackageJson = require("../lib/load-package-json");
 var postversion = require("../lib/postversion");
 var preversion = require("../lib/preversion");
 var release = require("../lib/release");
+var setup = require("../lib/setup");
+var setupPackageJson = require("../lib/setup-package-json");
 var travis = require("../lib/travis");
 
 var expect = chai.expect;
 var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
+
+var updatedPackageJson = {
+  name: "test-package",
+  version: "0.0.0",
+  description: "a test package",
+  main: "build/",
+  dependencies: {
+    semver: "^5.1.0",
+  },
+  devDependencies: {
+    "babel-cli": "^6.7.5",
+    "babel-core": "^6.8.0",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
+    "babel-polyfill": "^6.7.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    browserify: "^13.0.1",
+    chai: "^3.5.0",
+    coveralls: "^2.11.9",
+    eslint: "^2.9.0",
+    exorcist: "^0.4.0",
+    istanbul: "^1.0.0-alpha.2",
+    "js-yaml": "^3.6.1",
+    mocha: "^2.4.5",
+    "source-map-support": "^0.4.0",
+  },
+  scripts: {
+    build: "titor-build",
+    bundle: "titor-bundle",
+    clean: "titor-clean",
+    lint: "titor-lint",
+    postversion: "titor-postversion",
+    preversion: "titor-preversion",
+    release: "titor-release",
+    test: "titor-test",
+    travis: "titor-travis",
+  },
+};
 
 describe("lib", function () {
   beforeEach(function () {
@@ -64,6 +107,17 @@ describe("lib", function () {
     it("should, if invalid target, throw", function () {
       expect(function () { clean(["invalid_target"], sh) })
         .to.throw("Invalid clean target: invalid_target");
+    });
+  });
+
+  describe("clone", function () {
+    it("should return a deep-copied clone of object", function () {
+      var obj = {a: {b: 1, c: [2, {d: "blah"}]}, e: {f: [{g: [7]}]}};
+
+      var clonedObj = clone(obj);
+
+      expect(clonedObj).to.deep.equal(obj);
+      expect(clonedObj).to.not.equal(obj);
     });
   });
 
@@ -298,7 +352,7 @@ describe("lib", function () {
     beforeEach(function () { sh.cp(goodPackageJson, tmpPackageJson) });
 
     it("should return packageJson object from current directory", function () {
-      expect(loadPackageJson()).to.deep.equal({
+      expect(loadPackageJson(sh)).to.deep.equal({
         name: "test-package",
         version: "0.0.0",
         description: "a test package",
@@ -313,7 +367,7 @@ describe("lib", function () {
       sh.mkdir(tmpSubDir);
       sh.mv(tmpPackageJson, tmpSubDirPackageJson);
 
-      expect(loadPackageJson(tmpSubDir)).to.deep.equal({
+      expect(loadPackageJson(tmpSubDir, sh)).to.deep.equal({
         name: "test-package",
         version: "0.0.0",
         description: "a test package",
@@ -323,13 +377,13 @@ describe("lib", function () {
     it("should, if no package.json, throw", function () {
       sh.rm(tmpPackageJson);
 
-      expect(loadPackageJson).to.throw(/no such file/);
+      expect(function () { loadPackageJson(sh) }).to.throw(/no such file/);
     });
 
     it("should, if invalid package.json, throw", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
-      expect(loadPackageJson).to.throw(/Unexpected token/);
+      expect(function () { loadPackageJson(sh) }).to.throw(/Unexpected token/);
     });
   });
 
@@ -404,6 +458,98 @@ describe("lib", function () {
       release("patch", sh);
 
       expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+  });
+
+  describe("setup", function () {
+    var badFormatPackageJson = path.join(resource, "bad-format.package.json");
+    var dummy = path.join(resource, "dummy");
+    var goodPackageJson = path.join(resource, "good.package.json");
+    var resources = [
+      ".babelrc",
+      ".eslintignore",
+      ".eslintrc.yml",
+      ".gitignore",
+      ".titorrc.yml",
+      ".travis.yml",
+      "src/index.js",
+      "test/.eslintrc.yml",
+      "test/index.js",
+    ];
+    var stubs = ["echo", "set"];
+    var stubSh;
+    var tmpPackageJson = path.join(tmpRoot, "package.json");
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
+      sh.cp(goodPackageJson, tmpPackageJson);
+    });
+
+    it("should update package.json", function () {
+      setup(sh);
+
+      expect(JSON.parse(sh.cat(tmpPackageJson)))
+        .to.deep.equal(updatedPackageJson);
+    });
+
+    it("should make a backup of package.json", function () {
+      setup(sh);
+
+      expect(sh.cat(path.join(tmpRoot, "package.json.save")).stdout)
+        .to.equal(sh.cat(goodPackageJson).stdout);
+    });
+
+    it("should create resource files", function () {
+      setup(sh);
+
+      resources.forEach(function (res) {
+        expect(sh.test("-e", res)).to.be.true;
+      });
+    });
+
+    it("shouldn't overwrite existing resource files", function () {
+      sh.mkdir("src", "test");
+      resources.forEach(function (res) { sh.cp(dummy, res) });
+
+      setup(sh);
+
+      resources.forEach(function (res) {
+        expect(sh.cat(res).stdout).to.equal("nada\n");
+      });
+    });
+
+    it("should, if no package.json, throw", function () {
+      sh.rm(tmpPackageJson);
+
+      expect(function () { setup(sh) }).to.throw(/no such file/);
+    });
+
+    it("should, if invalid package.json, throw", function () {
+      sh.cp(badFormatPackageJson, tmpPackageJson);
+
+      expect(function () { setup(sh) }).to.throw(/Unexpected token/);
+    });
+  });
+
+  describe("setupPackageJson", function () {
+    it("should return an updated object", function () {
+      var packageJson = {
+        name: "test-package",
+        version: "0.0.0",
+        description: "a test package",
+        main: "index.js",
+        devDependencies: {
+          semver: "blah",
+        },
+      };
+
+      expect(setupPackageJson(packageJson, sh))
+        .to.deep.equal(updatedPackageJson);
     });
   });
 
