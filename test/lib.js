@@ -23,8 +23,10 @@ var preversion = require("../lib/preversion");
 var release = require("../lib/release");
 var setup = require("../lib/setup");
 var setupPackageJson = require("../lib/setup-package-json");
+var test = require("../lib/test");
 var travis = require("../lib/travis");
 
+var detectedBuild = detectBuild();
 var expect = chai.expect;
 var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
@@ -83,7 +85,7 @@ describe("lib", function () {
   });
 
   describe("clean", function () {
-    var stubs = ["echo", "set"];
+    var stubs = ["echo"];
     var stubSh;
 
     afterEach(function () {
@@ -293,7 +295,7 @@ describe("lib", function () {
   });
 
   describe("lint", function () {
-    var stubs = ["echo", "exec", "set"];
+    var stubs = ["echo", "exec"];
     var stubSh;
 
     afterEach(function () {
@@ -389,7 +391,7 @@ describe("lib", function () {
   });
 
   describe("postversion", function () {
-    var stubs = ["echo", "exec", "set"];
+    var stubs = ["echo", "exec"];
     var stubSh;
 
     afterEach(function () {
@@ -416,7 +418,7 @@ describe("lib", function () {
   });
 
   describe("preversion", function () {
-    var stubs = ["echo", "exec", "set"];
+    var stubs = ["echo", "exec"];
     var stubSh;
 
     afterEach(function () {
@@ -441,7 +443,7 @@ describe("lib", function () {
   });
 
   describe("release", function () {
-    var stubs = ["echo", "exec", "set"];
+    var stubs = ["echo", "exec"];
     var stubSh;
 
     afterEach(function () {
@@ -477,7 +479,7 @@ describe("lib", function () {
       "test/.eslintrc.yml",
       "test/index.js",
     ];
-    var stubs = ["echo", "set"];
+    var stubs = ["echo"];
     var stubSh;
     var tmpPackageJson = path.join(tmpRoot, "package.json");
 
@@ -553,8 +555,128 @@ describe("lib", function () {
     });
   });
 
+  describe("test", function () {
+    var stubs = ["echo", "exec"];
+    var stubSh;
+    var tmpCoverage = path.join(tmpRoot, "coverage");
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
+    });
+
+    it("should, if current type, run mocha on current build", function () {
+      var exp = "mocha -c"
+              + " -r " + path.join(__dirname, "../test-bootstrap/current")
+              + " build/current/test";
+
+      test(["current"]);
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should, if legacy type, run mocha on legacy build", function () {
+      var exp = "mocha -c"
+              + " -r " + path.join(__dirname, "../test-bootstrap/legacy")
+              + " build/legacy/test";
+
+      test(["legacy"]);
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should, if src type with coverage and lint, delete coverage directory,"
+     + " run istanbul and mocha with babel of detected build, and run lint",
+    function () {
+      var exp0 = "BABEL_ENV=" + detectedBuild
+               + " istanbul cover"
+               + " --report lcovonly"
+               + " --root src/"
+               + " _mocha -- -c "
+               + " -r " + path.join(__dirname, "../test-bootstrap/src")
+               + " test/";
+      var exp1 = "eslint --color --fix .";
+
+      sh.mkdir(tmpCoverage);
+
+      test(["src"], {cover: true, lint: true});
+
+      expect(sh.test("-e", tmpCoverage)).to.be.false;
+      expect(stubSh.exec.getCall(0)).to.have.been.calledWith(exp0);
+      expect(stubSh.exec.getCall(1)).to.have.been.calledWith(exp1);
+    });
+
+    it("should, if src type with coverage but no lint, delete coverage"
+     + " directory, run istanbul and mocha with babel of detected build",
+    function () {
+      var exp = "BABEL_ENV=" + detectedBuild
+              + " istanbul cover"
+              + " --report lcovonly"
+              + " --root src/"
+              + " _mocha -- -c "
+              + " -r " + path.join(__dirname, "../test-bootstrap/src")
+              + " test/";
+
+      sh.mkdir(tmpCoverage);
+
+      test(["src"], {cover: true, lint: false});
+
+      expect(sh.test("-e", tmpCoverage)).to.be.false;
+      expect(stubSh.exec).to.have.been.calledOnce;
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should, if src type with lint but no coverage, run mocha with babel of"
+     + " detected build, and run lint", function () {
+      var exp0 = "BABEL_ENV=" + detectedBuild
+               + " mocha -c "
+               + " -r " + path.join(__dirname, "../test-bootstrap/src")
+               + " test/";
+      var exp1 = "eslint --color --fix .";
+
+      sh.mkdir(tmpCoverage);
+
+      test(["src"], {cover: false, lint: true});
+
+      expect(sh.test("-e", tmpCoverage)).to.be.true;
+      expect(stubSh.exec.getCall(0)).to.have.been.calledWith(exp0);
+      expect(stubSh.exec.getCall(1)).to.have.been.calledWith(exp1);
+    });
+
+    it("should, if src type with no coverage and no lint, run mocha with babel"
+     + " of detected build", function () {
+      var exp = "BABEL_ENV=" + detectedBuild
+              + " mocha -c "
+              + " -r " + path.join(__dirname, "../test-bootstrap/src")
+              + " test/";
+
+      sh.mkdir(tmpCoverage);
+
+      test(["src"], {cover: false, lint: false});
+
+      expect(sh.test("-e", tmpCoverage)).to.be.true;
+      expect(stubSh.exec).to.have.been.calledOnce;
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should, if multiple types, run each one", function () {
+      test(["current", "legacy", "src"], {});
+
+      expect(stubSh.exec).to.have.been.calledThrice;
+    });
+
+    it("should, if invalid type, throw", function () {
+      expect(function () { test(["invalid_type"]) })
+        .to.throw("Invalid test: invalid_type");
+    });
+  });
+
   describe("travis", function () {
-    var stubs = ["cat", "echo", "exec", "set"];
+    var stubs = ["cat", "echo", "exec"];
     var stubSh;
 
     afterEach(function () {
