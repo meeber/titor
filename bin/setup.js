@@ -4,4 +4,6 @@
 var setup = require("../lib/setup");
 var sh = require("shelljs");
 
-setup(sh);
+sh.set("-e");
+
+setup();

@@ -4,4 +4,6 @@
 var preversion = require("preversion");
 var sh = require("shelljs");
 
-preversion(sh);
+sh.set("-e");
+
+preversion();

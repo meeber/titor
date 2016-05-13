@@ -4,4 +4,6 @@
 var postversion = require("../lib/postversion");
 var sh = require("shelljs");
 
-postversion(sh);
+sh.set("-e");
+
+postversion();

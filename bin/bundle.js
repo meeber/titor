@@ -61,7 +61,7 @@ function createBundle (bundle) {
 }
 
 function main () {
-  configurePath(sh);
+  configurePath();
 
   sh.exec("npm run clean bundle");
 

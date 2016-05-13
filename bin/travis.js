@@ -6,8 +6,10 @@ var loadConfig = require("../lib/load-config");
 var sh = require("shelljs");
 var travis = require("../lib/travis");
 
-configurePath(sh);
+sh.set("-e");
+
+configurePath();
 
 var config = loadConfig();
 
-travis(config, sh);
+travis(config);

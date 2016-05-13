@@ -29,7 +29,7 @@ function createBuild (build) {
 }
 
 function main () {
-  configurePath(sh);
+  configurePath();
 
   sh.exec("npm run clean build");
 

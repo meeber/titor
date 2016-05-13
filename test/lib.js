@@ -7,6 +7,7 @@ var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 
 chai.use(sinonChai);
+sh.set("-e");
 
 var clean = require("../lib/clean");
 var clone = require("../lib/clone");
@@ -97,7 +98,7 @@ describe("lib", function () {
     });
 
     it("should delete target subdirectories", function () {
-      clean(["build", "coverage"], sh);
+      clean(["build", "coverage"]);
 
       expect(sh.test("-e", "build")).to.be.false;
       expect(sh.test("-e", "bundle")).to.be.true;
@@ -105,7 +106,7 @@ describe("lib", function () {
     });
 
     it("should, if invalid target, throw", function () {
-      expect(function () { clean(["invalid_target"], sh) })
+      expect(function () { clean(["invalid_target"]) })
         .to.throw("Invalid clean target: invalid_target");
     });
   });
@@ -135,7 +136,7 @@ describe("lib", function () {
     });
 
     it("should add package's node_modules/.bin to path", function () {
-      configurePath(sh);
+      configurePath();
 
       expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
     });
@@ -144,15 +145,15 @@ describe("lib", function () {
       sh.mkdir("subdir");
       sh.cd("subdir");
 
-      configurePath(sh);
+      configurePath();
 
       expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
     });
 
     it("shouldn't modify path if already configured", function () {
-      configurePath(sh);
+      configurePath();
       var configuredPath = process.env.PATH;
-      configurePath(sh);
+      configurePath();
 
       expect(process.env.PATH).to.equal(configuredPath);
     });
@@ -307,7 +308,7 @@ describe("lib", function () {
     it("should call 'eslint' on current directory", function () {
       var exp = "eslint --color --fix .";
 
-      lint(sh);
+      lint();
 
       expect(stubSh.exec).to.have.been.calledWith(exp);
     });
@@ -352,7 +353,7 @@ describe("lib", function () {
     beforeEach(function () { sh.cp(goodPackageJson, tmpPackageJson) });
 
     it("should return packageJson object from current directory", function () {
-      expect(loadPackageJson(sh)).to.deep.equal({
+      expect(loadPackageJson()).to.deep.equal({
         name: "test-package",
         version: "0.0.0",
         description: "a test package",
@@ -367,7 +368,7 @@ describe("lib", function () {
       sh.mkdir(tmpSubDir);
       sh.mv(tmpPackageJson, tmpSubDirPackageJson);
 
-      expect(loadPackageJson(tmpSubDir, sh)).to.deep.equal({
+      expect(loadPackageJson(tmpSubDir)).to.deep.equal({
         name: "test-package",
         version: "0.0.0",
         description: "a test package",
@@ -377,13 +378,13 @@ describe("lib", function () {
     it("should, if no package.json, throw", function () {
       sh.rm(tmpPackageJson);
 
-      expect(function () { loadPackageJson(sh) }).to.throw(/no such file/);
+      expect(function () { loadPackageJson() }).to.throw(/no such file/);
     });
 
     it("should, if invalid package.json, throw", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
-      expect(function () { loadPackageJson(sh) }).to.throw(/Unexpected token/);
+      expect(function () { loadPackageJson() }).to.throw(/Unexpected token/);
     });
   });
 
@@ -402,7 +403,7 @@ describe("lib", function () {
 
     it("should check out dev branch, merge master, push branch/tags, and"
      + " publish to npm", function () {
-      postversion(sh);
+      postversion();
 
       expect(stubSh.exec.getCall(0))
         .to.have.been.calledWith("git checkout dev");
@@ -429,7 +430,7 @@ describe("lib", function () {
 
     it("should check out master branch, merge dev, run build script, and stage"
      + " working files", function () {
-      preversion(sh);
+      preversion();
 
       expect(stubSh.exec.getCall(0))
         .to.have.been.calledWith("git checkout master");
@@ -455,7 +456,7 @@ describe("lib", function () {
     it("should call 'npm version' with given version", function () {
       var exp = "npm version patch -m 'Finalize v%s'";
 
-      release("patch", sh);
+      release("patch");
 
       expect(stubSh.exec).to.have.been.calledWith(exp);
     });
@@ -491,21 +492,21 @@ describe("lib", function () {
     });
 
     it("should update package.json", function () {
-      setup(sh);
+      setup();
 
       expect(JSON.parse(sh.cat(tmpPackageJson)))
         .to.deep.equal(updatedPackageJson);
     });
 
     it("should make a backup of package.json", function () {
-      setup(sh);
+      setup();
 
       expect(sh.cat(path.join(tmpRoot, "package.json.save")).stdout)
         .to.equal(sh.cat(goodPackageJson).stdout);
     });
 
     it("should create resource files", function () {
-      setup(sh);
+      setup();
 
       resources.forEach(function (res) {
         expect(sh.test("-e", res)).to.be.true;
@@ -516,7 +517,7 @@ describe("lib", function () {
       sh.mkdir("src", "test");
       resources.forEach(function (res) { sh.cp(dummy, res) });
 
-      setup(sh);
+      setup();
 
       resources.forEach(function (res) {
         expect(sh.cat(res).stdout).to.equal("nada\n");
@@ -526,13 +527,13 @@ describe("lib", function () {
     it("should, if no package.json, throw", function () {
       sh.rm(tmpPackageJson);
 
-      expect(function () { setup(sh) }).to.throw(/no such file/);
+      expect(function () { setup() }).to.throw(/no such file/);
     });
 
     it("should, if invalid package.json, throw", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
-      expect(function () { setup(sh) }).to.throw(/Unexpected token/);
+      expect(function () { setup() }).to.throw(/Unexpected token/);
     });
   });
 
@@ -548,8 +549,7 @@ describe("lib", function () {
         },
       };
 
-      expect(setupPackageJson(packageJson, sh))
-        .to.deep.equal(updatedPackageJson);
+      expect(setupPackageJson(packageJson)).to.deep.equal(updatedPackageJson);
     });
   });
 
@@ -572,7 +572,7 @@ describe("lib", function () {
 
     it("should, if config.coverReport is false, run build but not coveralls",
     function () {
-      travis({coverReport: false}, sh);
+      travis({coverReport: false});
 
       expect(stubSh.exec).to.have.been.calledOnce;
       expect(stubSh.exec).to.have.been.calledWith("npm run build");
@@ -581,7 +581,7 @@ describe("lib", function () {
 
     it("should, if config.coverReport is true, run build and coveralls",
     function () {
-      travis({coverReport: true}, sh);
+      travis({coverReport: true});
 
       expect(stubSh.exec).to.have.been.calledWith("npm run build");
       expect(stubSh.exec).to.have.been.calledWith("coveralls");

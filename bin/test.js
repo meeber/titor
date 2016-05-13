@@ -44,7 +44,7 @@ function runSrcTest () {
 }
 
 function main () {
-  configurePath(sh);
+  configurePath();
 
   var tests = process.argv.length > 2 ? process.argv.slice(2) : ["src", build];
 
