@@ -10,6 +10,4 @@ sh.set("-e");
 
 configurePath();
 
-var config = loadConfig();
-
-travis(config);
+travis(loadConfig());

@@ -9,6 +9,7 @@ var sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 sh.set("-e");
 
+var bundle = require("../lib/bundle");
 var clean = require("../lib/clean");
 var clone = require("../lib/clone");
 var configurePath = require("../lib/configure-path");
@@ -82,6 +83,115 @@ describe("lib", function () {
   afterEach(function () {
     sh.cd(__dirname);
     sh.rm("-rf", tmpRoot);
+  });
+
+  describe("bundle", function () {
+    var stubs = ["echo", "exec"];
+    var stubSh;
+    var tmpCurBuildBundleDir = path.join(tmpRoot, "bundle/current");
+    var tmpCurBuildBundleMap = path.join(tmpCurBuildBundleDir, "bundle.js.map");
+    var tmpCurTestBundleDir = path.join(tmpCurBuildBundleDir, "test");
+    var tmpCurTestBundleMap = path.join(tmpCurTestBundleDir, "test.js.map");
+    var tmpLegBuildBundleDir = path.join(tmpRoot, "bundle/legacy");
+    var tmpLegBuildBundleMap = path.join(tmpLegBuildBundleDir, "bundle.js.map");
+    var tmpLegTestBundleDir = path.join(tmpLegBuildBundleDir, "test");
+    var tmpLegTestBundleMap = path.join(tmpLegTestBundleDir, "test.js.map");
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) {
+        // TODO: Remove this if exorcist updated to throw errors
+        var fn = stub !== "exec" ? undefined : function () {
+          if (!sh.test("-e", tmpCurBuildBundleMap)) {
+            sh.mkdir("-p", tmpCurTestBundleDir, tmpLegTestBundleDir);
+            sh.touch(
+              tmpCurBuildBundleMap,
+              tmpCurTestBundleMap,
+              tmpLegBuildBundleMap,
+              tmpLegTestBundleMap
+            );
+          }
+        };
+
+        stubSh[stub] = sinon.stub(sh, stub, fn);
+      });
+    });
+
+    it("should create build bundle for given type", function () {
+      var exp = "browserify"
+              + " -d"
+              + " -s testPackage"
+              + " build/current"
+              + " | exorcist bundle/current/bundle.js.map"
+              + " > bundle/current/bundle.js";
+
+      bundle(["current"], {export: "testPackage"});
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should create test bootstrap bundle for given type", function () {
+      var exp = "browserify "
+              + " -d "
+              + path.join(__dirname, "../test-bootstrap/common.js")
+              + " -o bundle/current/test/bootstrap.js";
+
+      bundle(["current"], {export: "testPackage"});
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should, if legacy type, create test bootstrap bundle with shim",
+    function () {
+      var exp = "browserify "
+              + "-r babel-polyfill"
+              + " -d "
+              + path.join(__dirname, "../test-bootstrap/common.js")
+              + " -o bundle/legacy/test/bootstrap.js";
+
+      bundle(["legacy"], {export: "testPackage"});
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should create test bundle for given type", function () {
+      var exp = "browserify"
+              + " -d "
+              + "build/current/test/"
+              + " | exorcist bundle/current/test/test.js.map"
+              + " > bundle/current/test/test.js";
+
+      bundle(["current"], {export: "testPackage"});
+
+      expect(stubSh.exec).to.have.been.calledWith(exp);
+    });
+
+    it("should copy test bundle resources for given type", function () {
+      var tmpIndexHtml = path.join(tmpRoot, "bundle/current/test/index.html");
+      var tmpMochaCss = path.join(tmpRoot, "bundle/current/test/mocha.css");
+      var tmpMochaJs = path.join(tmpRoot, "bundle/current/test/mocha.js");
+
+      bundle(["current"], {export: "testPackage"});
+
+      expect(sh.test("-e", tmpIndexHtml)).to.be.true;
+      expect(sh.test("-e", tmpMochaCss)).to.be.true;
+      expect(sh.test("-e", tmpMochaJs)).to.be.true;
+    });
+
+    it("should, if multiple types, create bundles for each one", function () {
+      bundle(["current", "legacy"], {export: "testPackage"});
+
+      expect(stubSh.exec).to.have.callCount(6);
+    });
+
+    it("should, if invalid type, throw", function () {
+      expect(function () { bundle(["invalid_type"]) })
+        .to.throw("Invalid bundle: invalid_type");
+    });
   });
 
   describe("clean", function () {

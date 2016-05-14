@@ -10,8 +10,6 @@ sh.set("-e");
 
 configurePath();
 
-var config = loadConfig();
-
 var types = process.argv.length > 2 ? process.argv.slice(2) : ["src"];
 
-test(types, config);
+test(types, loadConfig());

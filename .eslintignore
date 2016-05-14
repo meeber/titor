@@ -1,3 +1,4 @@
 /coverage
+/resource/bundle/_mocha.js
 /resource/src/_index.js
 /resource/test/_index.js
