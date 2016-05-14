@@ -95,16 +95,23 @@ describe("lib", function () {
     beforeEach(function () {
       stubSh = {};
       stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
-
-      sh.mkdir("-p", "build/a", "bundle/b", "coverage/c");
     });
 
     it("should delete target subdirectories", function () {
+      var tmpBuild = path.join(tmpRoot, "build");
+      var tmpBuildA = path.join(tmpBuild, "A");
+      var tmpBundle = path.join(tmpRoot, "bundle");
+      var tmpBundleB = path.join(tmpBundle, "B");
+      var tmpCoverage = path.join(tmpRoot, "coverage");
+      var tmpCoverageC = path.join(tmpCoverage, "C");
+
+      sh.mkdir("-p", tmpBuildA, tmpBundleB, tmpCoverageC);
+
       clean(["build", "coverage"]);
 
-      expect(sh.test("-e", "build")).to.be.false;
-      expect(sh.test("-e", "bundle")).to.be.true;
-      expect(sh.test("-e", "coverage")).to.be.false;
+      expect(sh.test("-e", tmpBuild)).to.be.false;
+      expect(sh.test("-e", tmpBundle)).to.be.true;
+      expect(sh.test("-e", tmpCoverage)).to.be.false;
     });
 
     it("should, if invalid target, throw", function () {
@@ -144,8 +151,10 @@ describe("lib", function () {
     });
 
     it("should, if in subdirectory, correctly configure path", function () {
-      sh.mkdir("subdir");
-      sh.cd("subdir");
+      var tmpSubdir = path.join(tmpRoot, "subdir");
+
+      sh.mkdir(tmpSubdir);
+      sh.cd(tmpSubdir);
 
       configurePath();
 
@@ -516,7 +525,7 @@ describe("lib", function () {
     });
 
     it("shouldn't overwrite existing resource files", function () {
-      sh.mkdir("src", "test");
+      sh.mkdir(path.join(tmpRoot, "src"), path.join(tmpRoot, "test"));
       resources.forEach(function (res) { sh.cp(dummy, res) });
 
       setup();
