@@ -60,9 +60,6 @@
     "titor-bundle": "./bin/bundle.js",
     "titor-clean": "./bin/clean.js",
     "titor-lint": "./bin/lint.js",
-    "titor-postversion": "./bin/postversion.js",
-    "titor-preversion": "./bin/preversion.js",
-    "titor-release": "./bin/release.js",
     "titor-setup": "./bin/setup.js",
     "titor-test": "./bin/test.js",
     "titor-travis": "./bin/travis.js"

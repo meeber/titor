@@ -30,15 +30,6 @@ When you're ready to build, Titor:
 - Creates a browser bundle for each build's tests 
 - Reports test coverage to Coveralls if built from within Travis CI
 
-When you're ready to publish, Titor:
-
-- Merges your dev branch with master
-- Builds and tests your package
-- Updates your `package.json` version
-- Tags the release
-- Pushes to github
-- Publishes to npm
-
 # Background
 
 In the year 2036, corporeal time-travel is added to the CERNScript specification, further widening the gap between the elite ruling class and the rest of the world's population who are still stuck using ECMAScript 5 due to browser compatibility concerns.
@@ -112,17 +103,6 @@ If you'd like to unit test other source files, create additional test files in `
 
 - `npm run lint`:
     1. Lint `src/` and `test/`
-
-- `npm run release [patch|minor|major]`:
-    1. Check out master branch
-    1. Merge dev branch into master branch
-    1. Launch `npm run build`
-    1. Bump `version` in `package.json` and commit changes
-    1. Tag release version
-    1. Check out dev branch
-    1. Merge master branch into dev branch
-    1. Push changes
-    1. Publish to npm
 
 - `npm test`:
     1. Run all of your tests against `src/`

@@ -19,9 +19,6 @@ var getPackageExport = require("../lib/get-package-export");
 var lint = require("../lib/lint");
 var loadConfig = require("../lib/load-config");
 var loadPackageJson = require("../lib/load-package-json");
-var postversion = require("../lib/postversion");
-var preversion = require("../lib/preversion");
-var release = require("../lib/release");
 var setup = require("../lib/setup");
 var setupPackageJson = require("../lib/setup-package-json");
 var test = require("../lib/test");
@@ -64,9 +61,6 @@ var updatedPackageJson = {
     bundle: "titor-bundle",
     clean: "titor-clean",
     lint: "titor-lint",
-    postversion: "titor-postversion",
-    preversion: "titor-preversion",
-    release: "titor-release",
     test: "titor-test",
     travis: "titor-travis",
   },
@@ -506,80 +500,6 @@ describe("lib", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
       expect(function () { loadPackageJson() }).to.throw(/Unexpected token/);
-    });
-  });
-
-  describe("postversion", function () {
-    var stubs = ["echo", "exec"];
-    var stubSh;
-
-    afterEach(function () {
-      stubs.forEach(function (stub) { stubSh[stub].restore() });
-    });
-
-    beforeEach(function () {
-      stubSh = {};
-      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
-    });
-
-    it("should check out dev branch, merge master, push branch/tags, and"
-     + " publish to npm", function () {
-      postversion();
-
-      expect(stubSh.exec.getCall(0))
-        .to.have.been.calledWith("git checkout dev");
-      expect(stubSh.exec.getCall(1))
-        .to.have.been.calledWith("git merge master");
-      expect(stubSh.exec.getCall(2)).to.have.been.calledWith("git push");
-      expect(stubSh.exec.getCall(3)).to.have.been.calledWith("git push --tags");
-      expect(stubSh.exec.getCall(4)).to.have.been.calledWith("npm publish");
-    });
-  });
-
-  describe("preversion", function () {
-    var stubs = ["echo", "exec"];
-    var stubSh;
-
-    afterEach(function () {
-      stubs.forEach(function (stub) { stubSh[stub].restore() });
-    });
-
-    beforeEach(function () {
-      stubSh = {};
-      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
-    });
-
-    it("should check out master branch, merge dev, run build script, and stage"
-     + " working files", function () {
-      preversion();
-
-      expect(stubSh.exec.getCall(0))
-        .to.have.been.calledWith("git checkout master");
-      expect(stubSh.exec.getCall(1)).to.have.been.calledWith("git merge dev");
-      expect(stubSh.exec.getCall(2)).to.have.been.calledWith("npm run build");
-      expect(stubSh.exec.getCall(3)).to.have.been.calledWith("git add -A");
-    });
-  });
-
-  describe("release", function () {
-    var stubs = ["echo", "exec"];
-    var stubSh;
-
-    afterEach(function () {
-      stubs.forEach(function (stub) { stubSh[stub].restore() });
-    });
-
-    beforeEach(function () {
-      stubSh = {};
-      stubs.forEach(function (stub) { stubSh[stub] = sinon.stub(sh, stub) });
-    });
-
-    it("should call 'npm version' with given version", function () {
-      var exp = "npm version patch -m 'Finalize v%s'";
-
-      release("patch");
-
-      expect(stubSh.exec).to.have.been.calledWith(exp);
     });
   });
 
