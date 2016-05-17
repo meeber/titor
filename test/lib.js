@@ -9,6 +9,7 @@ var sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 sh.set("-e");
 
+var build = require("../lib/build");
 var bundle = require("../lib/bundle");
 var clean = require("../lib/clean");
 var clone = require("../lib/clone");
@@ -77,6 +78,86 @@ describe("lib", function () {
   afterEach(function () {
     sh.cd(__dirname);
     sh.rm("-rf", tmpRoot);
+  });
+
+  describe("build", function () {
+    var otherBuild = detectedBuild === "current" ? "legacy" : "current";
+    var stubs = ["echo", "exec"];
+    var stubSh;
+    var tmpCurBuildBundleDir = path.join(tmpRoot, "bundle/current");
+    var tmpCurBuildBundleMap = path.join(tmpCurBuildBundleDir, "bundle.js.map");
+    var tmpCurTestBundleDir = path.join(tmpCurBuildBundleDir, "test");
+    var tmpCurTestBundleMap = path.join(tmpCurTestBundleDir, "test.js.map");
+    var tmpLegBuildBundleDir = path.join(tmpRoot, "bundle/legacy");
+    var tmpLegBuildBundleMap = path.join(tmpLegBuildBundleDir, "bundle.js.map");
+    var tmpLegTestBundleDir = path.join(tmpLegBuildBundleDir, "test");
+    var tmpLegTestBundleMap = path.join(tmpLegTestBundleDir, "test.js.map");
+
+    afterEach(function () {
+      stubs.forEach(function (stub) { stubSh[stub].restore() });
+    });
+
+    beforeEach(function () {
+      stubSh = {};
+      stubs.forEach(function (stub) {
+        // TODO: Remove this if exorcist updated to throw errors
+        var fn = stub !== "exec" ? undefined : function () {
+          if (!sh.test("-e", tmpCurBuildBundleMap)) {
+            sh.mkdir("-p", tmpCurTestBundleDir, tmpLegTestBundleDir);
+            sh.touch(
+              tmpCurBuildBundleMap,
+              tmpCurTestBundleMap,
+              tmpLegBuildBundleMap,
+              tmpLegTestBundleMap
+            );
+          }
+        };
+
+        stubSh[stub] = sinon.stub(sh, stub, fn);
+      });
+    });
+
+    it("should, if config.test, run src test", function () {
+      build(["current"], {test: true});
+
+      expect(stubSh.echo).to.be.calledWith("*** BEGIN TEST src");
+    });
+
+    it("should, if config.test, run test for detected but not other build",
+    function () {
+      build(["current"], {test: true});
+
+      expect(stubSh.echo).to.be.calledWith("*** BEGIN TEST " + detectedBuild);
+      expect(stubSh.echo).to.not.be.calledWith("*** BEGIN TEST " + otherBuild);
+    });
+
+    it("should, if not config.test, not run any test", function () {
+      build(["current"], {});
+
+      expect(stubSh.echo).to.not.be.calledWith("*** BEGIN TEST src");
+      expect(stubSh.echo).to.not.be.calledWith("*** BEGIN TEST current");
+      expect(stubSh.echo).to.not.be.calledWith("*** BEGIN TEST legacy");
+    });
+
+    it("should, if config.bundle, create bundle for same builds", function () {
+      build(["current", "legacy"], {bundle: true});
+
+      expect(stubSh.echo).to.be.calledWith("*** BEGIN BUNDLE current");
+      expect(stubSh.echo).to.be.calledWith("*** BEGIN BUNDLE legacy");
+    });
+
+    it("should, if not config.bundle, clean not create bundles", function () {
+      build(["current", "legacy"], {});
+
+      expect(stubSh.echo).to.be.calledWith("*** BEGIN CLEAN bundle");
+      expect(stubSh.echo).to.not.be.calledWith("*** BEGIN BUNDLE current");
+      expect(stubSh.echo).to.not.be.calledWith("*** BEGIN BUNDLE legacy");
+    });
+
+    it("should, if invalid type, throw", function () {
+      expect(function () { build(["invalid_type"], {}) })
+        .to.throw("Invalid build: invalid_type");
+    });
   });
 
   describe("bundle", function () {
