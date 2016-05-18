@@ -28,7 +28,7 @@ Titor's build script does the following:
 - Create a browser bundle for each build's tests 
 - Report test coverage to Coveralls if built from within Travis CI
 
-# Background
+# Backstory
 
 In the year 2036, corporeal time-travel is added to the CERNScript specification, further widening the gap between the elite ruling class and the rest of the world's population who are still stuck using ECMAScript 5 due to browser compatibility concerns.
 
@@ -36,7 +36,7 @@ A rebel named John Titor, armed only with an IBM 5100, manages to hack CERN's da
 
 His goal is singular: Prevent his dystopian future from becoming a reality by empowering developers to embrace ECMAScript 2015 and beyond.
 
-# Install
+# Installation
 
 `npm install --save-dev titor`
 
@@ -60,9 +60,9 @@ For npm v3.x or higher, you must then run `npm install` to install all of the pe
 1. Create `.gitignore` if it doesn't exist
 1. Create `.titorrc.yml` if it doesn't exist
 1. Create `.travis.yml` if it doesn't exist
-1. Create `src/index.js` if it doesn't exist
+1. Create `src/**<package-export>**.js` if it doesn't exist
 1. Create `test/.eslintrc.yml` if it doesn't exist
-1. Create `test/index.js` if it doesn't exist
+1. Create `test/**<package-export>**.js` if it doesn't exist
 
 You can remove `package.json.save` after reviewing the new `package.json`.
 
@@ -70,7 +70,7 @@ You can remove `package.json.save` after reviewing the new `package.json`.
 
 Write your code in `src/` using the latest ECMAScript features.
 
-The Titor setup script creates a barebones `src/index.js` with a default export named after your package. This is your **package export**.
+The Titor setup script creates a barebones `src/**<package-export>**.js` with a default export named after your package.
 
 Your **package export** is served to consumers who import your package, and is exposed as a global variable via your browser bundles. It can be of any type but is typically an object, function, or ES6 class.
 
@@ -78,9 +78,9 @@ Your **package export** is served to consumers who import your package, and is e
 
 Write your tests in `test/` using the latest ECMAScript features.
 
-The Titor setup script creates a barebones `test/index.js`. This file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
+The Titor setup script creates a barebones `test/**<package-export>**.js`. This file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
 
-Your `test/index.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script will automatically register your **package export** as a global. Don't import it manually.
+Your `test/**<package-export>**.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script automatically registers your **package export** as a global. Don't import it manually.
 
 If you'd like to unit test other source files, create additional test files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
 
@@ -113,8 +113,8 @@ The build script does the following (based on `.titorrc` options):
     1. Optionally calculate test coverage of `src/`
     1. Optionally lint `src/` and `test/`
 
-- `npm test [current|legacy]`:
-    1. Run your **package export tests** against the specified build
+- `npm test [current] [legacy]`:
+    1. Run your **package export tests** against the specified build(s)
 
 # Config
 

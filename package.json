@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "camelcase": "^3.0.0",
+    "decamelize": "^1.2.0",
     "shelljs": "^0.7.0"
   },
   "devDependencies": {
