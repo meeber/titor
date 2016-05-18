@@ -6,7 +6,7 @@
 
 JavaScript package assistant.
 
-With a single command, Titor kick-starts your package with:
+Titor's setup script configures your package to use:
 
 - Transpiling via [Babel](https://babeljs.io/)
 - Bundling via [Browserify](http://browserify.org/)
@@ -16,19 +16,17 @@ With a single command, Titor kick-starts your package with:
 - Continuous Integration via [Travis CI](https://travis-ci.org/)
 - Source Mapping via [Source Map Support](https://github.com/evanw/node-source-map-support)
 
-Write your source code and tests using the latest ECMAScript features.
+Titor's build script does the following:
 
-When you're ready to build, Titor:
-
-- Tests, lints, and calculates test coverage on your source
-- Creates two builds:
+- Test, lint, and calculate test coverage of your source
+- Create two builds:
     1. **Current**: Minimally transpiled to Node v6.x.x
     2. **Legacy**: Fully transpiled to ES5
-- Creates an entry point for your package so that when its imported, it automatically serves the best build based on the consumer's Node version
-- Tests your builds
-- Creates a browser bundle for each build
-- Creates a browser bundle for each build's tests 
-- Reports test coverage to Coveralls if built from within Travis CI
+- Create an entry point for your package that automatically serves the best build to consumers based on their Node version
+- Test your builds
+- Create a browser bundle for each build
+- Create a browser bundle for each build's tests 
+- Report test coverage to Coveralls if built from within Travis CI
 
 # Background
 
@@ -42,30 +40,31 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 `npm install --save-dev titor`
 
-# Setup
+# Usage
+
+## Setup
 
 `./node_modules/.bin/titor-setup`
 
 For npm v3.x or higher, you must then run `npm install` to install all of the peer dependencies that the setup script added to package.json. (Older versions of npm will install peer dependencies automatically when Titor is installed.)
 
 `titor-setup` does the following:
-  1. Make a backup of your `package.json` named `package.json.save`
-  1. Edit `package.json`:
+
+1. Make a backup of your `package.json` named `package.json.save`
+1. Edit `package.json`:
     - Set `main` to `build/`
     - Add Titor's `peerDependencies`
-  1. Create `.babelrc` if it doesn't exist
-  1. Create `.eslintignore` if it doesn't exist
-  1. Create `.eslintrc.yml` if it doesn't exist
-  1. Create `.gitignore` if it doesn't exist
-  1. Create `.titorrc.yml` if it doesn't exist
-  1. Create `.travis.yml` if it doesn't exist
-  1. Create `src/index.js` if it doesn't exist
-  1. Create `test/.eslintrc.yml` if it doesn't exist
-  1. Create `test/index.js` if it doesn't exist
+1. Create `.babelrc` if it doesn't exist
+1. Create `.eslintignore` if it doesn't exist
+1. Create `.eslintrc.yml` if it doesn't exist
+1. Create `.gitignore` if it doesn't exist
+1. Create `.titorrc.yml` if it doesn't exist
+1. Create `.travis.yml` if it doesn't exist
+1. Create `src/index.js` if it doesn't exist
+1. Create `test/.eslintrc.yml` if it doesn't exist
+1. Create `test/index.js` if it doesn't exist
 
 You can remove `package.json.save` after reviewing the new `package.json`.
-
-# Usage
 
 ## Write Code
 
@@ -85,15 +84,20 @@ Your `test/index.js` file is used by Titor when testing your source, your builds
 
 If you'd like to unit test other source files, create additional test files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
 
-## Scripts
+## Build
 
-- `npm run build`:
-    1. Optionally run all of your tests against `src/`
-    1. Optionally lint `src/` and `test/`
-    1. Optionally calculate test coverage of `src/`
-    1. Create `current` and `legacy` builds based on `src/`
-    1. Optionally run your **package export tests** against the best build for your version of Node
-    1. Optionally create browser bundles for each build and each build's tests
+`npm run build`
+
+The build script does the following (based on `.titorrc` options):
+
+1. Optionally run all of your tests against `src/`
+1. Optionally lint `src/` and `test/`
+1. Optionally calculate test coverage of `src/`
+1. Create `current` and `legacy` builds from `src/`
+1. Optionally run your **package export tests** against the best build for your version of Node
+1. Optionally create browser bundles for each build and each build's tests
+
+## Other Scripts
 
 - `npm run bundle`:
     1. Create browser bundles for each build and each build's tests
@@ -104,13 +108,7 @@ If you'd like to unit test other source files, create additional test files in `
 - `npm run lint`:
     1. Lint `src/` and `test/`
 
-- `npm test`:
-    1. Run all of your tests against `src/`
-    1. Optionally calculate test coverage of `src/`
-    1. Optionally lint `src/` and `test/`
-    1. Run your **package export tests** against the best build for your version of Node
-
-- `npm test src`:
+- `npm test` or `npm test src`:
     1. Run all of your tests against `src/`
     1. Optionally calculate test coverage of `src/`
     1. Optionally lint `src/` and `test/`
