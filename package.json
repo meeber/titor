@@ -5,6 +5,7 @@
   "author": "Grant Snodgrass <meeber@gametypething.com>",
   "license": "MIT",
   "repository": "meeber/titor",
+  "main": "api/titor.js",
   "engines": {
     "node": ">=0.12.0"
   },
