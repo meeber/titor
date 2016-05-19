@@ -57,13 +57,7 @@
     "source-map-support": "^0.4.0"
   },
   "bin": {
-    "titor-build": "./bin/build.js",
-    "titor-bundle": "./bin/bundle.js",
-    "titor-clean": "./bin/clean.js",
-    "titor-lint": "./bin/lint.js",
-    "titor-setup": "./bin/setup.js",
-    "titor-test": "./bin/test.js",
-    "titor-travis": "./bin/travis.js"
+    "titor": "./bin/titor.js",
   },
   "scripts": {
     "clean": "rm -R -f coverage/",

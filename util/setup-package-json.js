@@ -4,14 +4,7 @@ var clone = require("./clone");
 var loadPackageJson = require("./load-package-json");
 var path = require("path");
 
-var SCRIPTS = {
-  build: "titor-build",
-  bundle: "titor-bundle",
-  clean: "titor-clean",
-  lint: "titor-lint",
-  test: "titor-test",
-  travis: "titor-travis",
-};
+var SCRIPTS = ["build", "bundle", "clean", "lint", "test", "travis"];
 
 module.exports = function setupPackageJson (curPj) {
   var newPj = clone(curPj);
@@ -22,8 +15,8 @@ module.exports = function setupPackageJson (curPj) {
   if (!newPj.devDependencies) newPj.devDependencies = {};
   if (!newPj.scripts) newPj.scripts = {};
 
-  Object.keys(SCRIPTS).forEach(function setScript (key) {
-    newPj.scripts[key] = SCRIPTS[key];
+  SCRIPTS.forEach(function setScript (key) {
+    newPj.scripts[key] = "titor " + key;
   });
 
   var titorPj = loadPackageJson(path.join(__dirname, ".."));
@@ -39,8 +32,7 @@ module.exports = function setupPackageJson (curPj) {
     }
   );
 
-  if (newPj.devDependencies.semver)
-    delete newPj.devDependencies.semver;
+  if (newPj.devDependencies.semver) delete newPj.devDependencies.semver;
 
   return newPj;
 };
