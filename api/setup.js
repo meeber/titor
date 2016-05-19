@@ -1,11 +1,11 @@
 "use strict";
 
-var createResource = require("./create-resource");
+var createResource = require("../util/create-resource");
 var decamelize = require("decamelize");
-var getPackageExport = require("./get-package-export");
-var loadPackageJson = require("./load-package-json");
+var getPackageExport = require("../util/get-package-export");
+var loadPackageJson = require("../util/load-package-json");
 var path = require("path");
-var setupPackageJson = require("./setup-package-json");
+var setupPackageJson = require("../util/setup-package-json");
 var sh = require("shelljs");
 
 function createResources (packageJson) {

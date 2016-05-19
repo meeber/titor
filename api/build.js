@@ -2,15 +2,15 @@
 
 var bundle = require("./bundle");
 var clean = require("./clean");
-var createResource = require("./create-resource");
+var createResource = require("../util/create-resource");
 var decamelize = require("decamelize");
-var detectBuild = require("./detect-build");
+var detectBuild = require("../util/detect-build");
 var path = require("path");
 var sh = require("shelljs");
 var test = require("./test");
 
 function copyBuildResources (pkgExport) {
-  sh.cp(path.join(__dirname, "../lib/detect-build.js"), "build/");
+  sh.cp(path.join(__dirname, "../util/detect-build.js"), "build/");
   createResource("build/index.js");
   createResource("build/current.js", decamelize(pkgExport, "-"));
   createResource("build/legacy.js", decamelize(pkgExport, "-"));

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
-var clean = require("../lib/clean");
+var clean = require("../api/clean");
 var sh = require("shelljs");
 
 sh.set("-e");

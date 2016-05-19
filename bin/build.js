@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 "use strict";
 
-var build = require("../lib/build");
-var configurePath = require("../lib/configure-path");
-var loadConfig = require("../lib/load-config");
+var build = require("../api/build");
+var configurePath = require("../util/configure-path");
+var loadConfig = require("../util/load-config");
 var sh = require("shelljs");
 
 sh.set("-e");
