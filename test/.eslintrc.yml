@@ -1,5 +1,11 @@
 env:
   mocha: true
+globals:
+  chai: false
+  expect: false
+  standup: false
+  teardown: false
+  tmpRoot: false
 rules:
   func-names: off
   no-unused-expressions: off

@@ -12,8 +12,6 @@ sh.set("-e");
 var build = require("../lib/build");
 var bundle = require("../lib/bundle");
 var clean = require("../lib/clean");
-var clone = require("../lib/clone");
-var configurePath = require("../lib/configure-path");
 var createResource = require("../lib/create-resource");
 var detectBuild = require("../lib/detect-build");
 var getPackageExport = require("../lib/get-package-export");
@@ -68,18 +66,6 @@ var updatedPackageJson = {
 };
 
 describe("lib", function () {
-  beforeEach(function () {
-    if (sh.test("-e", tmpRoot)) sh.rm("-rf", tmpRoot);
-
-    sh.mkdir(tmpRoot);
-    sh.cd(tmpRoot);
-  });
-
-  afterEach(function () {
-    sh.cd(__dirname);
-    sh.rm("-rf", tmpRoot);
-  });
-
   describe("build", function () {
     var otherBuild = detectedBuild === "current" ? "legacy" : "current";
     var stubs = ["echo", "exec"];
@@ -302,56 +288,6 @@ describe("lib", function () {
     it("should, if invalid target, throw", function () {
       expect(function () { clean(["invalid_target"]) })
         .to.throw("Invalid clean target: invalid_target");
-    });
-  });
-
-  describe("clone", function () {
-    it("should return a deep-copied clone of object", function () {
-      var obj = {a: {b: 1, c: [2, {d: "blah"}]}, e: {f: [{g: [7]}]}};
-
-      var clonedObj = clone(obj);
-
-      expect(clonedObj).to.deep.equal(obj);
-      expect(clonedObj).to.not.equal(obj);
-    });
-  });
-
-  describe("configurePath", function () {
-    var origPath = process.env.PATH;
-    var rootNodeModules = path.resolve(tmpRoot, "node_modules/.bin");
-
-    afterEach(function () { process.env.PATH = origPath });
-
-    beforeEach(function () {
-      var goodPackageJson = path.join(resource, "good.package.json");
-      var tmpPackageJson = path.join(tmpRoot, "package.json");
-
-      sh.cp(goodPackageJson, tmpPackageJson);
-    });
-
-    it("should add package's node_modules/.bin to path", function () {
-      configurePath();
-
-      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
-    });
-
-    it("should, if in subdirectory, correctly configure path", function () {
-      var tmpSubdir = path.join(tmpRoot, "subdir");
-
-      sh.mkdir(tmpSubdir);
-      sh.cd(tmpSubdir);
-
-      configurePath();
-
-      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
-    });
-
-    it("shouldn't modify path if already configured", function () {
-      configurePath();
-      var configuredPath = process.env.PATH;
-      configurePath();
-
-      expect(process.env.PATH).to.equal(configuredPath);
     });
   });
 

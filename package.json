@@ -68,7 +68,7 @@
     "postversion": "git checkout dev && git merge master && git push && git push --tags && npm publish",
     "preversion": "git checkout master && git merge dev && npm test",
     "release": "npm version -m 'Finalize v%s'",
-    "test": "mocha 'test/**/*.test.js' && npm run lint",
+    "test": "mocha -r test/fixture 'test/**/*.test.js' && npm run lint",
     "travis": "npm run lint && npm run cover-report"
   }
 }
