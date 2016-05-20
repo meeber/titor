@@ -58,7 +58,7 @@
     "source-map-support": "^0.4.0"
   },
   "bin": {
-    "titor": "./bin/titor.js",
+    "titor": "./bin/titor.js"
   },
   "scripts": {
     "clean": "rm -R -f coverage/",
