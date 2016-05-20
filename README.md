@@ -44,11 +44,11 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 
 ## Setup
 
-`./node_modules/.bin/titor-setup`
+`./node_modules/.bin/titor setup`
 
 For npm v3.x or higher, you must then run `npm install` to install all of the peer dependencies that the setup script added to package.json. (Older versions of npm will install peer dependencies automatically when Titor is installed.)
 
-`titor-setup` does the following:
+`titor setup` does the following:
 
 1. Make a backup of your `package.json` named `package.json.save`
 1. Edit `package.json`:
@@ -132,17 +132,7 @@ Optional:
 - `test`: If true, run tests during build process
 - `lint`: If true, lint `src/` and `test/` when running tests
 
-Example:
-
-```js
-{
-  bundle: true,
-  cover: true,
-  coverReport: true,
-  export: "myPackageExport",
-  lint: true,
-  test: true,
-}
+All of the config files created for Titor's peer dependencies are also fully customizable.
 ```
 
 # Consumers
