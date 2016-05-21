@@ -15,28 +15,33 @@ describe("configurePath", function () {
 
   beforeEach(function () { standup() });
 
-  it("should add package's node_modules/.bin to path", function () {
-    configurePath();
+  describe("package's node_modules/.bin isn't in path", function () {
+    it("add package's node_modules/.bin to path", function () {
+      configurePath();
 
-    expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+    });
   });
 
-  it("should work even if in subdirectory", function () {
-    var tmpSubdir = path.join(tmpRoot, "subdir");
+  describe("run script while in a subdirectory", function () {
+    it("add package's node_modules/.bin to path", function () {
+      var tmpSubdir = path.join(tmpRoot, "subdir");
 
-    sh.mkdir(tmpSubdir);
-    sh.cd(tmpSubdir);
+      sh.mkdir(tmpSubdir);
+      sh.cd(tmpSubdir);
+      configurePath();
 
-    configurePath();
-
-    expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+    });
   });
 
-  it("shouldn't modify path if already configured", function () {
-    configurePath();
-    var configuredPath = process.env.PATH;
-    configurePath();
+  describe("package's node_modules/.bin is already in path", function () {
+    it("don't modify path", function () {
+      configurePath();
+      var configuredPath = process.env.PATH;
+      configurePath();
 
-    expect(process.env.PATH).to.equal(configuredPath);
+      expect(process.env.PATH).to.equal(configuredPath);
+    });
   });
 });
