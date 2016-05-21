@@ -75,9 +75,9 @@ describe("createResource", function () {
     it("copy src file from srcPath to dstPath", function () {
       var dstPath = path.join(tmpRoot, "src/testPackage.js");
       var srcPath = path.join(
-                      __dirname,
-                      "../../resource/src/_package-export.js"
-                    );
+        __dirname,
+        "../../resource/src/_package-export.js"
+      );
 
       createResource("src/testPackage.js", undefined, srcPath);
 
