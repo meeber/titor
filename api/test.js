@@ -22,7 +22,7 @@ function testSrc (isLint, detectedBuild) {
 }
 
 function testSrcCover (isLint, detectedBuild) {
-  clean(["coverage"]);
+  clean("coverage");
 
   sh.exec("BABEL_ENV=" + detectedBuild
         + " istanbul cover"
@@ -36,6 +36,21 @@ function testSrcCover (isLint, detectedBuild) {
 }
 
 module.exports = function test (types, config) {
+  switch (typeof types) {
+    case "object":
+      if (!Array.isArray(types)) throw TypeError("Invalid test types");
+      if (!types.length) types.push("src");
+      break;
+    case "string":
+      types = [types];
+      break;
+    case "undefined":
+      types = ["src"];
+      break;
+    default:
+      throw TypeError("Invalid test types");
+  }
+
   var detectedBuild = detectBuild();
 
   types.forEach(function _test (type) {

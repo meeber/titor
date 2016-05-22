@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 "use strict";
 
 var clean = require("./clean");
@@ -81,7 +80,22 @@ function createTestBundle (type, pkgExport) {
 }
 
 module.exports = function bundle (types, config) {
-  clean(["bundle"]);
+  switch (typeof types) {
+    case "object":
+      if (!Array.isArray(types)) throw TypeError("Invalid bundle types");
+      if (!types.length) types.push("current", "legacy");
+      break;
+    case "string":
+      types = [types];
+      break;
+    case "undefined":
+      types = ["current", "legacy"];
+      break;
+    default:
+      throw TypeError("Invalid bundle types");
+  }
+
+  clean("bundle");
 
   types.forEach(function _bundle (type) {
     sh.echo("*** BEGIN BUNDLE " + type);

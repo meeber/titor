@@ -37,9 +37,25 @@ function createBuildTest (type, pkgExport) {
 }
 
 module.exports = function build (types, config) {
-  clean(["build"]);
+  console.log(typeof types);
+  switch (typeof types) {
+    case "object":
+      if (!Array.isArray(types)) throw TypeError("Invalid build types");
+      if (!types.length) types.push("current", "legacy");
+      break;
+    case "string":
+      types = [types];
+      break;
+    case "undefined":
+      types = ["current", "legacy"];
+      break;
+    default:
+      throw TypeError("Invalid build types");
+  }
 
-  if (config.test) test(["src"], config);
+  clean("build");
+
+  if (config.test) test("src", config);
 
   types.forEach(function _build (type) {
     sh.echo("*** BEGIN BUILD " + type);
@@ -58,8 +74,8 @@ module.exports = function build (types, config) {
 
   copyBuildResources(config.export);
 
-  if (config.test) test([detectBuild()], config);
+  if (config.test) test(detectBuild(), config);
 
   if (config.bundle) bundle(types, config);
-  else clean(["bundle"]);
+  else clean("bundle");
 };
