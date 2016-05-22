@@ -14,7 +14,6 @@ var bundle = require("../lib/bundle");
 var clean = require("../lib/clean");
 var lint = require("../lib/lint");
 var setup = require("../lib/setup");
-var setupPackageJson = require("../lib/setup-package-json");
 var test = require("../lib/test");
 var travis = require("../lib/travis");
 
@@ -22,43 +21,6 @@ var detectedBuild = detectBuild();
 var expect = chai.expect;
 var resource = path.join(__dirname, "resource");
 var tmpRoot = path.join(sh.tempdir(), "titor-test-root");
-
-var updatedPackageJson = {
-  name: "test-package",
-  version: "0.0.0",
-  description: "a test package",
-  main: "build/",
-  dependencies: {
-    semver: "^5.1.0",
-  },
-  devDependencies: {
-    "babel-cli": "^6.9.0",
-    "babel-core": "^6.9.0",
-    "babel-eslint": "^6.0.4",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
-    "babel-polyfill": "^6.9.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-0": "^6.5.0",
-    browserify: "^13.0.1",
-    chai: "^3.5.0",
-    coveralls: "^2.11.9",
-    eslint: "^2.10.2",
-    exorcist: "^0.4.0",
-    istanbul: "^1.0.0-alpha.2",
-    "js-yaml": "^3.6.1",
-    mocha: "^2.4.5",
-    "source-map-support": "^0.4.0",
-  },
-  scripts: {
-    build: "titor-build",
-    bundle: "titor-bundle",
-    clean: "titor-clean",
-    lint: "titor-lint",
-    test: "titor-test",
-    travis: "titor-travis",
-  },
-};
 
 describe("lib", function () {
   describe("build", function () {
@@ -380,22 +342,6 @@ describe("lib", function () {
       sh.cp(badFormatPackageJson, tmpPackageJson);
 
       expect(function () { setup() }).to.throw(/Unexpected token/);
-    });
-  });
-
-  describe("setupPackageJson", function () {
-    it("should return an updated object", function () {
-      var packageJson = {
-        name: "test-package",
-        version: "0.0.0",
-        description: "a test package",
-        main: "index.js",
-        devDependencies: {
-          semver: "blah",
-        },
-      };
-
-      expect(setupPackageJson(packageJson)).to.deep.equal(updatedPackageJson);
     });
   });
 
