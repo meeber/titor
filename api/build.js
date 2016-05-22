@@ -12,14 +12,14 @@ var test = require("./test");
 function copyBuildResources (pkgExport) {
   sh.cp(path.join(__dirname, "../util/detect-build.js"), "build/");
   createResource("build/index.js");
-  createResource("build/current.js", decamelize(pkgExport, "-"));
-  createResource("build/legacy.js", decamelize(pkgExport, "-"));
+  createResource("build/current/index.js", decamelize(pkgExport, "-"));
+  createResource("build/legacy/index.js", decamelize(pkgExport, "-"));
 }
 
 function createBuild (type, pkgExport) {
   sh.exec("BABEL_ENV=" + type + " babel"
         + " -s inline"
-        + " -d " + path.join("build", type)
+        + " -d " + path.join("build", type, "src")
         + " src/");
 
   createBuildTest(type, pkgExport);
@@ -28,7 +28,7 @@ function createBuild (type, pkgExport) {
 function createBuildTest (type, pkgExport) {
   var pkgExportTest = "test/" + decamelize(pkgExport, "-") + ".js";
 
-  sh.mkdir("-p", "build/" + type + "/test");
+  sh.mkdir("-p", path.join("build", type, "test"));
 
   sh.exec("BABEL_ENV=" + type + " babel"
         + " -s inline"

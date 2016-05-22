@@ -8,7 +8,7 @@ module.exports = function clean (targets) {
   switch (typeof targets) {
     case "object":
       if (!Array.isArray(targets)) throw TypeError("Invalid clean targets");
-      if (!types.length) types = VALID_TARGETS;
+      if (!targets.length) targets = VALID_TARGETS;
       break;
     case "string":
       targets = [targets];
