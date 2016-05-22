@@ -37,7 +37,6 @@ function createBuildTest (type, pkgExport) {
 }
 
 module.exports = function build (types, config) {
-  console.log(typeof types);
   switch (typeof types) {
     case "object":
       if (!Array.isArray(types)) throw TypeError("Invalid build types");

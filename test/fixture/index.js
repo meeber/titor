@@ -6,20 +6,18 @@ var sh = require("shelljs");
 
 sh.set("-e");
 
-function doStandup (min) {
+function doStandup (srcRoot) {
   if (sh.test("-e", tmpRoot)) sh.rm("-rf", tmpRoot);
 
-  var srcSubDir = min ? "_min-root" : "_root";
-
-  sh.cp("-r", path.join(__dirname, srcSubDir), tmpRoot);
+  sh.cp("-r", path.join(__dirname, srcRoot), tmpRoot);
   sh.cd(tmpRoot);
 }
 
 global.expect = chai.expect;
 
-global.minStandup = function minStandup () { doStandup(true) };
-
-global.standup = function standup () { doStandup() };
+global.maxStandup = function maxStandup () { doStandup("_max-root") };
+global.minStandup = function minStandup () { doStandup("_min-root") };
+global.standup = function standup () { doStandup("_root") };
 
 global.tmpRoot = path.join(sh.tempdir(), "titor-test-root");
 
