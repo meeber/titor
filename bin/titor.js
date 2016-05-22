@@ -25,4 +25,6 @@ if (!args.length) throw Error("Missing command");
 var cmd = args.shift().toLowerCase();
 if (VALID_CMDS.indexOf(cmd) === -1) throw Error("Invalid command: " + cmd);
 
-require(path.join("../api", cmd))(args, loadConfig());
+var config = cmd === "setup" ? undefined : loadConfig();
+
+require(path.join("../api", cmd))(args, config);

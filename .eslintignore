@@ -2,3 +2,5 @@
 /resource/bundle/_mocha.js
 /resource/src/_package-export.js
 /resource/test/_package-export.js
+/test/fixture/_max-root
+/test/fixture/_root

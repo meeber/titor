@@ -12,10 +12,7 @@ sh.set("-e");
 var build = require("../lib/build");
 var bundle = require("../lib/bundle");
 var clean = require("../lib/clean");
-var getPackageExport = require("../lib/get-package-export");
 var lint = require("../lib/lint");
-var loadConfig = require("../lib/load-config");
-var loadPackageJson = require("../lib/load-package-json");
 var setup = require("../lib/setup");
 var setupPackageJson = require("../lib/setup-package-json");
 var test = require("../lib/test");
@@ -308,49 +305,6 @@ describe("lib", function () {
       lint();
 
       expect(stubSh.exec).to.have.been.calledWith(exp);
-    });
-  });
-
-  describe("loadPackageJson", function () {
-    var tmpPackageJson = path.join(tmpRoot, "package.json");
-    var goodPackageJson = path.join(resource, "good.package.json");
-    var badFormatPackageJson = path.join(resource, "bad-format.package.json");
-
-    beforeEach(function () { sh.cp(goodPackageJson, tmpPackageJson) });
-
-    it("should return packageJson object from current directory", function () {
-      expect(loadPackageJson()).to.deep.equal({
-        name: "test-package",
-        version: "0.0.0",
-        description: "a test package",
-      });
-    });
-
-    it("should, if dir given, return packageJson object from that directory",
-    function () {
-      var tmpSubDir = path.join(tmpRoot, "sub-dir");
-      var tmpSubDirPackageJson = path.join(tmpSubDir, "package.json");
-
-      sh.mkdir(tmpSubDir);
-      sh.mv(tmpPackageJson, tmpSubDirPackageJson);
-
-      expect(loadPackageJson(tmpSubDir)).to.deep.equal({
-        name: "test-package",
-        version: "0.0.0",
-        description: "a test package",
-      });
-    });
-
-    it("should, if no package.json, throw", function () {
-      sh.rm(tmpPackageJson);
-
-      expect(function () { loadPackageJson() }).to.throw(/no such file/);
-    });
-
-    it("should, if invalid package.json, throw", function () {
-      sh.cp(badFormatPackageJson, tmpPackageJson);
-
-      expect(function () { loadPackageJson() }).to.throw(/Unexpected token/);
     });
   });
 
