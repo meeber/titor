@@ -289,21 +289,6 @@ describe("lib", function () {
     });
   });
 
-  describe("getPackageExport", function () {
-    it("should return camelcased project name", function () {
-      expect(getPackageExport({name: "test-package"})).to.equal("testPackage");
-    });
-
-    it("should, if missing packageJson, throw", function () {
-      expect(getPackageExport).to.throw("Missing or invalid packageJson");
-    });
-
-    it("should, if missing name in packageJson, throw", function () {
-      expect(function () { getPackageExport({}) })
-        .to.throw("Missing or invalid name");
-    });
-  });
-
   describe("lint", function () {
     var stubs = ["echo", "exec"];
     var stubSh;
