@@ -6,7 +6,10 @@ var sh = require("shelljs");
 
 describe("createResource", function () {
   afterEach(function () { teardown() });
-  beforeEach(function () { standup() });
+  beforeEach(function () {
+    standup();
+    sh.rm(".titorrc.yml");
+  });
 
   describe("no file already exists at dstPath", function () {
     var dstPath = path.join(tmpRoot, ".titorrc.yml");

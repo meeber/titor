@@ -311,37 +311,6 @@ describe("lib", function () {
     });
   });
 
-  describe("loadConfig", function () {
-    var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
-    var goodTitorrcYml = path.join(resource, "good.titorrc.yml");
-    var badFormatTitorrcYml = path.join(resource, "bad-format.titorrc.yml");
-    var badExportTitorrcYml = path.join(resource, "bad-export.titorrc.yml");
-
-    beforeEach(function () { sh.cp(goodTitorrcYml, tmpTitorrcYml) });
-
-    it("should return a config object", function () {
-      expect(loadConfig()).to.be.an("object").with.property("export");
-    });
-
-    it("should, if no .titorrc.yml, throw", function () {
-      sh.rm(tmpTitorrcYml);
-
-      expect(loadConfig).to.throw(/no such file/);
-    });
-
-    it("should, if invalid .titorrc.yml, throw", function () {
-      sh.cp(badFormatTitorrcYml, tmpTitorrcYml);
-
-      expect(loadConfig).to.throw("Invalid .titorrc.yml");
-    });
-
-    it("should, if invalid export, throw", function () {
-      sh.cp(badExportTitorrcYml, tmpTitorrcYml);
-
-      expect(loadConfig).to.throw(/Invalid or missing export/);
-    });
-  });
-
   describe("loadPackageJson", function () {
     var tmpPackageJson = path.join(tmpRoot, "package.json");
     var goodPackageJson = path.join(resource, "good.package.json");
