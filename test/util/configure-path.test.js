@@ -6,32 +6,32 @@ var sh = require("shelljs");
 
 describe("configurePath", function () {
   var origPath = process.env.PATH;
-  var rootNodeModules = path.resolve(tmpRoot, "node_modules/.bin");
+  var rootNodeModulesBin = path.resolve(tmpRoot, "node_modules/.bin");
 
   afterEach(function () {
     teardown();
     process.env.PATH = origPath;
   });
 
-  beforeEach(function () { standup() });
+  beforeEach(minStandup);
 
   describe("package's node_modules/.bin isn't in path", function () {
     it("add package's node_modules/.bin to path", function () {
       configurePath();
 
-      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+      expect(process.env.PATH).to.match(new RegExp(rootNodeModulesBin));
     });
   });
 
   describe("run script while in a subdirectory", function () {
     it("add package's node_modules/.bin to path", function () {
-      var tmpSubdir = path.join(tmpRoot, "subdir");
+      var subDir = path.join(tmpRoot, "sub-dir");
 
-      sh.mkdir(tmpSubdir);
-      sh.cd(tmpSubdir);
+      sh.mkdir(subDir);
+      sh.cd(subDir);
       configurePath();
 
-      expect(process.env.PATH).to.match(new RegExp(rootNodeModules));
+      expect(process.env.PATH).to.match(new RegExp(rootNodeModulesBin));
     });
   });
 

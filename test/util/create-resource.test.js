@@ -5,19 +5,16 @@ var path = require("path");
 var sh = require("shelljs");
 
 describe("createResource", function () {
-  afterEach(function () { teardown() });
-  beforeEach(function () {
-    standup();
-    sh.rm(".titorrc.yml");
-  });
+  var rootTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
+
+  afterEach(teardown);
+  beforeEach(minStandup);
 
   describe("no file already exists at dstPath", function () {
-    var dstPath = path.join(tmpRoot, ".titorrc.yml");
-
     it("create file at dstPath", function () {
       createResource(".titorrc.yml");
 
-      expect(sh.test("-e", dstPath)).to.be.true;
+      expect(sh.test("-e", rootTitorrcYml)).to.be.true;
     });
 
     it("return true", function () {
@@ -26,14 +23,12 @@ describe("createResource", function () {
   });
 
   describe("a file already exists at dstPath", function () {
-    var dstPath = path.join(tmpRoot, ".titorrc.yml");
-
-    beforeEach(function () { sh.ShellString("testing").to(dstPath) });
+    beforeEach(function () { sh.ShellString("testing").to(rootTitorrcYml) });
 
     it("don't replace existing file at dstPath", function () {
       createResource(".titorrc.yml");
 
-      expect(sh.cat(dstPath).stdout).to.equal("testing");
+      expect(sh.cat(rootTitorrcYml).stdout).to.equal("testing");
     });
 
     it("return false", function () {
@@ -43,34 +38,29 @@ describe("createResource", function () {
 
   describe("pkgExport is undefined", function () {
     it("don't replace PACKAGE_EXPORT with pkgExport in dst file", function () {
-      var dstPath = path.join(tmpRoot, ".titorrc.yml");
-
       createResource(".titorrc.yml");
 
-      expect(sh.grep("export", dstPath).stdout.trim())
+      expect(sh.grep("export", rootTitorrcYml).stdout.trim())
         .to.equal("export: PACKAGE_EXPORT");
     });
   });
 
   describe("pkgExport is defined", function () {
     it("replace PACKAGE_EXPORT with pkgExport in dst file", function () {
-      var dstPath = path.join(tmpRoot, ".titorrc.yml");
-
       createResource(".titorrc.yml", "testPackage");
 
-      expect(sh.grep("export", dstPath).stdout.trim())
+      expect(sh.grep("export", rootTitorrcYml).stdout.trim())
         .to.equal("export: testPackage");
     });
   });
 
   describe("srcPath is undefined", function () {
     it("copy src file from default path to dstPath", function () {
-      var dstPath = path.join(tmpRoot, ".titorrc.yml");
       var srcPath = path.join(__dirname, "../../resource/_.titorrc.yml");
 
       createResource(".titorrc.yml");
 
-      expect(sh.cat(dstPath).stdout).to.equal(sh.cat(srcPath).stdout);
+      expect(sh.cat(rootTitorrcYml).stdout).to.equal(sh.cat(srcPath).stdout);
     });
   });
 

@@ -4,11 +4,19 @@ var loadConfig = require("../../util/load-config");
 var path = require("path");
 var sh = require("shelljs");
 
-var tmpTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
-
 describe("loadConfig", function () {
-  afterEach(function () { teardown() });
-  beforeEach(function () { standup() });
+  var badExportTitorrcYml = path.join(
+    __dirname,
+    "../fixture/resource/bad-export_.titorrc.yml"
+  );
+  var badFormatTitorrcYml = path.join(
+    __dirname,
+    "../fixture/resource/bad-format_.titorrc.yml"
+  );
+  var rootTitorrcYml = path.join(tmpRoot, ".titorrc.yml");
+
+  afterEach(teardown);
+  beforeEach(standup);
 
   describe(".titorrc.yml is valid", function () {
     it("return a config object", function () {
@@ -25,10 +33,7 @@ describe("loadConfig", function () {
 
   describe(".titorrc.yml is invalid", function () {
     it("throw", function () {
-      sh.cp(
-        path.join(__dirname, "../fixture/double/bad-format.titorrc.yml"),
-        tmpTitorrcYml
-      );
+      sh.cp(badFormatTitorrcYml, rootTitorrcYml);
 
       expect(loadConfig).to.throw("Invalid .titorrc.yml");
     });
@@ -36,10 +41,7 @@ describe("loadConfig", function () {
 
   describe("config.export is invalid", function () {
     it("throw", function () {
-      sh.cp(
-        path.join(__dirname, "../fixture/double/bad-export.titorrc.yml"),
-        tmpTitorrcYml
-      );
+      sh.cp(badExportTitorrcYml, rootTitorrcYml);
 
       expect(loadConfig).to.throw(/Invalid or missing export/);
     });
@@ -47,7 +49,7 @@ describe("loadConfig", function () {
 
   describe(".titorrc.yml doesn't exist", function () {
     it("throw", function () {
-      sh.rm(tmpTitorrcYml);
+      sh.rm(rootTitorrcYml);
 
       expect(loadConfig).to.throw(/no such file/);
     });
