@@ -12,8 +12,6 @@ sh.set("-e");
 var build = require("../lib/build");
 var bundle = require("../lib/bundle");
 var clean = require("../lib/clean");
-var createResource = require("../lib/create-resource");
-var detectBuild = require("../lib/detect-build");
 var getPackageExport = require("../lib/get-package-export");
 var lint = require("../lib/lint");
 var loadConfig = require("../lib/load-config");
@@ -288,28 +286,6 @@ describe("lib", function () {
     it("should, if invalid target, throw", function () {
       expect(function () { clean(["invalid_target"]) })
         .to.throw("Invalid clean target: invalid_target");
-    });
-  });
-
-  describe("detectBuild", function () {
-    it("should, if node version is equal to minNodeVer, return 'current'",
-    function () {
-      expect(detectBuild(process.version)).to.equal("current");
-    });
-
-    it("should, if node version is greater than minNodeVer, return 'current'",
-    function () {
-      expect(detectBuild("v0.0.1")).to.equal("current");
-    });
-
-    it("should, if node version is less than minNodeVer, return 'legacy'",
-    function () {
-      expect(detectBuild("v999.99.99")).to.equal("legacy");
-    });
-
-    it("should, if minNodeVer is invalid, throw", function () {
-      expect(function () { detectBuild("nacho cheese") })
-        .to.throw("Invalid Version: nacho cheese");
     });
   });
 
