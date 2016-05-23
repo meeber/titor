@@ -6,7 +6,7 @@ var setup = require("../../api/setup");
 var sh = require("shelljs");
 
 sh.set("-e");
-sh.config.silent = true;
+// sh.config.silent = true;
 sh.echo = function () {};
 
 global.expect = chai.expect;

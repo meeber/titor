@@ -1,7 +1,7 @@
 /coverage
 /resource/bundle/_mocha.js
 /resource/src/_package-export.js
-/resource/test/_package-export.js
+/resource/test/_package-export.test.js
 /test/fixture/_max-root
 /test/fixture/_min-root
 /test/fixture/resource
