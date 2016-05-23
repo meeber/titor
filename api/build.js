@@ -26,7 +26,7 @@ function createBuild (type, pkgExport) {
 }
 
 function createBuildTest (type, pkgExport) {
-  var pkgExportTest = "test/" + decamelize(pkgExport, "-") + ".js";
+  var pkgExportTest = "test/" + decamelize(pkgExport, "-") + ".test.js";
 
   sh.mkdir("-p", path.join("build", type, "test"));
 

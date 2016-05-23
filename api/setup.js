@@ -10,7 +10,6 @@ var sh = require("shelljs");
 
 function createResources (packageJson) {
   var pkgExport = getPackageExport(packageJson);
-  var pkgExportFile = decamelize(pkgExport, "-") + ".js";
 
   [
     {dst: ".babelrc"},
@@ -21,14 +20,14 @@ function createResources (packageJson) {
     {dst: ".titorrc.yml", export: pkgExport},
     {dst: ".travis.yml"},
     {
-      dst: path.join("src", pkgExportFile),
+      dst: path.join("src", decamelize(pkgExport, "-") + ".js"),
       export: pkgExport,
       src: path.join(__dirname, "../resource/src/_package-export.js"),
     },
     {
-      dst: path.join("test", pkgExportFile),
+      dst: path.join("test", decamelize(pkgExport, "-") + ".test.js"),
       export: pkgExport,
-      src: path.join(__dirname, "../resource/test/_package-export.js"),
+      src: path.join(__dirname, "../resource/test/_package-export.test.js"),
     },
   ].forEach(function _createResource (res) {
     if (createResource(res.dst, res.export, res.src))

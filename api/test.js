@@ -7,7 +7,7 @@ var path = require("path");
 var sh = require("shelljs");
 
 function testBuild (type) {
-  sh.exec("mocha -c --recursive"
+  sh.exec("mocha -c"
         + " -r " + path.join(__dirname, "../test-bootstrap", type)
         + " " + path.join("build", type, "test"));
 }
@@ -16,7 +16,7 @@ function testSrc (isLint, detectedBuild) {
   sh.exec("BABEL_ENV=" + detectedBuild
         + " mocha -c "
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
-        + " test/");
+        + " 'test/**/*.test.js'");
 
   if (isLint) lint();
 }
@@ -30,7 +30,7 @@ function testSrcCover (isLint, detectedBuild) {
         + " --root src/"
         + " _mocha -- -c "
         + " -r " + path.join(__dirname, "../test-bootstrap/src")
-        + " test/");
+        + " 'test/**/*.test.js'");
 
   if (isLint) lint();
 }

@@ -66,13 +66,19 @@ function createTestBootstrapBundle (type) {
 }
 
 function createTestBundle (type, pkgExport) {
-  var testBundleMap = path.join("bundle", type, "test/test.js.map");
+  var testBundle = path.join(
+    "bundle",
+    type,
+    "test",
+    decamelize(pkgExport, "-") + ".test.js"
+  );
+  var testBundleMap = testBundle + ".map";
 
   sh.exec("browserify"
         + " -d "
-        + path.join("build", type, "test", decamelize(pkgExport, "-"))
+        + testBundle.replace("bundle", "build")
         + " | exorcist " + testBundleMap
-        + " > " + path.join("bundle", type, "test/test.js"));
+        + " > " + testBundle);
 
   // TODO: Remove this if exorcist updated to throw errors
   if (!sh.test("-e", testBundleMap))
