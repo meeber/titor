@@ -6,7 +6,7 @@
 
 JavaScript package assistant.
 
-Titor's setup script configures your package to use:
+Titor's setup script quickly gets your package up-and-running with:
 
 - Transpiling via [Babel](https://babeljs.io/)
 - Bundling via [Browserify](http://browserify.org/)
