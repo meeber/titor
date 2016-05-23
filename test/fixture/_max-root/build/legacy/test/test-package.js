@@ -1,9 +1,0 @@
-"use strict";
-
-/* global chai testPackage */
-
-describe("testPackage", function () {
-  // Your package export tests
-});
-
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3Rlc3QvdGVzdC1wYWNrYWdlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7QUFFQSxTQUFTLGFBQVQsRUFBd0IsWUFBWTs7QUFFbkMsQ0FGRCIsImZpbGUiOiJ0ZXN0LXBhY2thZ2UuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBnbG9iYWwgY2hhaSB0ZXN0UGFja2FnZSAqL1xuXG5kZXNjcmliZShcInRlc3RQYWNrYWdlXCIsIGZ1bmN0aW9uICgpIHtcbiAgLy8gWW91ciBwYWNrYWdlIGV4cG9ydCB0ZXN0c1xufSk7XG4iXX0=

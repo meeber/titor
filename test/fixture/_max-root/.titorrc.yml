@@ -1,6 +1,0 @@
-bundle: true
-cover: true
-coverReport: true
-export: testPackage
-lint: true
-test: true

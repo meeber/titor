@@ -1,5 +1,9 @@
 /* global chai PACKAGE_EXPORT */
 
-describe("PACKAGE_EXPORT", function () {
-  // Your package export tests
+let expect = chai.expect;
+
+describe("PACKAGE_EXPORT", () => {
+  it("example test", () => {
+    expect(PACKAGE_EXPORT).to.be.an("object");
+  });
 });

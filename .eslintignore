@@ -3,4 +3,6 @@
 /resource/src/_package-export.js
 /resource/test/_package-export.js
 /test/fixture/_max-root
+/test/fixture/_min-root
+/test/fixture/resource
 /test/fixture/_root
