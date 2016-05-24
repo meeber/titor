@@ -63,6 +63,10 @@ For npm v3.x or higher, you must then run `npm install` to install all of the pe
 1. Create `src/**<package-export>**.js` if it doesn't exist
 1. Create `test/.eslintrc.yml` if it doesn't exist
 1. Create `test/**<package-export>**.js` if it doesn't exist
+1. Create `test/fixture/common.js` if it doesn't exist
+1. Create `test/fixture/current.js` if it doesn't exist
+1. Create `test/fixture/legacy.js` if it doesn't exist
+1. Create `test/fixture/src.js` if it doesn't exist
 
 You can remove `package.json.save` after reviewing the new `package.json`.
 

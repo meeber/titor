@@ -1,3 +1,3 @@
 "use strict";
 
-module.exports = require("./src/PACKAGE_EXPORT");
+module.exports = require("./src/PACKAGE_FILE");

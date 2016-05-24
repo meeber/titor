@@ -61,8 +61,8 @@ function createTestBootstrapBundle (type) {
   sh.exec("browserify "
         + shim
         + " -d "
-        + path.join(__dirname, "../test-bootstrap/common.js")
-        + " -o " + path.join("bundle", type, "test/bootstrap.js"));
+        + " test/fixture/common.js"
+        + " -o " + path.join("bundle", type, "test/fixture.js"));
 }
 
 function createTestBundle (type, pkgExport) {

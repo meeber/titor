@@ -12,8 +12,8 @@ var test = require("./test");
 function copyBuildResources (pkgExport) {
   sh.cp(path.join(__dirname, "../util/detect-build.js"), "build/");
   createResource("build/index.js");
-  createResource("build/current/index.js", decamelize(pkgExport, "-"));
-  createResource("build/legacy/index.js", decamelize(pkgExport, "-"));
+  createResource("build/current/index.js", pkgExport);
+  createResource("build/legacy/index.js", pkgExport);
 }
 
 function createBuild (type, pkgExport) {

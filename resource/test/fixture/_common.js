@@ -1,5 +1,3 @@
-"use strict";
-
 require("source-map-support/register");
 
 if (typeof window === "object") {

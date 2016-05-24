@@ -52,6 +52,16 @@ describe("createResource", function () {
       expect(sh.grep("export", rootTitorrcYml).stdout.trim())
         .to.equal("export: testPackage");
     });
+
+    it("replace PACKAGE_FILE with decamelized pkgExport in dst", function () {
+      var dstPath = path.join(tmpRoot, "test/fixture/src.js");
+
+      sh.mkdir(path.join(tmpRoot, "test"));
+      createResource("test/fixture/src.js", "testPkg");
+
+      expect(sh.grep("test-pkg", dstPath).stdout.trim())
+        .to.equal("global[\"testPkg\"] = require(\"../../src/test-pkg\");");
+    });
   });
 
   describe("srcPath is undefined", function () {

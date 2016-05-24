@@ -8,20 +8,25 @@ var sh = require("shelljs");
 
 function testBuild (type) {
   sh.exec("mocha -c"
-        + " -r " + path.join(__dirname, "../test-bootstrap", type)
+        + " -r " + path.join("test/fixture", type)
         + " " + path.join("build", type, "test"));
 }
 
 function testSrc (isLint, detectedBuild) {
+  var shim = detectedBuild === "legacy" ? "-r babel-polyfill" : "";
+
   sh.exec("BABEL_ENV=" + detectedBuild
         + " mocha -c "
-        + " -r " + path.join(__dirname, "../test-bootstrap/src")
+        + shim
+        + " -r " + path.join("test/fixture/src")
         + " 'test/**/*.test.js'");
 
   if (isLint) lint();
 }
 
 function testSrcCover (isLint, detectedBuild) {
+  var shim = detectedBuild === "legacy" ? "-r babel-polyfill" : "";
+
   clean("coverage");
 
   sh.exec("BABEL_ENV=" + detectedBuild
@@ -29,7 +34,8 @@ function testSrcCover (isLint, detectedBuild) {
         + " --report lcovonly"
         + " --root src/"
         + " _mocha -- -c "
-        + " -r " + path.join(__dirname, "../test-bootstrap/src")
+        + shim
+        + " -r " + path.join("test/fixture/src")
         + " 'test/**/*.test.js'");
 
   if (isLint) lint();
