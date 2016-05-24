@@ -1,3 +1,3 @@
 require("./common");
 
-global["PACKAGE_EXPORT"] = require("../../build/current");
+global.PACKAGE_EXPORT = require("../../build/current");

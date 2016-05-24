@@ -1,4 +1,4 @@
 require("./common");
 require("babel-polyfill");
 
-global["PACKAGE_EXPORT"] = require("../../build/legacy");
+global.PACKAGE_EXPORT = require("../../build/legacy");

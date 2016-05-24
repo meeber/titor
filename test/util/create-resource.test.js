@@ -60,7 +60,7 @@ describe("createResource", function () {
       createResource("test/fixture/src.js", "testPkg");
 
       expect(sh.grep("test-pkg", dstPath).stdout.trim())
-        .to.equal("global[\"testPkg\"] = require(\"../../src/test-pkg\");");
+        .to.equal("global.testPkg = require(\"../../src/test-pkg\");");
     });
   });
 
