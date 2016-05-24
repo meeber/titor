@@ -82,11 +82,11 @@ Your **package export** is served to consumers who import your package, and is e
 
 Write your tests in `test/` using the latest ECMAScript features.
 
-The Titor setup script creates a barebones `test/**<package-export>**.js`. This file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
+The Titor setup script creates a barebones `test/**<package-export>**.test.js`. This file should only test your **package export**. It shouldn't import source files nor perform unit tests on code that's not exposed by your **package export**.
 
-Your `test/**<package-export>**.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script automatically registers your **package export** as a global. Don't import it manually.
+Your `test/**<package-export>**.test.js` file is used by Titor when testing your source, your builds, and your browser bundles. In each case, the Titor test script automatically registers your **package export** as a global. Don't import it manually.
 
-If you'd like to unit test other source files, create additional test files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
+If you'd like to unit test other source files, create additional `.test.js` files in `test/`. These tests will only be run when testing your source; not when testing builds or bundles. However, these tests will be considered when calculating test coverage.
 
 ## Build
 
