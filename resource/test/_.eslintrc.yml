@@ -1,5 +1,8 @@
 env:
   mocha: true
+globals:
+  PACKAGE_EXPORT: false
+  chai: false
 rules:
   func-names: 0
   no-invalid-this: 0

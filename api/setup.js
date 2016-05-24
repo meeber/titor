@@ -16,7 +16,7 @@ function createResources (packageJson) {
     {dst: ".eslintignore"},
     {dst: ".eslintrc.yml"},
     {dst: ".gitignore"},
-    {dst: "test/.eslintrc.yml"},
+    {dst: "test/.eslintrc.yml", export: pkgExport},
     {dst: "test/fixture/common.js"},
     {dst: "test/fixture/current.js", export: pkgExport},
     {dst: "test/fixture/legacy.js", export: pkgExport},
