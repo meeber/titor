@@ -61,7 +61,7 @@
   },
   "scripts": {
     "clean": "rm -R -f coverage/",
-    "cover": "npm run clean && istanbul cover --report lcovonly _mocha -t 5000 -r test/fixture 'test/**/*.test.js'",
+    "cover": "npm run clean && istanbul cover --report lcovonly _mocha -- -t 5000 -r test/fixture 'test/**/*.test.js'",
     "cover-report": "npm run cover && cat coverage/lcov.info | coveralls",
     "lint": "eslint --fix .",
     "postversion": "git checkout dev && git merge master && git push && git push --tags && npm publish",
