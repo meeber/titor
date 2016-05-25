@@ -25,7 +25,7 @@ var expPj = {
     eslint: "^2.10.2",
     exorcist: "^0.4.0",
     istanbul: "^1.0.0-alpha.2",
-    mocha: "^2.5.2",
+    mocha: "^2.5.3",
   },
   scripts: {
     build: "titor build",
