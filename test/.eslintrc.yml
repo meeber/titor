@@ -1,13 +1,12 @@
 env:
   mocha: true
 globals:
-  bin: false
   chai: false
   expect: false
+  fxt: false
   minStandup: false
   standup: false
   teardown: false
-  tmpRoot: false
 rules:
   func-names: off
   no-unused-expressions: off
