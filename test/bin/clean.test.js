@@ -1,6 +1,7 @@
 "use strict";
 
-var expectCleaned = require("../fixture/share/expect-cleaned");
+var expectTargetsToBeCleaned =
+  require("../fixture/expect/expect-targets-to-be-cleaned");
 var path = require("path");
 var sh = require("shelljs");
 
@@ -21,7 +22,7 @@ describe("clean (bin)", function () {
   describe("args is 'build'", function () {
     before(function () { defStandup("build") });
 
-    expectCleaned(["build"]);
+    expectTargetsToBeCleaned(["build"]);
 
     after(teardown);
   });
@@ -29,7 +30,7 @@ describe("clean (bin)", function () {
   describe("args is 'bundle'", function () {
     before(function () { defStandup("bundle") });
 
-    expectCleaned(["bundle"]);
+    expectTargetsToBeCleaned(["bundle"]);
 
     after(teardown);
   });
@@ -37,7 +38,7 @@ describe("clean (bin)", function () {
   describe("args is 'coverage'", function () {
     before(function () { defStandup("coverage") });
 
-    expectCleaned(["coverage"]);
+    expectTargetsToBeCleaned(["coverage"]);
 
     after(teardown);
   });
@@ -45,7 +46,7 @@ describe("clean (bin)", function () {
   describe("args is 'build bundle'", function () {
     before(function () { defStandup("build bundle") });
 
-    expectCleaned(["build", "bundle"]);
+    expectTargetsToBeCleaned(["build", "bundle"]);
 
     after(teardown);
   });
@@ -53,7 +54,7 @@ describe("clean (bin)", function () {
   describe("args is provided", function () {
     before(function () { defStandup("") });
 
-    expectCleaned(["build", "bundle", "coverage"]);
+    expectTargetsToBeCleaned(["build", "bundle", "coverage"]);
 
     after(teardown);
   });

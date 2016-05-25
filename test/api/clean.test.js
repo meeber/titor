@@ -1,7 +1,8 @@
 "use strict";
 
 var clean = require("../../api/clean");
-var expectCleaned = require("../fixture/share/expect-cleaned");
+var expectTargetsToBeCleaned =
+  require("../fixture/expect/expect-targets-to-be-cleaned");
 var path = require("path");
 var sh = require("shelljs");
 
@@ -21,7 +22,7 @@ describe("clean (api)", function () {
   describe("targets is 'build'", function () {
     before(function () { defStandup("build") });
 
-    expectCleaned(["build"]);
+    expectTargetsToBeCleaned(["build"]);
 
     after(teardown);
   });
@@ -29,7 +30,7 @@ describe("clean (api)", function () {
   describe("targets is 'bundle'", function () {
     before(function () { defStandup("bundle") });
 
-    expectCleaned(["bundle"]);
+    expectTargetsToBeCleaned(["bundle"]);
 
     after(teardown);
   });
@@ -37,7 +38,7 @@ describe("clean (api)", function () {
   describe("targets is 'coverage'", function () {
     before(function () { defStandup("coverage") });
 
-    expectCleaned(["coverage"]);
+    expectTargetsToBeCleaned(["coverage"]);
 
     after(teardown);
   });
@@ -45,7 +46,7 @@ describe("clean (api)", function () {
   describe("targets is an array with 'build' and 'bundle'", function () {
     before(function () { defStandup(["build", "bundle"]) });
 
-    expectCleaned(["build", "bundle"]);
+    expectTargetsToBeCleaned(["build", "bundle"]);
 
     after(teardown);
   });
@@ -53,7 +54,7 @@ describe("clean (api)", function () {
   describe("targets is undefined", function () {
     before(function () { defStandup() });
 
-    expectCleaned(["build", "bundle", "coverage"]);
+    expectTargetsToBeCleaned(["build", "bundle", "coverage"]);
 
     after(teardown);
   });
@@ -61,7 +62,7 @@ describe("clean (api)", function () {
   describe("targets is an empty array", function () {
     before(function () { defStandup([]) });
 
-    expectCleaned(["build", "bundle", "coverage"]);
+    expectTargetsToBeCleaned(["build", "bundle", "coverage"]);
 
     after(teardown);
   });
