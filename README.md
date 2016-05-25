@@ -28,6 +28,14 @@ Titor's build script does the following:
 - Create a browser bundle for each build's tests 
 - Report test coverage to Coveralls if built from within Travis CI
 
+# Goal
+
+The goal of Titor is to eliminate the barrier of entry for developing packages using the latest ECMAScript features.
+
+It's intended for small libraries and toy projects which often require a prohibitive amount of time and effort to support a full ES6+ workflow.
+
+It's not intended for projects that require significant customization in terms of structure and/or workflow. When such a requirement exists, it's better to forgo Titor, and use its dependencies directly.
+
 # Backstory
 
 In the year 2036, corporeal time-travel is added to the CERNScript specification, further widening the gap between the elite ruling class and the rest of the world's population who are still stuck using ECMAScript 5 due to browser compatibility concerns.
@@ -39,6 +47,8 @@ His goal is singular: Prevent his dystopian future from becoming a reality by em
 # Installation
 
 `npm install --save-dev titor`
+
+Follow the [Setup](#setup) procedure below to resolve "UNMET PEER DEPENDENCIES".
 
 # Usage
 
