@@ -1,5 +1,6 @@
 "use strict";
 
+var getMinPkgJsonObj = require("../fixture/helper/get-min-pkg-json-obj");
 var loadPackageJson = require("../../util/load-package-json");
 var path = require("path");
 var sh = require("shelljs");
@@ -23,11 +24,7 @@ describe("loadPackageJson", function () {
     });
 
     it("return a packageJson object from current directory", function () {
-      expect(pkgJson).to.deep.equal({
-        name: "test-package",
-        version: "0.0.0",
-        description: "a test package",
-      });
+      expect(pkgJson).to.deep.equal(getMinPkgJsonObj());
     });
 
     after(teardown);
@@ -46,11 +43,7 @@ describe("loadPackageJson", function () {
     });
 
     it("return a packageJson object from dir", function () {
-      expect(pkgJson).to.deep.equal({
-        name: "test-package",
-        version: "0.0.0",
-        description: "a test package",
-      });
+      expect(pkgJson).to.deep.equal(getMinPkgJsonObj());
     });
 
     after(teardown);
