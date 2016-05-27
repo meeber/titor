@@ -13,7 +13,8 @@ var args = process.argv.slice(2);
 if (!args.length) throw Error("Missing command");
 
 var cmd = args.shift().toLowerCase();
-if (!titor.hasOwnProperty(cmd)) throw Error("Invalid command: " + cmd);
+if (!Object.prototype.hasOwnProperty.call(titor, cmd))
+  throw Error("Invalid command: " + cmd);
 
 var config = cmd === "setup" ? undefined : loadConfig();
 
