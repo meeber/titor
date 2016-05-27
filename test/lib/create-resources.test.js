@@ -1,6 +1,6 @@
 "use strict";
 
-var createResources = require("../../util/create-resources");
+var createResources = require("../../lib/create-resources");
 var expectResourcesCreated =
   require("../fixture/expect/expect-resources-created");
 var getMinPkgJsonObj = require("../fixture/helper/get-min-pkg-json-obj");

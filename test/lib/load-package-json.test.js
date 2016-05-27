@@ -1,7 +1,7 @@
 "use strict";
 
 var getMinPkgJsonObj = require("../fixture/helper/get-min-pkg-json-obj");
-var loadPackageJson = require("../../util/load-package-json");
+var loadPackageJson = require("../../lib/load-package-json");
 var path = require("path");
 var sh = require("shelljs");
 

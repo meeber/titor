@@ -1,7 +1,7 @@
 "use strict";
 
 var clean = require("./clean");
-var createResource = require("../util/create-resource");
+var createResource = require("../lib/create-resource");
 var decamelize = require("decamelize");
 var path = require("path");
 var sh = require("shelljs");

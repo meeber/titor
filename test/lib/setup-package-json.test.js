@@ -2,7 +2,7 @@
 
 var getMinPkgJsonObj = require("../fixture/helper/get-min-pkg-json-obj");
 var getSetupPkgJsonObj = require("../fixture/helper/get-setup-pkg-json-obj");
-var setupPackageJson = require("../../util/setup-package-json");
+var setupPackageJson = require("../../lib/setup-package-json");
 
 describe("setupPackageJson", function () {
   describe("curPj has a minimal configuration", function () {

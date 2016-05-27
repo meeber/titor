@@ -1,6 +1,6 @@
 "use strict";
 
-var clone = require("../../util/clone");
+var clone = require("../../lib/clone");
 
 describe("clone", function () {
   describe("obj is nested", function () {

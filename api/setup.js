@@ -1,8 +1,8 @@
 "use strict";
 
-var createResources = require("../util/create-resources");
-var loadPackageJson = require("../util/load-package-json");
-var updatePackageJson = require("../util/update-package-json");
+var createResources = require("../lib/create-resources");
+var loadPackageJson = require("../lib/load-package-json");
+var updatePackageJson = require("../lib/update-package-json");
 var sh = require("shelljs");
 
 module.exports = function setup () {

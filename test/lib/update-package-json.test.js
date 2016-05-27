@@ -6,7 +6,7 @@ var expectPkgJsonNotUpdated =
 var getMinPkgJsonObj = require("../fixture/helper/get-min-pkg-json-obj");
 var path = require("path");
 var sh = require("shelljs");
-var updatePackageJson = require("../../util/update-package-json");
+var updatePackageJson = require("../../lib/update-package-json");
 
 var fxtPackageJson = path.join(fxt, "package.json");
 var fxtPackageJsonSave = fxtPackageJson + ".save";

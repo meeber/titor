@@ -1,6 +1,6 @@
 "use strict";
 
-var detectBuild = require("../../util/detect-build");
+var detectBuild = require("../../lib/detect-build");
 
 describe("detectBuild", function () {
   describe("node version is equal to minNodeVer", function () {

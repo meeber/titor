@@ -1,6 +1,6 @@
 "use strict";
 
-var configurePath = require("../../util/configure-path");
+var configurePath = require("../../lib/configure-path");
 var path = require("path");
 var sh = require("shelljs");
 

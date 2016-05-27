@@ -1,6 +1,6 @@
 "use strict";
 
-var getPackageExport = require("../../util/get-package-export");
+var getPackageExport = require("../../lib/get-package-export");
 
 describe("getPackageExport", function () {
   describe("packageJson.name is a string", function () {

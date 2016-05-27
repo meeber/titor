@@ -1,6 +1,6 @@
 "use strict";
 
-var createResource = require("../../util/create-resource");
+var createResource = require("../../lib/create-resource");
 var path = require("path");
 var sh = require("shelljs");
 

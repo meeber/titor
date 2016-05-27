@@ -1,7 +1,7 @@
 "use strict";
 
 var clean = require("./clean");
-var detectBuild = require("../util/detect-build");
+var detectBuild = require("../lib/detect-build");
 var lint = require("./lint");
 var path = require("path");
 var sh = require("shelljs");

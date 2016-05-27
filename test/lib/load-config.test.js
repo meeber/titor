@@ -1,6 +1,6 @@
 "use strict";
 
-var loadConfig = require("../../util/load-config");
+var loadConfig = require("../../lib/load-config");
 var path = require("path");
 var sh = require("shelljs");
 
