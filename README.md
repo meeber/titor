@@ -32,9 +32,9 @@ Titor's build script does the following:
 
 The goal of Titor is to eliminate the barrier of entry for developing packages using the latest ECMAScript features.
 
-It's intended for small libraries and toy projects which often require a prohibitive amount of time and effort to support a full ES6+ workflow.
+It's intended for small libraries and toy projects which require a prohibitive amount of effort to setup a full ES6+ workflow.
 
-It's not intended for projects that require significant customization in terms of structure and/or workflow. When such a requirement exists, it's better to forgo Titor, and use its dependencies directly.
+It's **not** intended for projects that require significant customization in terms of structure, workflow, and/or tooling.
 
 # Backstory
 
