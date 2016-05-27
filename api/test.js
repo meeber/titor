@@ -5,12 +5,7 @@ var detectBuild = require("../lib/detect-build");
 var lint = require("./lint");
 var path = require("path");
 var sh = require("shelljs");
-
-function testBuild (type) {
-  sh.exec("mocha -c"
-        + " -r " + path.join("test/fixture", type)
-        + " " + path.join("build", type, "test"));
-}
+var testBuild = require("../lib/test-build");
 
 function testSrc (isLint, detectedBuild) {
   var shim = detectedBuild === "legacy" ? "-r babel-polyfill" : "";

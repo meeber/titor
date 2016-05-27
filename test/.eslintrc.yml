@@ -4,6 +4,7 @@ globals:
   chai: false
   expect: false
   fxt: false
+  maxStandup: false
   minStandup: false
   standup: false
   teardown: false
