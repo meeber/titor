@@ -3,28 +3,18 @@
 
 var configurePath = require("../util/configure-path");
 var loadConfig = require("../util/load-config");
-var path = require("path");
 var sh = require("shelljs");
+var titor = require("../api/titor");
 
 sh.set("-e");
 configurePath();
-
-var VALID_CMDS = [
-  "build",
-  "bundle",
-  "clean",
-  "lint",
-  "setup",
-  "test",
-  "travis",
-];
 
 var args = process.argv.slice(2);
 if (!args.length) throw Error("Missing command");
 
 var cmd = args.shift().toLowerCase();
-if (VALID_CMDS.indexOf(cmd) === -1) throw Error("Invalid command: " + cmd);
+if (!titor.hasOwnProperty(cmd)) throw Error("Invalid command: " + cmd);
 
 var config = cmd === "setup" ? undefined : loadConfig();
 
-require(path.join("../api", cmd))(args, config);
+titor[cmd](args, config);

@@ -1,7 +1,9 @@
 "use strict";
 
+var expectPkgJsonUpdated = require("../fixture/expect/expect-pkg-json-updated");
+var expectPkgJsonNotUpdated =
+  require("../fixture/expect/expect-pkg-json-not-updated");
 var getMinPkgJsonObj = require("../fixture/helper/get-min-pkg-json-obj");
-var getSetupPkgJsonObj = require("../fixture/helper/get-setup-pkg-json-obj");
 var path = require("path");
 var sh = require("shelljs");
 var updatePackageJson = require("../../util/update-package-json");
@@ -21,15 +23,7 @@ describe("updatePackageJson", function () {
       updatePackageJson(packageJson);
     });
 
-    it("move package.json to package.json.save", function () {
-      expect(JSON.parse(sh.cat(fxtPackageJsonSave)))
-        .to.deep.equal(getMinPkgJsonObj());
-    });
-
-    it("create package.json with setup object", function () {
-      expect(JSON.parse(sh.cat(fxtPackageJson)))
-        .to.deep.equal(getSetupPkgJsonObj());
-    });
+    expectPkgJsonUpdated();
 
     it("don't modify original object", function () {
       expect(packageJson).to.deep.equal(getMinPkgJsonObj());
@@ -50,14 +44,7 @@ describe("updatePackageJson", function () {
         .to.throw("mv: dest file already exists: package.json.save");
     });
 
-    it("don't modify existing package.json", function () {
-      expect(JSON.parse(sh.cat(fxtPackageJson)))
-        .to.deep.equal(getMinPkgJsonObj());
-    });
-
-    it("don't modify existing package.json.save", function () {
-      expect(sh.cat(fxtPackageJsonSave).stdout).to.equal("pizza");
-    });
+    expectPkgJsonNotUpdated();
 
     after(teardown);
   });

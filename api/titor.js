@@ -8,6 +8,7 @@ var titor = {};
   "bundle",
   "clean",
   "lint",
+  "setup",
   "test",
   "travis",
 ].forEach(function _addApiKey (key) { titor[key] = require("./" + key) });

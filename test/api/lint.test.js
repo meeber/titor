@@ -1,8 +1,8 @@
 "use strict";
 
-var lint = require("../../api/lint");
 var path = require("path");
 var sh = require("shelljs");
+var titor = require("../../api/titor");
 
 var fxtBuild = path.join(fxt, "build");
 var fxtBuildLintable = path.join(fxtBuild, "lintable.js");
@@ -16,7 +16,7 @@ describe("lint (api)", function () {
 
       sh.cp(rscLintable, fxtSrcLintable);
 
-      lint();
+      titor.lint();
     });
 
     it("fix the issue", function () {
@@ -35,7 +35,7 @@ describe("lint (api)", function () {
       sh.mkdir(fxtBuild);
       sh.cp(rscLintable, fxtBuildLintable);
 
-      lint();
+      titor.lint();
     });
 
     it("don't fix the issue", function () {

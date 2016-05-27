@@ -1,10 +1,10 @@
 "use strict";
 
-var clean = require("../../api/clean");
 var expectTargetsToBeCleaned =
   require("../fixture/expect/expect-targets-to-be-cleaned");
 var path = require("path");
 var sh = require("shelljs");
+var titor = require("../../api/titor");
 
 var fxtBuild = path.join(fxt, "build");
 var fxtBundle = path.join(fxt, "bundle");
@@ -15,7 +15,7 @@ function defStandup (types) {
 
   sh.mkdir(fxtBuild, fxtBundle, fxtCoverage);
 
-  clean(types);
+  titor.clean(types);
 }
 
 describe("clean (api)", function () {
@@ -69,14 +69,14 @@ describe("clean (api)", function () {
 
   describe("targets isn't undefined, a string, or an array", function () {
     it("throw TypeError with descriptive message", function () {
-      expect(function () { clean({}) })
+      expect(function () { titor.clean({}) })
         .to.throw(TypeError, "Invalid clean targets");
     });
   });
 
   describe("a target isn't 'build', 'bundle', or 'coverage'", function () {
     it("throw Error with descriptive message", function () {
-      expect(function () { clean("pizza") })
+      expect(function () { titor.clean("pizza") })
         .to.throw("Invalid clean target: pizza");
     });
   });
