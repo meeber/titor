@@ -75,17 +75,19 @@ var RESOURCES = [
 
 module.exports = function expectResourcesCreated (nameExists) {
   RESOURCES.forEach(function (resource) {
-    var description = resource.name === nameExists
-                    ? "don't overwrite existing " + resource.name
-                    : "copy customized " + resource.name + " from resources";
+    var description, expected;
+
+    if (resource.name === nameExists) {
+      description = "don't overwrite existing " + resource.name;
+      expected = "pizza";
+    } else {
+      description = "copy customized " + resource.name + " from resources";
+      expected = sh.sed("PACKAGE_EXPORT", "testPackage", resource.src)
+                   .sed("PACKAGE_FILE", "test-package")
+                   .stdout;
+    }
 
     it(description, function () {
-      var expected = resource.name === nameExists
-                    ? "pizza"
-                    : sh.sed("PACKAGE_EXPORT", "testPackage", resource.src)
-                        .sed("PACKAGE_FILE", "test-package")
-                        .stdout;
-
       expect(sh.cat(resource.dst).stdout).to.equal(expected);
     });
   });
