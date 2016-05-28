@@ -61,13 +61,13 @@
   },
   "scripts": {
     "clean": "rm -R -f coverage/",
-    "cover": "npm run clean && istanbul cover --report lcovonly _mocha -- -t 20000 -r test/fixture 'test/**/*.test.js'",
+    "cover": "npm run clean && istanbul cover --report lcovonly _mocha -- -t 60000 -r test/fixture 'test/**/*.test.js'",
     "cover-report": "npm run cover && cat coverage/lcov.info | coveralls",
     "lint": "eslint --fix .",
     "postversion": "git checkout dev && git merge master && git push && git push --tags && npm publish",
     "preversion": "git checkout master && git merge dev && npm test",
     "release": "npm version -m 'Finalize v%s'",
-    "test": "mocha -t 20000 -r test/fixture 'test/**/*.test.js' && npm run lint",
+    "test": "mocha -t 60000 -r test/fixture 'test/**/*.test.js' && npm run lint",
     "travis": "npm run lint && npm run cover-report"
   }
 }
