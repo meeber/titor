@@ -67,9 +67,16 @@ describe("clean (api)", function () {
     after(teardown);
   });
 
-  describe("targets isn't undefined, a string, or an array", function () {
+  describe("targets is a non-array object", function () {
     it("throw TypeError with descriptive message", function () {
       expect(function () { titor.clean({}) })
+        .to.throw(TypeError, "Invalid clean targets");
+    });
+  });
+
+  describe("targets isn't a string, object, or undefined", function () {
+    it("throw TypeError with descriptive message", function () {
+      expect(function () { titor.clean(42) })
         .to.throw(TypeError, "Invalid clean targets");
     });
   });
