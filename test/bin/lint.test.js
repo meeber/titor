@@ -1,29 +1,25 @@
 "use strict";
 
+var createLintableJs = require("../fixture/helper/create-lintable-js");
+var expectLintableFixed = require("../fixture/expect/expect-lintable-fixed");
+var expectLintableNotFixed =
+  require("../fixture/expect/expect-lintable-not-fixed");
 var path = require("path");
 var sh = require("shelljs");
 
 var binTitorJs = path.join(__dirname, "../../bin/titor.js");
-var fxtBuild = path.join(fxt, "build");
-var fxtBuildLintable = path.join(fxtBuild, "lintable.js");
-var fxtSrcLintable = path.join(fxt, "src/lintable.js");
-var rscLintable = path.join(__dirname, "../fixture/resource/lintable.js");
 
 describe("lint (bin)", function () {
   describe("a .js file exists in src/ with a fixable issue", function () {
     before(function () {
       standup();
 
-      sh.cp(rscLintable, fxtSrcLintable);
+      createLintableJs("src");
 
       sh.exec(binTitorJs + " lint");
     });
 
-    it("fix the issue", function () {
-      expect(sh.cat(fxtSrcLintable).stdout).to.equal("module.exports = {\n"
-                                                   + "  a: 1\n"
-                                                   + "};\n");
-    });
+    expectLintableFixed("src");
 
     after(teardown);
   });
@@ -32,17 +28,12 @@ describe("lint (bin)", function () {
     before(function () {
       standup();
 
-      sh.mkdir(fxtBuild);
-      sh.cp(rscLintable, fxtBuildLintable);
+      createLintableJs("build");
 
       sh.exec(binTitorJs + " lint");
     });
 
-    it("don't fix the issue", function () {
-      expect(sh.cat(fxtBuildLintable).stdout).to.equal("module.exports = {\n"
-                                                     + "  a: 1,\n"
-                                                     + "};\n");
-    });
+    expectLintableNotFixed("build");
 
     after(teardown);
   });

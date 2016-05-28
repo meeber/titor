@@ -6,18 +6,7 @@ var lint = require("./lint");
 var path = require("path");
 var sh = require("shelljs");
 var testBuild = require("../lib/test-build");
-
-function testSrc (isLint, detectedBuild) {
-  var shim = detectedBuild === "legacy" ? "-r babel-polyfill" : "";
-
-  sh.exec("BABEL_ENV=" + detectedBuild
-        + " mocha -c "
-        + shim
-        + " -r " + path.join("test/fixture/src")
-        + " 'test/**/*.test.js'");
-
-  if (isLint) lint();
-}
+var testSrc = require("../lib/test-src");
 
 function testSrcCover (isLint, detectedBuild) {
   var shim = detectedBuild === "legacy" ? "-r babel-polyfill" : "";

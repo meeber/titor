@@ -6,6 +6,7 @@ globals:
   fxt: false
   maxStandup: false
   minStandup: false
+  sinon: false
   standup: false
   teardown: false
 rules:

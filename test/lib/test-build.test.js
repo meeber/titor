@@ -1,6 +1,6 @@
 "use strict";
 
-var createTest = require("../fixture/helper/create-test-js");
+var createTestJs = require("../fixture/helper/create-test-js");
 var sh = require("shelljs");
 var testBuild = require("../../lib/test-build");
 
@@ -11,7 +11,7 @@ describe("testBuild", function () {
     before(function () {
       maxStandup();
 
-      createTest("current");
+      createTestJs("current");
 
       result = testBuild("current");
     });
@@ -29,7 +29,7 @@ describe("testBuild", function () {
     before(function () {
       maxStandup();
 
-      createTest("legacy");
+      createTestJs("legacy");
 
       result = testBuild("legacy");
     });
@@ -48,7 +48,7 @@ describe("testBuild", function () {
       maxStandup();
 
       sh.set("+e");
-      createTest("current", true);
+      createTestJs("current", true);
 
       result = testBuild("current");
     });

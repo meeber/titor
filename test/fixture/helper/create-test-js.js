@@ -6,7 +6,7 @@ var sh = require("shelljs");
 var DIRS = {
   current: path.join(fxt, "build/current/test"),
   legacy: path.join(fxt, "build/legacy/test"),
-  src: path.join(fxt, "src"),
+  src: path.join(fxt, "test"),
 };
 
 var rscBadTestJs = path.join(__dirname, "../resource/bad-test.js");

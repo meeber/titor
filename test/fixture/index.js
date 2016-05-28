@@ -3,13 +3,18 @@
 var chai = require("chai");
 var path = require("path");
 var sh = require("shelljs");
+var sinon = require("sinon");
+var sinonChai = require("sinon-chai");
 var titor = require("../../api/titor");
 
 sh.set("-e");
 sh.config.silent = true;
 sh.echo = function () {};
 
+chai.use(sinonChai);
+
 global.expect = chai.expect;
+global.sinon = sinon;
 
 global.maxStandup = function maxStandup () {
   standup();
