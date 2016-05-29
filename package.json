@@ -1,0 +1,15 @@
+{
+  "name": "titor",
+  "version": "0.0.0",
+  "description": "package assistant",
+  "author": "Grant Snodgrass <meeber@gametypething.com>",
+  "license": "MIT",
+  "repository": "meeber/titor",
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
