@@ -13,6 +13,7 @@
     "camelcase": "^3.0.0",
     "decamelize": "^1.2.0",
     "js-yaml": "^3.6.1",
+    "semver": "^5.1.0",
     "shelljs": "^0.7.0",
     "source-map-support": "^0.4.0"
   },
@@ -33,7 +34,6 @@
     "exorcist": "^0.4.0",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^2.5.3",
-    "semver": "^5.1.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "source-map-support": "^0.4.0"
