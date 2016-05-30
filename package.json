@@ -11,8 +11,10 @@
   },
   "scripts": {
     "lint": "eslint --fix .",
-    "test": "npm run test-src && npm run lint",
-    "test-src": "mocha --recursive -r babel-core/register src/test/unit src/test/integration"
+    "test": "npm run test-src-unit && npm run lint",
+    "test-src": "npm run test-src-unit && npm run test-src-integration",
+    "test-src-integration": "mocha --recursive -r babel-core/register src/test/integration",
+    "test-src-unit": "mocha --recursive -r babel-core/register src/test/unit"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",
@@ -25,6 +27,8 @@
     "eslint": "^2.11.0",
     "eslint-config-tt": "^1.5.0",
     "mocha": "^2.5.3",
-    "sinon": "^1.17.4"
+    "shelljs": "^0.7.0",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0"
   }
 }

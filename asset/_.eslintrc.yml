@@ -3,8 +3,7 @@ parserOptions:
   ecmaVersion: 7
   sourceType: module
 env:
+  browser: true
   es6: true
   node: true
-rules:
-  no-useless-rename: off
-extends: eslint-config-tt
+extends: eslint:recommended
