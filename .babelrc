@@ -1,4 +1,9 @@
 {
-  plugins: ["add-module-exports", "transform-es2015-modules-commonjs"],
-  presets: ["stage-0"],
+  env: {
+    current: {
+      plugins: ["add-module-exports", "transform-es2015-modules-commonjs"],
+      presets: ["stage-0"],
+    },
+    legacy: {plugins: ["add-module-exports"], presets: ["es2015", "stage-0"]},
+  },
 }
