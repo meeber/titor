@@ -1,8 +1,0 @@
-extends: tt
-env:
-  node: true
-rules:
-  no-var: off
-  prefer-reflect: off
-  prefer-spread: off
-  prefer-template: off
