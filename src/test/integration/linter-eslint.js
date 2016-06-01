@@ -1,37 +1,52 @@
 import chai from "chai";
 import LinterEslint from "../../lib/linter-eslint";
-import path from "path";
 import sh from "shelljs";
+import {join} from "path";
 import {rootDir, standup, teardown} from "../util/fixture";
 
 let expect = chai.expect;
 
+sh.execAsync = function execAsync (cmd) {
+  return new Promise((resolve, reject) => {
+    sh.exec(cmd, (code, stdout, stderr) => {
+      let details = {cmd, code, stdout, stderr};
+
+      if (code) reject(Object.assign(Error("Script error"), details));
+      else resolve(details);
+    });
+  });
+};
+
 describe("linterEslint", () => {
   describe("run in a directory containing a file with linting errors", () => {
-    let result;
+    let err;
 
-    before(() => {
+    before(async function () {
       standup();
 
       sh.cp(
-        path.join(__dirname, "../../../asset/_.eslintrc.yml"),
-        path.join(rootDir, ".eslintrc.yml"),
+        join(__dirname, "../../../asset/_.eslintrc.yml"),
+        join(rootDir, ".eslintrc.yml"),
       );
 
       sh.cp(
-        path.join(__dirname, "../../../asset/fixture/_lint-errors.js"),
-        path.join(rootDir, "lint-errors.js"),
+        join(__dirname, "../../../asset/fixture/_lint-errors.js"),
+        join(rootDir, "lint-errors.js"),
       );
-
-      result = LinterEslint(sh).run();
+      
+      try {
+        await LinterEslint(sh).run();
+      } catch (e) {
+        err = e;
+      }
     });
 
-    it("report unfixable linting error", () => {
-      expect(result.stdout).to.match(/'unusedVar' is defined but never used/);
+    it("return a promise that rejects with unfixable linting error", () => {
+      expect(err.stdout).to.match(/'unusedVar' is defined but never used/)
     });
 
     it("fix fixable linting error", () => {
-      expect(sh.cat(path.join(rootDir, "lint-errors.js")).stdout)
+      expect(sh.cat(join(rootDir, "lint-errors.js")).stdout)
         .to.equal("let unusedVar;\n");
     });
 

@@ -1,5 +1,5 @@
 export default function LinterEslint (sh) {
   return {
-    run () { return sh.exec("eslint --fix .") },
+    run () { return sh.execAsync("eslint --fix .") },
   };
 }
