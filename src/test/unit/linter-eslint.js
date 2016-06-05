@@ -1,48 +1,49 @@
-import chai from "chai";
-import chaiAsPromised from "chai-as-promised";
 import LinterEslint from "../../lib/linter-eslint";
-import sinon from "sinon";
+import sh from "../../lib/sh";
 import sinonChai from "sinon-chai";
+import {stub} from "sinon";
+import chai, {expect} from "chai";
 
-chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
-let expect = chai.expect;
-
 describe("linterEslint", () => {
-  describe("run successfully", () => {
-    let result, sh;
+  describe("run eslint without error", () => {
+    let result;
 
-    before(() => {
-      sh = {execAsync: sinon.stub().returns(Promise.resolve())};
+    before(async () => {
+      stub(sh, "execAsync").returns(Promise.resolve(42));
 
-      let linter = LinterEslint(sh);
-
-      result = linter.run();
+      result = await LinterEslint().run();
     });
 
     it("launch eslint", () => {
       expect(sh.execAsync).to.be.calledWith("eslint --fix .");
     });
 
-    it("return a promise that resolves", () =>
-      expect(result).to.eventually.be.fulfilled
-    );
-  });
-
-  describe("run with error", () => {
-    let result, sh;
-
-    before(() => {
-      sh = {execAsync: sinon.stub().returns(Promise.reject())};
-
-      let linter = LinterEslint(sh);
-
-      result = linter.run();
+    it("return a promise that's fulfilled with result", () => {
+      expect(result).to.equal(42);
     });
 
-    it("return a promise that resolves", () =>
-      expect(result).to.eventually.be.rejected
-    );
+    after(() => sh.execAsync.restore());
+  });
+
+  describe("run eslint with error", () => {
+    let err;
+
+    before(async () => {
+      stub(sh, "execAsync").returns(Promise.reject(Error("pizza")));
+
+      try {
+        await LinterEslint().run();
+      } catch (e) {
+        err = e;
+      }
+    });
+
+    it("return a promise that's rejected with error", () => {
+      expect(err.message).to.equal("pizza");
+    });
+
+    after(() => sh.execAsync.restore());
   });
 });

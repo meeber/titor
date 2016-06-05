@@ -1,6 +1,8 @@
-export default function TranspilerBabel (sh) {
+import {execAsync} from "./sh";
+
+export default function TranspilerBabel () {
   function transpile (compat) {
-    return sh.execAsync(`BABEL_ENV=${compat} babel -d ${compat}-build/ src/`);
+    return execAsync(`BABEL_ENV=${compat} babel -d ${compat}-build/ src/`);
   }
 
   return {

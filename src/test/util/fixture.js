@@ -1,29 +1,29 @@
-import path from "path";
-import sh from "shelljs";
+import {join} from "path";
+import {cd, config, cp, ln, rm, tempdir, test} from "../../lib/sh";
 
 let origDir, origShConfigSilent;
 
-export const rootDir = path.join(sh.tempdir(), "titor-fixture-root");
+export const rootDir = join(tempdir(), "titor-fixture-root");
 
 export function standup () {
-  origShConfigSilent = sh.config.silent;
-  sh.config.silent = true;
+  origShConfigSilent = config.silent;
+  config.silent = true;
 
-  if (sh.test("-e", rootDir)) sh.rm("-rf", rootDir);
+  if (test("-e", rootDir)) rm("-rf", rootDir);
 
-  sh.cp("-r", path.join(__dirname, "../../../asset/fixture/_root"), rootDir);
-  sh.ln(
+  cp("-r", join(__dirname, "../../../asset/fixture/_root"), rootDir);
+  ln(
     "-s",
-    path.join(__dirname, "../../../node_modules"),
-    path.join(rootDir, "node_modules"),
+    join(__dirname, "../../../node_modules"),
+    join(rootDir, "node_modules"),
   );
 
   origDir = process.env.PWD;
-  sh.cd(rootDir);
+  cd(rootDir);
 }
 
 export function teardown () {
-  sh.config.silent = origShConfigSilent;
-  sh.cd(origDir);
-  sh.rm("-rf", rootDir);
+  config.silent = origShConfigSilent;
+  cd(origDir);
+  rm("-rf", rootDir);
 }
