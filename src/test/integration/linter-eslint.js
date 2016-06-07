@@ -28,11 +28,11 @@ describe("LinterEslint", () => {
       }
     });
 
-    it("return a promise that rejects with unfixable linting error", () => {
+    it("returns a promise that rejects with unfixable linting error", () => {
       expect(err.stdout).to.match(/'unusedVar' is defined but never used/);
     });
 
-    it("fix fixable linting error", () => {
+    it("fixes fixable linting error", () => {
       expect(cat(join(rootDir, "lint-errors.js")).stdout)
         .to.equal("let unusedVar;\n");
     });

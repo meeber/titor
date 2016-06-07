@@ -16,19 +16,19 @@ describe("TranspilerBabel", () => {
       result = await TranspilerBabel().run();
     });
 
-    it("launch babel to transpile src/ to current-build/", () => {
+    it("launches babel to transpile src/ to current-build/", () => {
       expect(sh.execAsync).to.be.calledWith(
         "BABEL_ENV=current babel -d current-build/ src/",
       );
     });
 
-    it("launch babel to transpile src/ to legacy-build/", () => {
+    it("launches babel to transpile src/ to legacy-build/", () => {
       expect(sh.execAsync).to.be.calledWith(
         "BABEL_ENV=legacy babel -d legacy-build/ src/",
       );
     });
 
-    it("return a promise that's fulfilled with result", () => {
+    it("returns a promise that's fulfilled with result", () => {
       expect(result).to.deep.equal([42, 42]);
     });
 
@@ -48,7 +48,7 @@ describe("TranspilerBabel", () => {
       }
     });
 
-    it("return a promise that's rejected with error", () => {
+    it("returns a promise that's rejected with error", () => {
       expect(err.message).to.equal("pizza");
     });
 

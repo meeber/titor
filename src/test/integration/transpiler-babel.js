@@ -23,25 +23,21 @@ describe("TranspilerBabel", () => {
       await TranspilerBabel().run();
     });
 
-    it("minimally transpiles src/lib into current-build", () => {
+    it("minimally and recursively transpiles src/ into current-build/", () => {
       expect(cat(join(rootDir, "current-build/lib/pizza-dog.js")).stdout)
         .to.match(/exports.default = PizzaDog[\s\S]+let fleas =/);
-    });
-
-    it("minimally transpiles src/test/unit into current-build", () => {
       expect(cat(join(rootDir, "current-build/test/unit/pizza-dog.js")).stdout)
         .to.match(/_pizzaDog = require[\s\S]+let fleas =/);
     });
 
-    it("maximally transpiles src/lib into legacy-build", () => {
+    it("maximally and recursively transpiles src/ into legacy-build/", () => {
       expect(cat(join(rootDir, "legacy-build/lib/pizza-dog.js")).stdout)
-       .to.match(/exports.default = PizzaDog[\s\S]+var fleas =/);
-    });
-
-    it("maximally transpiles src/test/unit into legacy-build", () => {
+        .to.match(/exports.default = PizzaDog[\s\S]+var fleas =/);
       expect(cat(join(rootDir, "legacy-build/test/unit/pizza-dog.js")).stdout)
         .to.match(/_pizzaDog = require[\s\S]+var fleas =/);
     });
+
+    it("creates source maps 
 
     after(teardown);
   });

@@ -16,11 +16,11 @@ describe("LinterEslint", () => {
       result = await LinterEslint().run();
     });
 
-    it("launch eslint", () => {
+    it("launches eslint", () => {
       expect(sh.execAsync).to.be.calledWith("eslint --fix .");
     });
 
-    it("return a promise that's fulfilled with result", () => {
+    it("returns a promise that's fulfilled with result", () => {
       expect(result).to.equal(42);
     });
 
@@ -40,7 +40,7 @@ describe("LinterEslint", () => {
       }
     });
 
-    it("return a promise that's rejected with error", () => {
+    it("returns a promise that's rejected with error", () => {
       expect(err.message).to.equal("pizza");
     });
 
