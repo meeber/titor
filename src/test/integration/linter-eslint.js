@@ -4,7 +4,7 @@ import LinterEslint from "../../lib/linter-eslint";
 import {cat, cp} from "../../lib/sh";
 import {rootDir, standup, teardown} from "../util/fixture";
 
-describe("linterEslint", () => {
+describe("LinterEslint", () => {
   describe("run in a directory containing a file with linting errors", () => {
     let err;
 

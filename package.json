@@ -17,6 +17,7 @@
     "test-src-unit": "BABEL_ENV=current mocha --recursive -r babel-core/register src/test/unit"
   },
   "devDependencies": {
+    "babel-cli": "^6.9.0",
     "babel-core": "^6.9.1",
     "babel-eslint": "^6.0.4",
     "babel-plugin-add-module-exports": "^0.2.1",

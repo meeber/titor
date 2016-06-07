@@ -7,7 +7,7 @@ sh.execAsync = function execAsync (cmd) {
     sh.exec(cmd, (code, stdout, stderr) => {
       let details = {cmd, code, stdout, stderr};
 
-      if (code) reject(Object.assign(Error("Script error"), details));
+      if (code) reject(Object.assign(Error(`${stderr || stdout}`), details));
       else resolve(details);
     });
   });

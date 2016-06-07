@@ -6,7 +6,7 @@ import chai, {expect} from "chai";
 
 chai.use(sinonChai);
 
-describe("transpilerBabel", () => {
+describe("TranspilerBabel", () => {
   describe("run babel without error", () => {
     let result;
 

@@ -6,7 +6,7 @@ import chai, {expect} from "chai";
 
 chai.use(sinonChai);
 
-describe("linterEslint", () => {
+describe("LinterEslint", () => {
   describe("run eslint without error", () => {
     let result;
 
