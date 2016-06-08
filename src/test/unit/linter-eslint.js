@@ -1,10 +1,5 @@
 import {lint} from "../../lib/linter-eslint";
 import sh from "../../lib/sh";
-import sinonChai from "sinon-chai";
-import {stub} from "sinon";
-import chai, {expect} from "chai";
-
-chai.use(sinonChai);
 
 describe("LinterEslint", () => {
   describe("run eslint without error", () => {

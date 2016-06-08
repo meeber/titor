@@ -13,8 +13,8 @@
     "lint": "eslint --fix .",
     "test": "npm run test-src-unit && npm run lint",
     "test-src": "npm run test-src-unit && npm run test-src-integration",
-    "test-src-integration": "BABEL_ENV=current mocha --recursive -r babel-core/register src/test/integration",
-    "test-src-unit": "BABEL_ENV=current mocha --recursive -r babel-core/register src/test/unit"
+    "test-src-integration": "BABEL_ENV=current mocha --recursive -r babel-core/register -r src/test/bootstrap src/test/integration",
+    "test-src-unit": "BABEL_ENV=current mocha --recursive -r babel-core/register -r src/test/bootstrap src/test/unit"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",

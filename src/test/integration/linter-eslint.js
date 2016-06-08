@@ -1,8 +1,7 @@
-import {expect} from "chai";
 import {join} from "path";
 import {lint} from "../../lib/linter-eslint";
 import {cat, cp} from "../../lib/sh";
-import {rootDir, standup, teardown} from "../util/fixture";
+import {rootDir, standup, teardown} from "../fixture";
 
 describe("LinterEslint", () => {
   describe("run in a directory containing a file with linting errors", () => {

@@ -1,8 +1,7 @@
-import {expect} from "chai";
 import {join} from "path";
 import {transpile} from "../../lib/transpiler-babel";
 import {cat, cp, test} from "../../lib/sh";
-import {rootDir, standup, teardown} from "../util/fixture";
+import {rootDir, standup, teardown} from "../fixture";
 
 describe("TranspilerBabel", () => {
   describe("run in a directory containing a basic src directory", () => {

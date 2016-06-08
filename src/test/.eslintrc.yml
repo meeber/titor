@@ -1,4 +1,7 @@
 env:
   mocha: true
+globals:
+  expect: true
+  stub: true
 rules:
   no-unused-expressions: off

@@ -1,10 +1,5 @@
 import sh from "../../lib/sh";
-import sinonChai from "sinon-chai";
-import {stub} from "sinon";
 import {transpile} from "../../lib/transpiler-babel";
-import chai, {expect} from "chai";
-
-chai.use(sinonChai);
 
 describe("TranspilerBabel", () => {
   describe("run babel without error", () => {
