@@ -18,13 +18,13 @@ describe("TranspilerBabel", () => {
 
     it("launches babel to transpile src/ to current-build/", () => {
       expect(sh.execAsync).to.be.calledWith(
-        "BABEL_ENV=current babel -d current-build/ src/",
+        "BABEL_ENV=current babel -s -d current-build/ src/",
       );
     });
 
     it("launches babel to transpile src/ to legacy-build/", () => {
       expect(sh.execAsync).to.be.calledWith(
-        "BABEL_ENV=legacy babel -d legacy-build/ src/",
+        "BABEL_ENV=legacy babel -s -d legacy-build/ src/",
       );
     });
 
