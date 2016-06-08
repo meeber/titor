@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {join} from "path";
-import TranspilerBabel from "../../lib/transpiler-babel";
+import {transpile} from "../../lib/transpiler-babel";
 import {cat, cp, test} from "../../lib/sh";
 import {rootDir, standup, teardown} from "../util/fixture";
 
@@ -20,7 +20,7 @@ describe("TranspilerBabel", () => {
         join(rootDir, "src"),
       );
 
-      await TranspilerBabel().run();
+      await transpile();
     });
 
     describe("current build", () => {

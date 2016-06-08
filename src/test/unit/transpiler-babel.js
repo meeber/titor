@@ -1,7 +1,7 @@
 import sh from "../../lib/sh";
 import sinonChai from "sinon-chai";
 import {stub} from "sinon";
-import TranspilerBabel from "../../lib/transpiler-babel";
+import {transpile} from "../../lib/transpiler-babel";
 import chai, {expect} from "chai";
 
 chai.use(sinonChai);
@@ -13,7 +13,7 @@ describe("TranspilerBabel", () => {
     before(async () => {
       stub(sh, "execAsync").returns(Promise.resolve(42));
 
-      result = await TranspilerBabel().run();
+      result = await transpile();
     });
 
     it("launches babel to transpile src/ to current-build/", () => {
@@ -42,7 +42,7 @@ describe("TranspilerBabel", () => {
       stub(sh, "execAsync").returns(Promise.reject(Error("pizza")));
 
       try {
-        await TranspilerBabel().run();
+        await transpile();
       } catch (e) {
         err = e;
       }

@@ -1,4 +1,4 @@
-import LinterEslint from "../../lib/linter-eslint";
+import {lint} from "../../lib/linter-eslint";
 import sh from "../../lib/sh";
 import sinonChai from "sinon-chai";
 import {stub} from "sinon";
@@ -13,7 +13,7 @@ describe("LinterEslint", () => {
     before(async () => {
       stub(sh, "execAsync").returns(Promise.resolve(42));
 
-      result = await LinterEslint().run();
+      result = await lint();
     });
 
     it("launches eslint", () => {
@@ -34,7 +34,7 @@ describe("LinterEslint", () => {
       stub(sh, "execAsync").returns(Promise.reject(Error("pizza")));
 
       try {
-        await LinterEslint().run();
+        await lint();
       } catch (e) {
         err = e;
       }

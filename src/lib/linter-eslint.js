@@ -1,7 +1,7 @@
 import {execAsync} from "./sh";
 
-export default function LinterEslint () {
-  return {
-    run () { return execAsync("eslint --fix .") },
-  };
+function lint () {
+  return execAsync("eslint --fix .");
 }
+
+export default {lint};

@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {join} from "path";
-import LinterEslint from "../../lib/linter-eslint";
+import {lint} from "../../lib/linter-eslint";
 import {cat, cp} from "../../lib/sh";
 import {rootDir, standup, teardown} from "../util/fixture";
 
@@ -22,7 +22,7 @@ describe("LinterEslint", () => {
       );
 
       try {
-        await LinterEslint().run();
+        await lint();
       } catch (e) {
         err = e;
       }
