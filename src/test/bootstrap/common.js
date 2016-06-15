@@ -1,6 +1,6 @@
 "use strict";
 
-const {config} = require("../lib/sh");
+const {config} = require("../../lib/sh");
 const sinonChai = require("sinon-chai");
 const {stub} = require("sinon");
 const chai = require("chai");
