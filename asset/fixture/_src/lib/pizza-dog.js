@@ -1,4 +1,4 @@
-export default function PizzaDog () {
-  let fleas = 42;
-  return fleas;
-}
+exports.pizzaDog = function pizzaDog (fleas,) {
+  const pepperoni = 42;
+  return pepperoni + fleas;
+};

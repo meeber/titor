@@ -29,7 +29,7 @@ describe("TranspilerBabel", () => {
 
       it("minimally transpile src/ into current-build/", () => {
         expect(cat(join(buildDir, "lib/pizza-dog.js")).stdout)
-          .to.match(/exports.default = PizzaDog[\s\S]+let fleas =/);
+          .to.match(/\(fleas\)[\s\S]+const pepperoni/);
       });
 
       it("recursively transpiles src/ into current-build/", () => {
@@ -46,7 +46,7 @@ describe("TranspilerBabel", () => {
 
       it("maximally transpiles src/ into legacy-build/", () => {
         expect(cat(join(buildDir, "lib/pizza-dog.js")).stdout)
-          .to.match(/exports.default = PizzaDog[\s\S]+var fleas =/);
+          .to.match(/\(fleas\)[\s\S]+var pepperoni/);
       });
 
       it("recursively transpiles src/ into legacy-build/", () => {
