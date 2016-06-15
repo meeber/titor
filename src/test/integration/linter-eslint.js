@@ -1,7 +1,9 @@
-import {join} from "path";
-import {lint} from "../../lib/linter-eslint";
-import {cat, cp} from "../../lib/sh";
-import {rootDir, standup, teardown} from "../fixture";
+"use strict";
+
+const {join} = require("path");
+const {lint} = require("../../lib/linter-eslint");
+const {cat, cp} = require("../../lib/sh");
+const {rootDir, standup, teardown} = require("../fixture");
 
 describe("LinterEslint", () => {
   describe("run in a directory containing a file with linting errors", () => {

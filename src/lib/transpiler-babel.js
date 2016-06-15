@@ -1,4 +1,6 @@
-import {execAsync} from "./sh";
+"use strict";
+
+const {execAsync} = require("./sh");
 
 function transpileBuild (compatLevel) {
   return execAsync(`BABEL_ENV=${compatLevel}`
@@ -14,4 +16,4 @@ function transpile () {
   ]);
 }
 
-export default {transpile};
+module.exports = {transpile};

@@ -1,4 +1,6 @@
-import sh from "shelljs";
+"use strict";
+
+const sh = require("shelljs");
 
 sh.config.fatal = true;
 
@@ -13,4 +15,4 @@ sh.execAsync = function execAsync (cmd) {
   });
 };
 
-export default sh;
+module.exports = sh;

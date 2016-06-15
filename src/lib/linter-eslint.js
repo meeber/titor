@@ -1,7 +1,9 @@
-import {execAsync} from "./sh";
+"use strict";
+
+const {execAsync} = require("./sh");
 
 function lint () {
   return execAsync("eslint --fix .");
 }
 
-export default {lint};
+module.exports = {lint};

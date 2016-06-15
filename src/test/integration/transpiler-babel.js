@@ -1,7 +1,9 @@
-import {join} from "path";
-import {transpile} from "../../lib/transpiler-babel";
-import {cat, cp, test} from "../../lib/sh";
-import {rootDir, standup, teardown} from "../fixture";
+"use strict";
+
+const {join} = require("path");
+const {transpile} = require("../../lib/transpiler-babel");
+const {cat, cp, test} = require("../../lib/sh");
+const {rootDir, standup, teardown} = require("../fixture");
 
 describe("TranspilerBabel", () => {
   describe("run in a directory containing a basic src directory", () => {

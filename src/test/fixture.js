@@ -1,11 +1,13 @@
-import {join} from "path";
-import {cd, cp, ln, rm, tempdir, test} from "../lib/sh";
+"use strict";
+
+const {join} = require("path");
+const {cd, cp, ln, rm, tempdir, test} = require("../lib/sh");
 
 let origDir;
 
-export const rootDir = join(tempdir(), "titor-fixture-root");
+const rootDir = join(tempdir(), "titor-fixture-root");
 
-export function standup () {
+function standup () {
   if (test("-e", rootDir)) rm("-rf", rootDir);
 
   cp("-r", join(__dirname, "../../asset/fixture/_root"), rootDir);
@@ -19,7 +21,9 @@ export function standup () {
   cd(rootDir);
 }
 
-export function teardown () {
+function teardown () {
   cd(origDir);
   rm("-rf", rootDir);
 }
+
+module.exports = {rootDir, standup, teardown};
