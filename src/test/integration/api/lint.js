@@ -1,11 +1,12 @@
 "use strict";
 
 const {join} = require("path");
-const {lint} = require("../../lib/linter-eslint");
-const {cat, cp} = require("../../lib/sh");
-const {rootDir, standup, teardown} = require("../fixture");
+const {lint} = require("../../../api");
+const LinterEslint = require("../../../lib/linter-eslint");
+const {cat, cp} = require("../../../lib/sh");
+const {rootDir, standup, teardown} = require("../../fixture");
 
-describe("LinterEslint", () => {
+describe("lint with LinterEslint", () => {
   describe("run in a directory containing a file with linting errors", () => {
     let err;
 
@@ -13,17 +14,17 @@ describe("LinterEslint", () => {
       standup();
 
       cp(
-        join(__dirname, "../../../asset/_.eslintrc.yml"),
+        join(__dirname, "../../../../asset/_.eslintrc.yml"),
         join(rootDir, ".eslintrc.yml"),
       );
 
       cp(
-        join(__dirname, "../../../asset/fixture/_lint-errors.js"),
+        join(__dirname, "../../../../asset/fixture/_lint-errors.js"),
         join(rootDir, "lint-errors.js"),
       );
 
       try {
-        await lint();
+        await lint(LinterEslint);
       } catch (e) {
         err = e;
       }

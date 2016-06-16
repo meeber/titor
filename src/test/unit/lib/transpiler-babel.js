@@ -6,7 +6,7 @@ describe("TranspilerBabel", () => {
   describe("run babel without error", () => {
     const execAsyncStub = stub().returns(Promise.resolve(42));
     const {transpile} = proxyquire(
-      "../../lib/transpiler-babel",
+      "../../../lib/transpiler-babel",
       {"./sh": {execAsync: execAsyncStub}},
     );
 
@@ -36,7 +36,7 @@ describe("TranspilerBabel", () => {
   describe("run babel with error", () => {
     const execAsyncStub = stub().returns(Promise.reject(Error("pizza")));
     const {transpile} = proxyquire(
-      "../../lib/transpiler-babel",
+      "../../../lib/transpiler-babel",
       {"./sh": {execAsync: execAsyncStub}},
     );
 

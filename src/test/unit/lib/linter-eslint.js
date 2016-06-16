@@ -6,7 +6,7 @@ describe("LinterEslint", () => {
   describe("run eslint without error", () => {
     const execAsyncStub = stub().returns(Promise.resolve(42));
     const {lint} = proxyquire(
-      "../../lib/linter-eslint",
+      "../../../lib/linter-eslint",
       {"./sh": {execAsync: execAsyncStub}},
     );
 
@@ -28,7 +28,7 @@ describe("LinterEslint", () => {
   describe("run eslint with error", () => {
     const execAsyncStub = stub().returns(Promise.reject(Error("pizza")));
     const {lint} = proxyquire(
-      "../../lib/linter-eslint",
+      "../../../lib/linter-eslint",
       {"./sh": {execAsync: execAsyncStub}},
     );
 
