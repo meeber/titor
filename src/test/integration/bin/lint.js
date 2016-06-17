@@ -1,12 +1,10 @@
 "use strict";
 
 const {join} = require("path");
-const {lint} = require("../../../api");
-const LinterEslint = require("../../../lib/linter-eslint");
-const {cat, cp} = require("../../../lib/sh");
+const {cat, cd, cp, exec} = require("../../../lib/sh");
 const {rootDir, standup, teardown} = require("../../fixture");
 
-describe("(api) lint with LinterEslint", () => {
+describe("(bin) lint with LinterEslint", () => {
   describe("run in a directory containing a file with linting errors", () => {
     let err;
 
@@ -23,14 +21,20 @@ describe("(api) lint with LinterEslint", () => {
         join(rootDir, "lint-errors.js"),
       );
 
+      cd(rootDir);
+
       try {
-        await lint(LinterEslint);
+        exec(`${join(__dirname, "../../../bin/titor.js")} lint`);
       } catch (e) {
         err = e;
       }
     });
 
-    it("returns a promise that rejects with unfixable linting error", () => {
+    it("terminates with exit code -1", () => {
+      expect(err.code).to.equal(-1);
+    });
+
+    it("outputs unfixable linting error to stdout", () => {
       expect(err.stdout).to.match(/'unusedVar' is defined but never used/);
     });
 
