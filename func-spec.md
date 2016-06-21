@@ -23,3 +23,21 @@ Stuart is a fine programmer with a fresh idea for a library. Brimming with excit
 Gertrude knows what Gertrude wants, and what Gertrude wants is to use `async` and `await` in the library she's writing. But there's a problem: Although an experienced programmer, Gertrude is new to Node.js. She has read a couple articles about transpiling, but when it comes to selecting the right tools, building a complete project workflow, and distributing her library to consumers, she finds herself buried by choice and confusion. Maybe one day she'll get around to learning it all, but for now, the benefit just ain't worth the effort, so back to callbacks she goes. If only Gertrude had known about Titor, she could've jumped straight to working with future language features, allowing her to learn at a natural pace, without impeding progress on her project.
 
 Elijah is a seasoned professional. He can manually bootstrap a project with transpiling, bundling, and source mapping in the amount of time it takes to eat a plate of curly fries. But just because he can do it doesn't mean he should. Elijah has more pressing pursuits. If only Elijah had Titor in his toolkit, he could wire up a new project in seconds, leaving more time for coding and curly fries.
+
+## Installation
+
+It all starts with a little `npm install --save-dev titor`.
+
+Titor has an unusually high number of peer depedencies. There's a setup script detailed below that simplifies the installation of them.
+
+## Usage
+
+Titor is designed to be used via the commandline tool. Or rather, it's designed to be used via simple npm scripts that invoke the commandline tool. There's a setup script detailed below that automates adding npm scripts to a project's **package.json**.
+
+The commandline tool is powered by the Titor API. Although the commandline tool is the recommended way to use Titor, there's nothing preventing the API from being used directly instead. The Titor API can be made available via `const titor = require("titor")`.
+
+**Technical Note:** Titor's test suite is divided into unit tests and functional tests. Each unit test only tests one api call, mocking out other api calls as well as any database and filesystem access. Functional tests are performed on the commandline tool, and don't mock out anything.
+
+## Configuration
+
+Titor is not intended to be a highly customizable tool. Nevertheless, there are a handful of configuration options available to consumers, primarily pertaining to which steps the build script should perform. These options can be set in `.titorrc.yml` in the project's root directory.
