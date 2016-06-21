@@ -18,9 +18,15 @@ Titor is very opinionated about which libraries you should use and how your proj
 
 ## Scenarios
 
+### The Procrastinator
+
 Stuart is a fine programmer with a fresh idea for a library. Brimming with excitement, he sits down at his workstation, cracks his knuckles, and starts banging away at the keyboard. Several hours pass with little let up. From the outside, it appears that Stuart is making rapid progress on his idea, but in reality he hasn't written a single line of code! The problem is that Stuart is prone to procrastination via tooling. He spent the whole day messing around with libraries, writing build scripts, and tweaking the structure of his project directory. By the time he has to head out to Monday Pilates, all of his momentum is gone. If only Stuart had used Titor, he could've started coding within minutes of sitting down, directing his energy where it actually matters.
 
-Gertrude knows what Gertrude wants, and what Gertrude wants is to use `async` and `await` in the library she's writing. But there's a problem: Although an experienced programmer, Gertrude is new to Node.js. She has read a couple articles about transpiling, but when it comes to selecting the right tools, building a complete project workflow, and distributing her library to consumers, she finds herself buried by choice and confusion. Maybe one day she'll get around to learning it all, but for now, the benefit just ain't worth the effort, so back to callbacks she goes. If only Gertrude had known about Titor, she could've jumped straight to working with future language features, allowing her to learn at a natural pace, without impeding progress on her project.
+### The Student
+
+Gertrude knows what Gertrude wants, and what Gertrude wants is to use `async` and `await` in the library she's writing. But there's a problem: Although an experienced programmer, Gertrude is new to Node.js. She has read a couple articles about transpiling, but when it comes to selecting the right tools and building a complete project workflow, she finds herself buried by choice and confusion. Maybe one day she'll get around to learning it all, but for now, the benefit just ain't worth the effort, so back to callbacks she goes. If only Gertrude had known about Titor, she could've jumped straight to working with future language features, allowing her to learn at a natural pace, without impeding progress on her project.
+
+### The Guru
 
 Elijah is a seasoned professional. He can manually bootstrap a project with transpiling, bundling, and source mapping in the amount of time it takes to eat a plate of curly fries. But just because he can do it doesn't mean he should. Elijah has more pressing pursuits. If only Elijah had Titor in his toolkit, he could wire up a new project in seconds, leaving more time for coding and curly fries.
 
@@ -59,12 +65,14 @@ Any of the configuration files for Titor's peer dependencies can be fully custom
 ## Setup Script
 
 Titor's setup script can be run in one of two ways:
+
 1. Via CLI: `./node_modules/.bin/titor setup`
 1. Via API: `titor.setup();`
 
 Most consumers will launch the setup script using the first method shortly after installing Titor.
 
 The setup script does the following:
+
 1. Make a backup of package.json named package.json.save
 1. Edit package.json:
     - Set main to build/
@@ -89,4 +97,7 @@ The setup script does the following:
 
 All paths are relative to the project root. If a file already exists, then it's skipped. Some files have placeholders in their content that are replaced during copy with the **package-export** in camelCase.
 
-It's intentional that the setup script must be manually (as opposed to automatically) run after installing Titor. It'd be too intrusive to perform all of these changes automatically via an npm installation hook.
+It's intentional that the setup script must be manually run after installing Titor. It'd be too intrusive to perform all of these changes automatically via an npm installation hook.
+
+**Technical note:** For npm v3.x or higher, consumers must then run `npm install` to install all of the peer dependencies that the setup script added to package.json. (Older versions of npm will install peer dependencies automatically when Titor is installed.)
+
