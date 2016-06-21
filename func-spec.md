@@ -36,8 +36,57 @@ Titor is designed to be used via the commandline tool. Or rather, it's designed 
 
 The commandline tool is powered by the Titor API. Although the commandline tool is the recommended way to use Titor, there's nothing preventing the API from being used directly instead. The Titor API can be made available via `const titor = require("titor")`.
 
-**Technical Note:** Titor's test suite is divided into unit tests and functional tests. Each unit test only tests one api call, mocking out other api calls as well as any database and filesystem access. Functional tests are performed on the commandline tool, and don't mock out anything.
+**Technical Note:** Titor's test suite is divided into unit tests and integration tests. Each unit test only tests one api call, faking other api calls as well as any database and filesystem access. Integration tests are performed on the commandline tool, and don't fake anything.
 
 ## Configuration
 
 Titor is not intended to be a highly customizable tool. Nevertheless, there are a handful of configuration options available to consumers, primarily pertaining to which steps the build script should perform. These options can be set in `.titorrc.yml` in the project's root directory.
+
+There's only one required configuration option:
+
+- `export`: Name of the **package export**. Typically the package name written in camelCase. Browser bundles expose this variable as a global.
+
+The following are optional configuration options:
+
+- `bundle`: If true, create browser bundles during build process.
+- `cover`: If true, calculate test coverage whenever testing `src/`.
+- `coverReport`: If true, submit test coverage to coveralls.io during travis build.
+- `test`: If true, run tests during build process.
+- `lint`: If true, lint `src/` and `test/` when running tests.
+
+Any of the configuration files for Titor's peer dependencies can be fully customized as well.
+
+## Setup Script
+
+Titor's setup script can be run in one of two ways:
+1. Via CLI: `./node_modules/.bin/titor setup`
+1. Via API: `titor.setup();`
+
+Most consumers will launch the setup script using the first method shortly after installing Titor.
+
+The setup script does the following:
+1. Make a backup of package.json named package.json.save
+1. Edit package.json:
+    - Set main to build/
+    - Add Titor's peerDependencies
+    - Add Titor's scripts
+1. Create the following files:
+    - .babelrc
+    - .eslintignore
+    - .eslintrc.yml
+    - .gitignore
+    - .titorrc.yml
+    - .travis.yml
+    - src/api/**<package-export>**.js
+    - src/bin/**<package-export>**.js
+    - src/lib/example-lib.js
+    - src/test/.eslintrc.yml
+    - src/test/unit/example-unit-test.js
+    - src/test/integration/example-integration-test.js
+    - src/test/bootstrap/common.js
+    - src/test/bootstrap/current.js
+    - src/test/bootstrap/legacy.js
+
+All paths are relative to the project root. If a file already exists, then it's skipped. Some files have placeholders in their content that are replaced during copy with the **package-export** in camelCase.
+
+It's intentional that the setup script must be manually (as opposed to automatically) run after installing Titor. It'd be too intrusive to perform all of these changes automatically via an npm installation hook.
